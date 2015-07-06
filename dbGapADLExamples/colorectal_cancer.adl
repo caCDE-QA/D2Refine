@@ -1,0 +1,118 @@
+archetype (adl_version=2.0.5; rm_release=2.0.2)
+ 	CIMI-CORE-ITEM_GROUP.dbGapDD.v0.0.1
+ 
+language
+ 	original_language = <[ISO_639-1::en]>
+ 
+description
+ 	lifecycle_state = <"unmanaged">
+ 	original_author = <
+ 		["name"] = <"Deepak Sharma">
+ 		["organisation"] = <"Mayo Clinic">
+ 		["email"] = <"sharma.deepak2@mayo.edu">
+ 		["date"] = <"2015-07-02">
+ 	>
+ 	custodian_namespace = <"edu.mayo">
+ 	custodian_organisation = <"Mayo Clinic <http://www.mayo.edu>">
+ 	copyright = <"Copyright © 2015 Mayo Clinic <http://www.mayo.edu>">
+ 	licence = <"Creative Commons CC-BY-SA <https://creativecommons.org/licenses/by-sa/3.0/>">
+ 	details = <
+ 		["en"] = <
+ 			language = <[ISO_639-1::en]>
+ 			purpose = <"Demonstrates a dbGap DD transformed as an ADL Archetype">
+ 			keywords = <"ADL", "test", "tuples">
+ 		>
+ 	>
+
+definition
+	ITEM_GROUP[id1] matches {
+ 			item matches {
+ 				ELEMENT[id2] occurrences matches {1}
+ 				ELEMENT[id3] occurrences matches {1} matches {
+ 					value matches {
+ 						CODED_TEXT[id4]
+ 						CODED_TEXT[id5]
+ 					}	
+ 				}
+ 				ELEMENT[id6] occurrences matches {0..1} matches {
+ 					value matches {
+ 						INTERVAL_VALUE<Integer>[id7] occurrences matches {0..1} matches {
+ 							lower matches {33}
+ 							upper matches {99}
+ 						}
+ 						CODED_TEXT[id8]
+ 						CODED_TEXT[id9]
+ 					}
+ 				}
+ 				ELEMENT[id10] occurrences matches {1} matches {
+ 					value matches {
+ 						CODED_TEXT[id11]
+ 						CODED_TEXT[id12]
+ 						CODED_TEXT[id13]
+ 						CODED_TEXT[id14]
+ 					}
+ 				}
+			}
+ 	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+ 				text = <"Epigenetic Colorectal Cancer DD">
+ 				description = <"Epigenetic Colorectal Cancer Subject Phenotypes Data Dictionary">
+ 			>
+ 			["id2"] = <
+ 				text = <"SUBJID">
+ 				description = <"De-identified Subject ID">
+ 			>
+            		["id3"] = <
+ 				text = <"Site of Primary (Event)">
+ 				description = <"Indicates the site of primary for the patient's cancer">
+ 			>
+ 			["id4"] = <
+ 				text = <"COLN">
+ 				description = <"Colonic (includes appendix)">
+ 			>
+            		["id5"] = <
+ 				text = <"RECT">
+ 				description = <"Rectal">
+ 			>
+            		["id6"] = <
+ 				text = <"Age">
+ 				description = <"Age at the time the specimen was taken">
+ 			>
+           		 ["id7"] = <
+ 				text = <"age interval">
+ 				description = <"Valid age Interval">
+ 			>
+           		 ["id8"] = <
+ 				text = <"9999">
+ 				description = <"Missing">
+ 			>
+           		 ["id9"] = <
+ 				text = <"1000">
+ 				description = <"Not assessed">
+ 			>
+ 			["id10"] = <
+ 				text = <"sex">
+ 				description = <"Gender of participant">
+ 			>
+ 			["id11"] = <
+ 				text = <"F">
+ 				description = <"Female">
+ 			>
+ 			["id12"] = <
+ 				text = <"M">
+ 				description = <"Male">
+ 			>
+ 			["id13"] = <
+ 				text = <"NA">
+ 				description = <"Not applicable">
+ 			>
+ 			["id14"] = <
+ 				text = <"UNK">
+ 				description = <"Unknown">
+ 			>
+		>
+	>
