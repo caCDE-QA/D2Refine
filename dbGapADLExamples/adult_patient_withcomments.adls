@@ -1,0 +1,113 @@
+archetype (adl_version=2.0.5; rm_release=2.0.2)
+	CIMI-Core-ITEM_GROUP.adult_patient.v0.0.1
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Deepak Sharma">
+		["organisation"] = <"Mayo Clinic">
+		["email"] = <"sharma.deepak2@mayo.edu">
+		["date"] = <"2015-07-12">
+	>
+	custodian_namespace = <"edu.mayo">
+	custodian_organisation = <"Mayo Clinic <http://www.mayo.edu>">
+	copyright = <"Copyright © 2015 Mayo Clinic <http://www.mayo.edu>">
+	licence = <"Creative Commons CC-BY-SA <https://creativecommons.org/licenses/by-sa/3.0/>">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Demonstrates a simple ADL Archetype for a patient with couple of restrictions">
+			keywords = <"ADL", "adult", "patient">
+		>
+	>
+
+definition
+	ITEM_GROUP[id1] matches {	-- adultPatent
+		item matches {
+			ELEMENT[id2] occurrences matches {1} 	-- subjectID
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- age
+				value matches {
+					COUNT[id4] occurrences matches {0..1} matches {	-- ageInterval
+						value matches {|>17|}
+					}
+					CODED_TEXT[id5] 	-- 9999
+					CODED_TEXT[id6] 	-- 1000
+				}
+			}
+			ELEMENT[id7] occurrences matches {0..1} matches {	-- patientGender
+				value matches {
+					CODED_TEXT[id8] 	-- F
+					CODED_TEXT[id9] 	-- M
+					CODED_TEXT[id10] 	-- NS
+					CODED_TEXT[id11] 	-- UNK
+				}
+			}
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"adultPatent">
+				description = <"Adult Patient">
+			>
+			["id2"] = <
+				text = <"subjectID">
+				description = <"Patient Identifier">
+			>
+			["id3"] = <
+				text = <"age">
+				description = <"Patient Age">
+			>
+			["id4"] = <
+				text = <"ageInterval">
+				description = <"Patient Age Interval">
+			>
+			["id5"] = <
+				text = <"9999">
+				description = <"Missing">
+			>
+			["id6"] = <
+				text = <"1000">
+				description = <"Not Assesssed">
+			>
+			["id7"] = <
+				text = <"patientGender">
+				description = <"Patient Gender">
+			>
+			["id8"] = <
+				text = <"F">
+				description = <"Female">
+			>
+			["id9"] = <
+				text = <"M">
+				description = <"Male">
+			>
+			["id10"] = <
+				text = <"NS">
+				description = <"Not Specified">
+			>
+			["id11"] = <
+				text = <"UNK">
+				description = <"Unknown">
+			>
+		>
+	>
+	term_bindings = <
+		["snomed-ct"] = <
+			["id2"] = <http://snomed.info/id/118522005>
+			["id3"] = <http://snomed.info/id/424144002>
+			["id4"] = <http://snomed.info/id/2667000>
+			["id5"] = <http://snomed.info/id/255582007>
+			["id6"] = <http://snomed.info/id/424144002>
+			["id7"] = <http://snomed.info/id/703117000>
+			["id8"] = <http://snomed.info/id/385432009>
+			["id9"] = <http://snomed.info/id/394743007>
+			["id10"] = <http://snomed.info/id/385432009>
+			["id11"] = <http://snomed.info/id/394743007>
+		>
+	>
