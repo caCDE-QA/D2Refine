@@ -1,7 +1,8 @@
+ExporterManager.MenuItems.push({});//add separator
 ExporterManager.MenuItems.push(
 		{
 			"id" : "ADLExporter/export",
-          	"label":"ADLADLADL",
+          	"label":"ADL2.0 Export",
           	"click": function() { ExporterManager.handlers.exportRows("adl", "adls");}
 		}
 );

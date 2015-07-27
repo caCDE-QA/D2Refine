@@ -1,0 +1,12 @@
+/target
+build.xml
+.settings
+.cache
+.project
+.classpath
+.DS_Store
+*.iml
+*.ipr
+*.iws
+*.bak
+.idea/
