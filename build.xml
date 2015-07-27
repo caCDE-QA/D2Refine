@@ -63,19 +63,7 @@
         </javac>
     </target>
 
-    <target name="build" depends="build_java" >
-    	<tstamp>
-    		<format property="timestmp" pattern="MM/dd/yyyy hh:mm:ss aa" unit="hour"/>
-    	</tstamp>
-        <echo message="Building ADLExporter...${timestmp}" />
-    	<echo message="Copying extension ADLExporter to /Users/dks02/Library/Application Support/OpenRefine/extensions" />
-    	<copy todir="/Users/dks02/Library/Application Support/OpenRefine/extensions/ADLExporter" overwrite="true">
-    		<fileset dir="../ADLExporter" />
-    	</copy>
-    	<copy todir="/Users/dks02/A123/git/Guoqian/D2Refine" overwrite="true">
-    	    <fileset dir="../ADLExporter" />
-    	</copy>
-    </target>
+    <target name="build" depends="build_java" />
 
     <target name="clean">
         <delete dir="${classes.dir}" />
