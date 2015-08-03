@@ -42,14 +42,17 @@ function init()
 {
   var Exp = Packages.com.google.refine.exporters;
   Exp.ExporterRegistry.registerExporter(
-		  "adl", new Packages.edu.mayo.d2refine.ADLExporterExtension.ADLExporter());
+		  "D2Refine", new Packages.edu.mayo.d2refine.ADLExporterExtension.ADLExporter());
   
   // Script files to inject into /project page
   ClientSideResourceManager.addPaths(
     "project/scripts",
     module,
     [
-      "scripts/adl-export.js"
+      "scripts/config.js",
+      "scripts/adl-export.js",
+      "scripts/adl-extension.js",
+      "dialogs/about.js"
     ]
   );
 

@@ -1,12 +1,12 @@
 #*
- * Access this page at the URL /extension/ADLExporter/
+ * Access this page at the URL /extension/D2Refine/
  *#
 <html>
   <head>
-    <title>ADLExporter Extension</title>
+    <title>D2Refine Extension</title>
   </head>
   <body>
-    <h1>ADLExporter Extension</h1>
+    <h1>D2Refine Extension</h1>
     
     <p>If an extension needs its own page, then this is such an example.
       However, mostly, extensions only need to inject their own scripts
@@ -15,7 +15,7 @@
     
     <p>Here is someString: $someString, and someInt: $someInt</p>
     
-    <p>Here is a ADLExporter list using a veloci-macro:</p>
+    <p>Here is a D2Refine list using a veloci-macro:</p>
     
     #set( $greatlakes = ["Superior","Michigan","Huron","Erie","Ontario"] )
     #makeAList( $greatlakes )

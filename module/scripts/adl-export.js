@@ -1,17 +1,8 @@
 ExporterManager.MenuItems.push({});//add separator
 ExporterManager.MenuItems.push(
 		{
-			"id" : "ADLExporter/export",
+			"id" : "D2Refine/export",
           	"label":"ADL2.0 Export",
-          	"click": function() { ExporterManager.handlers.exportRows("adl", "adls");}
+          	"click": function() { ExporterManager.handlers.exportRows("D2Refine", "adls");}
 		}
 );
-
-ADLExporterMenuBar = {};
-
-ADLExporterMenuBar.exportADL = function(format, ext) {
-
-        alert(
-            "This will export ADL..."
-        );
-};

@@ -33,4 +33,4 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // This file is added to the /project page
 
-var ADLExporterExtension = {};
+var D2RefineExtension = {};

@@ -25,7 +25,7 @@ public class ADLExporter implements WriterExporter
     public void export(Project project, Properties options, Engine engine, Writer writer) throws IOException
     {
            String reader = ADLUtils.getTestArchetypeText();
-           System.out.println("This is tested");
+           System.out.println("This is tested 3");
            writer.write(reader);
            return;
     }
