@@ -1,0 +1,7 @@
+package edu.mayo.d2refine.impl;
+
+public class StringInterval extends Interval
+{
+    public String min;
+    public String max;
+}
