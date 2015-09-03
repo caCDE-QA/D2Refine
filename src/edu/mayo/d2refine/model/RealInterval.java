@@ -8,6 +8,18 @@ public class RealInterval extends Interval
     public float min;
     public float max;
     
+    public RealInterval(float minVal, float maxVal)
+    {
+        this.min = minVal;
+        this.max = maxVal;
+    }
+    
+    public RealInterval(String minVal, String maxVal)
+    {
+        setMin(minVal);
+        setMax(maxVal);
+    }
+    
     public void setMin(String minVal)
     {
         try
@@ -30,7 +42,7 @@ public class RealInterval extends Interval
             if (StringUtils.isEmpty(maxVal))
                 return;
             
-            min = Float.parseFloat(maxVal);        
+            max = Float.parseFloat(maxVal);        
         }
         catch(Exception e)
         {

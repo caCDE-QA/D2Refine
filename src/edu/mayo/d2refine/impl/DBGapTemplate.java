@@ -16,8 +16,6 @@ public class DBGapTemplate implements D2RefineTemplate
 {
     private Project project_;
     
-    private String ENCODED_CHECK = "encode";
-    
     public DBGapTemplate(Project project) 
     {
         this.project_ = project;
@@ -60,27 +58,51 @@ public class DBGapTemplate implements D2RefineTemplate
     }
 
     @Override
+    public String getValueSetName(Row row)
+    {
+        return getStringValue(row, DBGapConstants.VARIABLE_NAME_INDEX);  
+    }
+    
+    @Override
+    public String getValueSetDescription(Row row)
+    {
+        return getStringValue(row, DBGapConstants.VARIABLE_DESC_INDEX);  
+    }
+    
+    @Override
+    public String getValueSetMember(Row row) 
+    {        
+        return getStringValue(row, DBGapConstants.VARIABLE_CODED_VALUE_INDEX);   
+    }
+
+    @Override
+    public String getValueSetMemberCode(Row row) 
+    {
+        return getStringValue(row, DBGapConstants.VARIABLE_CODED_VALUE_CODE_INDEX);
+    }
+    
+    @Override
     public DataType getConstraintDataType(Row row) 
     {
-        DataType dt = new DataType();
-        dt.type = "string";
-        dt.isEncoded = false;
-        
         String type = getStringValue(row, DBGapConstants.VARIABLE_TYPE_INDEX);
         
         if (StringUtils.isEmpty(type))
-            return dt;
+            return null;
         
-        if (type.toLowerCase().contains(this.ENCODED_CHECK))
+        DataType dt = new DataType();
+        dt.type = DBGapConstants.TEMPLATE_TYPE_STRING;
+        dt.isEncoded = false;
+              
+        if (type.toLowerCase().contains(DBGapConstants.TEMPLATE_TYPE_ENCODED))
             dt.isEncoded = true;
         
-        if (type.toLowerCase().contains("integer"))
-            dt.type = "integer";
+        if (type.toLowerCase().contains(DBGapConstants.TEMPLATE_TYPE_INTEGER))
+            dt.type = DBGapConstants.RMATYPE_INTEGER;
         
-        if ((type.toLowerCase().contains("decimal"))||
-                (type.toLowerCase().contains("float"))||
-                (type.toLowerCase().contains("real")))
-            dt.type = "real"; 
+        if ((type.toLowerCase().contains(DBGapConstants.TEMPLATE_TYPE_DECIMAL))||
+                (type.toLowerCase().contains(DBGapConstants.TEMPLATE_TYPE_FLOAT))||
+                (type.toLowerCase().contains(DBGapConstants.TEMPLATE_TYPE_REAL)))
+            dt.type = DBGapConstants.RMATYPE_REAL; 
         
         dt.units = getStringValue(row, DBGapConstants.VARIABLE_UNITS_INDEX);
         
@@ -98,32 +120,40 @@ public class DBGapTemplate implements D2RefineTemplate
         
         DataType dt = getConstraintDataType(row);
         
-        if ("integer".equals(dt.type))
-        {
-            IntegerInterval ii = new IntegerInterval();
-            ii.setMin(minVal);
-            ii.setMax(maxVal);
-            return ii;
-        }
+        if (DBGapConstants.RMATYPE_INTEGER.equals(dt.type))
+            return new IntegerInterval(minVal, maxVal);
         
-        if ("real".equals(dt.type))
-        {
-            RealInterval ri = new RealInterval();
-            ri.setMin(minVal);
-            ri.setMax(maxVal);
-            return ri;
-        }
+        if (DBGapConstants.RMATYPE_REAL.equals(dt.type))
+            return  new RealInterval(minVal, maxVal);
         
-        StringInterval si = new StringInterval();
-        si.min = minVal;
-        si.max = maxVal;
-        return si;
+        return new StringInterval(minVal, maxVal);
     }
 
     @Override
     public String getPackageName() 
     {
-        return "DBGAP";
+        return DBGapConstants.DBGAP_PACKAGE_NAME;
+    }
+    
+    public IntegerInterval getRowOccurrence(Row row)
+    {
+        return new IntegerInterval(0, 1);
+    }
+    
+    public String getConstrainedRMClass(Row row)
+    {
+        if (row == null)
+            return DBGapConstants.RMCLASS_ITEM_GROUP;
+        
+        return DBGapConstants.RMCLASS_ELEMENT;
+    }
+    
+    public String getConstrainedRMClassAttribute(Row row, String rmClassName)
+    {
+        if (DBGapConstants.RMCLASS_ITEM_GROUP.equals(rmClassName))
+            return DBGapConstants.RMATT_ITEM;
+        
+        return DBGapConstants.RMATT_VALUE;
     }
     
     private String getStringValue(Row row, int index)

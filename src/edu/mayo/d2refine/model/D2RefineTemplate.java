@@ -2,9 +2,6 @@ package edu.mayo.d2refine.model;
 
 import com.google.refine.model.Row;
 
-import edu.mayo.d2refine.model.DataType;
-import edu.mayo.d2refine.model.Interval;
-
 public interface D2RefineTemplate 
 {
     public String getName();
@@ -15,4 +12,13 @@ public interface D2RefineTemplate
     public String getConstraintDescription(Row row);
     public DataType getConstraintDataType(Row row);    
     public Interval getInterval(Row row);
+    public IntegerInterval getRowOccurrence(Row row);
+    
+    public String getConstrainedRMClass(Row row);   
+    public String getConstrainedRMClassAttribute(Row row, String rmClassName);
+    
+    public String getValueSetName(Row row);
+    public String getValueSetDescription(Row row);
+    public String getValueSetMember(Row row);
+    public String getValueSetMemberCode(Row row);
 }
