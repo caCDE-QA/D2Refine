@@ -5,10 +5,10 @@ import org.apache.commons.lang.StringUtils;
 
 public class RealInterval extends Interval
 {
-    public float min;
-    public float max;
+    public double min;
+    public double max;
     
-    public RealInterval(float minVal, float maxVal)
+    public RealInterval(double minVal, double maxVal)
     {
         this.min = minVal;
         this.max = maxVal;

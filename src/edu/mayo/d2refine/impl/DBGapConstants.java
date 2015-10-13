@@ -2,8 +2,9 @@ package edu.mayo.d2refine.impl;
 
 public class DBGapConstants 
 {
-    // RM Classes used
     public static String DBGAP_PACKAGE_NAME = "DBGAP";
+    
+ // RM Specific
     public static String RMCLASS_ITEM_GROUP = "ITEM_GROUP";
     public static String RMCLASS_ELEMENT = "ELEMENT";
     public static String RMCLASS_COUNT = "COUNT";

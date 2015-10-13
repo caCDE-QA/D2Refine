@@ -15,7 +15,6 @@ import com.google.refine.model.Project;
 import edu.mayo.d2refine.ADLExporterExtension.DDRowVisitor;
 import edu.mayo.d2refine.impl.DBGapTemplate;
 import edu.mayo.d2refine.model.D2RefineTemplate;
-import edu.mayo.samepage.utils.ADLUtils;
 
 
 public class ADLExporter implements WriterExporter
