@@ -50,7 +50,7 @@ public class DBGapTemplate implements D2RefineTemplate
     {        
         return getStringValue(row, DBGapConstants.VARIABLE_NAME_INDEX);   
     }
-
+    
     @Override
     public String getConstraintDescription(Row row) 
     {
@@ -60,7 +60,7 @@ public class DBGapTemplate implements D2RefineTemplate
     @Override
     public String getValueSetName(Row row)
     {
-        return getStringValue(row, DBGapConstants.VARIABLE_NAME_INDEX);  
+        return getConstraintName(row);  
     }
     
     @Override

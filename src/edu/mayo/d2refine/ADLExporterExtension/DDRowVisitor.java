@@ -30,6 +30,7 @@ import com.google.refine.browsing.RowVisitor;
 import com.google.refine.model.Project;
 import com.google.refine.model.Row;     
 
+import edu.mayo.d2refine.impl.DBGapConstants;
 import edu.mayo.d2refine.model.D2RefineTemplate;
 import edu.mayo.d2refine.model.DataType;
 import edu.mayo.d2refine.model.IntegerInterval;
@@ -61,7 +62,7 @@ public class DDRowVisitor implements RowVisitor
     public String currentValueSetId_ = null;
     public List<String> currentValueSet_ = null;
     
-    public String archetypeRMClass_ = null;
+    //public String archetypeRMClass_ = null;
     
     public String topId = null;
         
@@ -75,26 +76,16 @@ public class DDRowVisitor implements RowVisitor
     @Override
     public void start(Project project) 
     {
-        try
-        {
-            System.out.println("STarting...");
-            this.metadata_ = new ADLMetaData(ADLRM.OPENCIMI);
-            
-            System.out.println("after metadata call" + this.metadata_);
-            
-            this.archetypeRMClass_ = this.template_.getConstrainedRMClass(null);
-                    
-            String archetypeName = this.template_.getName();
-            String archetypeDescription = this.template_.getDescription();
-            
-            this.archetype_ = new ADLArchetype(archetypeName, metadata_);
-            topId = this.archetype_.addNewId(IDType.TERM, archetypeName, archetypeDescription);
-        }
-        catch (Exception e)
-        {
-            System.out.println("HERE############");
-            e.printStackTrace();
-        }
+        this.metadata_ = new ADLMetaData(ADLRM.OPENCIMI);
+        this.metadata_.setDefaultTerminologySetName("snomed-ct");
+        
+        //this.archetypeRMClass_ = this.template_.getConstrainedRMClass(null);
+                
+        String archetypeName = this.template_.getName();
+        String archetypeDescription = this.template_.getDescription();
+        
+        this.archetype_ = new ADLArchetype(archetypeName, metadata_);
+        topId = this.archetype_.addNewId(IDType.TERM, archetypeName, archetypeDescription);       
     }
 
     @Override
@@ -103,12 +94,12 @@ public class DDRowVisitor implements RowVisitor
         if (this.archetype_ == null)
             logger.error("Archetype is null!... returning...");
         
-        logger.info("Row=" + rowIndex + ":" + row);
+        //logger.info("Row=" + rowIndex + ":" + row);
         
         DataType dt  = this.template_.getConstraintDataType(row);
         if (dt == null)
         {
-            // If datatype is null then check if this row has some
+            // If data type is null then check if this row has some
             // permissive values to be included as members of already
             // defined value-set
             
@@ -143,6 +134,8 @@ public class DDRowVisitor implements RowVisitor
         IntegerInterval occurrence = this.template_.getRowOccurrence(row);
         if (occurrence != null)
             multiplicity = this.archetypeHelper_.createMultiplicity(occurrence.min, occurrence.max);
+        else
+            multiplicity = this.archetypeHelper_.createMultiplicity(0, 1);
         
         RmType rmClass = metadata_.getRmType(constraintRMClassName);
         RmTypeAttribute rmAttribute= metadata_.getRmAttribute(constraintRMClassName, attributeName);
@@ -183,10 +176,47 @@ public class DDRowVisitor implements RowVisitor
                     subConstraints.add(constraint2);
         }
         
+        if ((interval == null)&&(!dt.isEncoded))
+        {
+            // It is either an identifier or some other simple/primitve constraints.
+            String constrainedType = getIdentifyingType(constraintName, dt);
+            RmType rmType = metadata_.getRmType(constrainedType);
+            
+            /*
+            RmTypeAttribute rmAtt = metadata_.getRmAttribute(rmType.getRmType(), "value");            
+            if ("IDENTIFIER".equals(constrainedType))
+                rmAtt = metadata_.getRmAttribute(rmType.getRmType(), "id");
+            */
+            
+            String constraint3Id = this.archetype_.addNewId(IDType.TERM, constraintName, description);
+            CComplexObject constraint3 = this.archetypeHelper_.createComplexObjectConstraint(rmType, null, constraint3Id, null, null);
+            
+            if (constraint3 != null)
+                subConstraints.add(constraint3);
+        }
+        
         CComplexObject constraint = this.archetypeHelper_.createComplexObjectConstraint(rmClass, rmAttribute, constraintID, multiplicity, subConstraints);        
         constraints_.add(constraint);
                 
         return false;
+    }
+    
+    public String getIdentifyingType(String name, DataType type)
+    {
+        String lc = name.toLowerCase();
+        
+        if ((lc.indexOf(" id") != -1)||
+            (lc.indexOf("_id") != -1)||
+            (lc.endsWith("id")))
+            return "IDENTIFIER";
+        
+        if (DBGapConstants.RMATYPE_INTEGER.equals(type.type))
+            return "COUNT";
+        
+        if (DBGapConstants.RMATYPE_REAL.equals(type.type))
+            return "QUANTITY";
+        
+        return "PLAIN_TEXT";        
     }
     
     public CObject getCIMIInterval(Interval interval, String id)
@@ -259,8 +289,6 @@ public class DDRowVisitor implements RowVisitor
     @Override
     public void end(Project project) 
     {
-        String groupingAttribute = this.template_.getConstrainedRMClassAttribute(null, archetypeRMClass_);
-        
         if ((this.valueSets_ != null) && (!this.valueSets_.isEmpty()))
             for (String vsId : this.valueSets_.keySet())
                 if ((this.valueSets_.get(vsId) != null)&&(!this.valueSets_.get(vsId).isEmpty()))
