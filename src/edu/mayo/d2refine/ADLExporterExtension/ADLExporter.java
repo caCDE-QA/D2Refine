@@ -37,7 +37,7 @@ public class ADLExporter implements WriterExporter
     public void export(Project project, Properties options, Engine engine, Writer writer) throws IOException
     {               
         D2RefineTemplate template = new DBGapTemplate(project);
-        DDRowVisitor ddVisitor = new DDRowVisitor(template, writer);
+        DDRowVisitor ddVisitor = new DDRowVisitor(template, this.type_, writer);
         
         FilteredRows allRows = engine.getAllRows();
         allRows.accept(project, ddVisitor);

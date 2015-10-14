@@ -14,9 +14,6 @@ public interface D2RefineTemplate
     public Interval getInterval(Row row);
     public IntegerInterval getRowOccurrence(Row row);
     
-    public String getConstrainedRMClass(Row row);   
-    public String getConstrainedRMClassAttribute(Row row, String rmClassName);
-    
     public String getValueSetName(Row row);
     public String getValueSetDescription(Row row);
     public String getValueSetMember(Row row);

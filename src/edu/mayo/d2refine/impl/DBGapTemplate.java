@@ -20,8 +20,8 @@ public class DBGapTemplate implements D2RefineTemplate
     {
         this.project_ = project;
         
-        if (DBGapConstants.VARIABLE_NAME_INDEX > -1)
-            return;
+        //if (DBGapConstants.VARIABLE_NAME_INDEX > -1)
+         //   return;
         
         DBGapConstants.VARIABLE_NAME_INDEX = project_.columnModel.getColumnByName(DBGapConstants.VARIABLE_NAME).getCellIndex();
         DBGapConstants.VARIABLE_TYPE_INDEX = project_.columnModel.getColumnByName(DBGapConstants.VARIABLE_TYPE).getCellIndex();
@@ -145,23 +145,7 @@ public class DBGapTemplate implements D2RefineTemplate
     {
         return new IntegerInterval(0, 1);
     }
-    
-    public String getConstrainedRMClass(Row row)
-    {
-        if (row == null)
-            return DBGapConstants.RMCLASS_ITEM_GROUP;
         
-        return DBGapConstants.RMCLASS_ELEMENT;
-    }
-    
-    public String getConstrainedRMClassAttribute(Row row, String rmClassName)
-    {
-        if (DBGapConstants.RMCLASS_ITEM_GROUP.equals(rmClassName))
-            return DBGapConstants.RMATT_ITEM;
-        
-        return DBGapConstants.RMATT_VALUE;
-    }
-    
     private String getStringValue(Row row, int index)
     {
         

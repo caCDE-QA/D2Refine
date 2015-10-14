@@ -7,6 +7,7 @@ import static org.openehr.adl.am.AmObjectFactory.newCReal;
 import static org.openehr.adl.am.AmObjectFactory.newCString;
 import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfInteger;
 import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfReal;
+import static org.openehr.adl.am.AmObjectFactory.newCTerminologyCode;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -28,7 +29,7 @@ import com.google.common.collect.ImmutableList;
 
 import com.google.refine.browsing.RowVisitor;
 import com.google.refine.model.Project;
-import com.google.refine.model.Row;     
+import com.google.refine.model.Row;
 
 import edu.mayo.d2refine.impl.DBGapConstants;
 import edu.mayo.d2refine.model.D2RefineTemplate;
@@ -62,21 +63,28 @@ public class DDRowVisitor implements RowVisitor
     public String currentValueSetId_ = null;
     public List<String> currentValueSet_ = null;
     
-    //public String archetypeRMClass_ = null;
+   public ADLRM rmKind_ = null;
     
     public String topId = null;
         
-    public DDRowVisitor(D2RefineTemplate template, Writer writer) 
+    public DDRowVisitor(D2RefineTemplate template, String rmType, Writer writer) 
     {
         this.template_ = template;
         this.writer_ = writer;
+        
+        if ("OPENCIMI".equals(rmType))
+            this.rmKind_ = ADLRM.OPENCIMI;
+        else
+            this.rmKind_ = ADLRM.OPENEHR;
+        
+        this.metadata_ = new ADLMetaData(this.rmKind_);
     }
     
     
     @Override
     public void start(Project project) 
     {
-        this.metadata_ = new ADLMetaData(ADLRM.OPENCIMI);
+        //this.metadata_ = new ADLMetaData(ADLRM.OPENCIMI);
         this.metadata_.setDefaultTerminologySetName("snomed-ct");
         
         //this.archetypeRMClass_ = this.template_.getConstrainedRMClass(null);
@@ -122,9 +130,6 @@ public class DDRowVisitor implements RowVisitor
             this.currentValueSet_ = null;
         }
         
-        String constraintRMClassName = this.template_.getConstrainedRMClass(row);
-        String attributeName = this.template_.getConstrainedRMClassAttribute(row, constraintRMClassName);
-        
         String constraintName = this.template_.getConstraintName(row);
         String description = this.template_.getConstraintDescription(row);
         String constraintID = this.archetype_.addNewId(IDType.TERM, constraintName, description);   
@@ -137,8 +142,6 @@ public class DDRowVisitor implements RowVisitor
         else
             multiplicity = this.archetypeHelper_.createMultiplicity(0, 1);
         
-        RmType rmClass = metadata_.getRmType(constraintRMClassName);
-        RmTypeAttribute rmAttribute= metadata_.getRmAttribute(constraintRMClassName, attributeName);
                 
         List<CObject> subConstraints = new ArrayList<CObject>();
         
@@ -149,18 +152,33 @@ public class DDRowVisitor implements RowVisitor
             
             String constraint1ID = this.archetype_.addNewId(IDType.TERM, constraintName, description);
             
-            RmType CODEDTEXT = metadata_.getRmType("CODED_TEXT");
-            RmTypeAttribute code = metadata_.getRmAttribute(CODEDTEXT.getRmType(), "code");
-            RmTypeAttribute terminologyId = metadata_.getRmAttribute(CODEDTEXT.getRmType(), "terminology_id");
+            RmType CODEDTEXT = metadata_.getRmType(getRMTypeName("CODED_TEXT"));
+            
+            CComplexObject constraint1 = null;
+            
+            if (this.rmKind_ != ADLRM.OPENEHR)
+            {
+                RmTypeAttribute code = metadata_.getRmAttribute(CODEDTEXT.getRmType(), "code");
+                RmTypeAttribute terminologyId = metadata_.getRmAttribute(CODEDTEXT.getRmType(), "terminology_id");
 
-            CComplexObject constraint1 = newCComplexObject(CODEDTEXT.getRmType(), null, constraint1ID, ImmutableList.of(
-                    newCAttribute(terminologyId.getAttributeName(), null, null, ImmutableList.<CObject>of(
-                            newCString(null, Arrays.asList(this.currentValueSetId_), null)
-                    )),
-                    newCAttribute(code.getAttributeName(), null, null, ImmutableList.<CObject>of(
-                            newCString(".*", null, null)
-                    ))
-            ));
+                constraint1 = newCComplexObject(CODEDTEXT.getRmType(), null, constraint1ID, ImmutableList.of(
+                        newCAttribute(terminologyId.getAttributeName(), null, null, ImmutableList.<CObject>of(
+                                newCString(null, Arrays.asList(this.currentValueSetId_), null)
+                                )),
+                                newCAttribute(code.getAttributeName(), null, null, ImmutableList.<CObject>of(
+                                        newCString(".*", null, null)
+                                ))
+                        ));
+            }
+            else
+            {
+                RmTypeAttribute def_code = metadata_.getRmAttribute(CODEDTEXT.getRmType(), "defining_code");
+                constraint1 = newCComplexObject(CODEDTEXT.getRmType(), null, constraint1ID, ImmutableList.of(
+                        newCAttribute(def_code.getAttributeName(), null, null, ImmutableList.<CObject>of(
+                                newCTerminologyCode(this.currentValueSetId_, null)
+                        ))
+                ));
+            }
             
             if (constraint1 != null)
                 subConstraints.add(constraint1);
@@ -188,8 +206,9 @@ public class DDRowVisitor implements RowVisitor
             
             if (!StringUtils.isEmpty(value))
             {
-                rmAtt = metadata_.getRmAttribute(rmType.getRmType(), "value");            
-                if ("IDENTIFIER".equals(constrainedType))
+                rmAtt = metadata_.getRmAttribute(rmType.getRmType(), "value"); 
+                
+                if (getRMTypeName("IDENTIFIER").equals(constrainedType))
                     rmAtt = metadata_.getRmAttribute(rmType.getRmType(), "id");
                 
                 String[] values = { value };
@@ -203,7 +222,11 @@ public class DDRowVisitor implements RowVisitor
                 subConstraints.add(constraint3);
         }
         
-        CComplexObject constraint = this.archetypeHelper_.createComplexObjectConstraint(rmClass, rmAttribute, constraintID, multiplicity, subConstraints);        
+        String element = getRMTypeName("ELEMENT");
+        RmType rmClass = metadata_.getRmType(element);
+        RmTypeAttribute rmAttribute= metadata_.getRmAttribute(element, "value");        
+        CComplexObject constraint = this.archetypeHelper_.createComplexObjectConstraint(rmClass, rmAttribute, constraintID, multiplicity, subConstraints); 
+        
         constraints_.add(constraint);
                 
         return false;
@@ -216,15 +239,41 @@ public class DDRowVisitor implements RowVisitor
         if ((lc.indexOf(" id") != -1)||
             (lc.indexOf("_id") != -1)||
             (lc.endsWith("id")))
-            return "IDENTIFIER";
+            return getRMTypeName("IDENTIFIER");
         
         if (DBGapConstants.RMATYPE_INTEGER.equals(type.type))
-            return "COUNT";
+            return getRMTypeName("COUNT");
         
         if (DBGapConstants.RMATYPE_REAL.equals(type.type))
-            return "QUANTITY";
+            return getRMTypeName("QUANTITY");
         
-        return "PLAIN_TEXT";        
+        return getRMTypeName("PLAIN_TEXT");        
+    }
+    
+    private String getRMTypeName(String name)
+    {
+        if (this.rmKind_ == ADLRM.OPENEHR)
+        {
+            if ("ITEM_GROUP".equals(name))
+                return "CLUSTER";
+            
+            if ("IDENTIFIER".equals(name))
+                return "DV_IDENTIFIER";
+            
+            if ("COUNT".equals(name))
+                return "DV_COUNT";
+            
+            if ("QUANTITY".equals(name))
+                return "DV_QUANTITY";
+            
+            if ("PLAIN_TEXT".equals(name))
+                return "DV_TEXT";
+            
+            if ("CODED_TEXT".equals(name))
+                return "DV_CODED_TEXT";
+        }
+        
+        return name;
     }
     
     public CObject getCIMIInterval(Interval interval, String id)
@@ -235,13 +284,14 @@ public class DDRowVisitor implements RowVisitor
         MultiplicityInterval occurrence01 = this.archetypeHelper_.createMultiplicity(0, 1);
         if (interval instanceof IntegerInterval)
         {
-            RmType COUNT = metadata_.getRmType("COUNT");
-            RmTypeAttribute value = metadata_.getRmAttribute(COUNT.getRmType(), "value");
+            RmType COUNT = metadata_.getRmType(getRMTypeName("COUNT"));
+            String countAttribute = (this.rmKind_ == ADLRM.OPENEHR)? "magnitude" : "value";
+            RmTypeAttribute avalue = metadata_.getRmAttribute(COUNT.getRmType(), countAttribute);
             
             IntegerInterval ii = (IntegerInterval) interval;
             
             return newCComplexObject(COUNT.getRmType(), occurrence01, id, ImmutableList.of(
-                    newCAttribute(value.getAttributeName(), null, null, ImmutableList.<CObject>of(
+                    newCAttribute(avalue.getAttributeName(), null, null, ImmutableList.<CObject>of(
                             newCInteger(newIntervalOfInteger(ii.min, ii.max), null)
                     ))
             ));
@@ -251,13 +301,13 @@ public class DDRowVisitor implements RowVisitor
         {
             RealInterval ri = (RealInterval) interval;
             
-            RmType QUANTITY = metadata_.getRmType("QUANTITY");
-            RmTypeAttribute value = metadata_.getRmAttribute(QUANTITY.getRmType(), "value");
+            RmType QUANTITY = metadata_.getRmType(getRMTypeName("QUANTITY"));
             
-            Double noval = new Double(0);
+            String quantityAttribute = (this.rmKind_ == ADLRM.OPENEHR)? "magnitude" : "value";
+            RmTypeAttribute qvalue = metadata_.getRmAttribute(QUANTITY.getRmType(), quantityAttribute);
             
             return newCComplexObject(QUANTITY.getRmType(), occurrence01, id, ImmutableList.of(
-                    newCAttribute(value.getAttributeName(), null, null, ImmutableList.<CObject>of(
+                    newCAttribute(qvalue.getAttributeName(), null, null, ImmutableList.<CObject>of(
                             newCReal(newIntervalOfReal(ri.min, ri.max), null)
                     ))
             ));
@@ -302,8 +352,15 @@ public class DDRowVisitor implements RowVisitor
                 if ((this.valueSets_.get(vsId) != null)&&(!this.valueSets_.get(vsId).isEmpty()))
                     this.archetype_.updateValueSet(vsId, this.valueSets_.get(vsId).toArray(new String[this.valueSets_.get(vsId).size()]));
         
-        RmType ITEM_GROUP = metadata_.getRmType("ITEM_GROUP");
-        RmTypeAttribute item = metadata_.getRmAttribute(ITEM_GROUP.getRmType(), "item");
+        RmType ITEM_GROUP = metadata_.getRmType(getRMTypeName("ITEM_GROUP"));
+        
+        RmTypeAttribute item = null;
+        
+        if (this.rmKind_ == ADLRM.OPENEHR)
+            item = metadata_.getRmAttribute(ITEM_GROUP.getRmType(), "items");
+        else
+            item = metadata_.getRmAttribute(ITEM_GROUP.getRmType(), "item");
+        
         MultiplicityInterval occurrence01 = this.archetypeHelper_.createMultiplicity(0, 1);
         
        CComplexObject topConstraint = this.archetypeHelper_.createComplexObjectConstraint(ITEM_GROUP, item, topId, occurrence01, this.constraints_);
