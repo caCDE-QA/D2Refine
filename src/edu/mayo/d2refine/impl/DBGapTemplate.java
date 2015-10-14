@@ -29,7 +29,7 @@ public class DBGapTemplate implements D2RefineTemplate
         DBGapConstants.VARIABLE_MINVAL_INDEX = project_.columnModel.getColumnByName(DBGapConstants.VARIABLE_MINVAL).getCellIndex();
         DBGapConstants.VARIABLE_MAXVAL_INDEX = project_.columnModel.getColumnByName(DBGapConstants.VARIABLE_MAXVAL).getCellIndex();
         DBGapConstants.VARIABLE_UNITS_INDEX = project_.columnModel.getColumnByName(DBGapConstants.VARIABLE_UNITS).getCellIndex();
-        DBGapConstants.VARIABLE_CODED_VALUE_INDEX = project_.columnModel.getColumnByName(DBGapConstants.VARIABLE_CODED_VALUE).getCellIndex();
+        DBGapConstants.VARIABLE_VALUE_INDEX = project_.columnModel.getColumnByName(DBGapConstants.VARIABLE_VALUE).getCellIndex();
         DBGapConstants.VARIABLE_CODED_VALUE_CODE_INDEX = project_.columnModel.getColumnByName(DBGapConstants.VARIABLE_CODED_VALUE_CODE).getCellIndex();
     }
     
@@ -72,9 +72,15 @@ public class DBGapTemplate implements D2RefineTemplate
     @Override
     public String getValueSetMember(Row row) 
     {        
-        return getStringValue(row, DBGapConstants.VARIABLE_CODED_VALUE_INDEX);   
+        return getValue(row);   
     }
 
+    @Override
+    public String getValue(Row row) 
+    {        
+        return getStringValue(row, DBGapConstants.VARIABLE_VALUE_INDEX);   
+    }
+    
     @Override
     public String getValueSetMemberCode(Row row) 
     {

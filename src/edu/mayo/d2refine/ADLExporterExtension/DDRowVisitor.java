@@ -182,14 +182,22 @@ public class DDRowVisitor implements RowVisitor
             String constrainedType = getIdentifyingType(constraintName, dt);
             RmType rmType = metadata_.getRmType(constrainedType);
             
-            /*
-            RmTypeAttribute rmAtt = metadata_.getRmAttribute(rmType.getRmType(), "value");            
-            if ("IDENTIFIER".equals(constrainedType))
-                rmAtt = metadata_.getRmAttribute(rmType.getRmType(), "id");
-            */
+            RmTypeAttribute rmAtt = null;
+            String value = this.template_.getValue(row);
+            List<CObject> restrictions = new ArrayList<CObject>();
+            
+            if (!StringUtils.isEmpty(value))
+            {
+                rmAtt = metadata_.getRmAttribute(rmType.getRmType(), "value");            
+                if ("IDENTIFIER".equals(constrainedType))
+                    rmAtt = metadata_.getRmAttribute(rmType.getRmType(), "id");
+                
+                String[] values = { value };
+                restrictions.add(newCString(null, Arrays.asList(values), null));
+            }
             
             String constraint3Id = this.archetype_.addNewId(IDType.TERM, constraintName, description);
-            CComplexObject constraint3 = this.archetypeHelper_.createComplexObjectConstraint(rmType, null, constraint3Id, null, null);
+            CComplexObject constraint3 = this.archetypeHelper_.createComplexObjectConstraint(rmType, rmAtt, constraint3Id, null, restrictions);
             
             if (constraint3 != null)
                 subConstraints.add(constraint3);

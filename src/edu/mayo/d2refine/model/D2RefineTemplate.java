@@ -21,4 +21,5 @@ public interface D2RefineTemplate
     public String getValueSetDescription(Row row);
     public String getValueSetMember(Row row);
     public String getValueSetMemberCode(Row row);
+    public String getValue(Row row);
 }

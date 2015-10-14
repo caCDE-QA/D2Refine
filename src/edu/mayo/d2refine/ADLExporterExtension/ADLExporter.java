@@ -20,7 +20,14 @@ import edu.mayo.d2refine.model.D2RefineTemplate;
 public class ADLExporter implements WriterExporter
 {
     final static Logger logger = LoggerFactory.getLogger("ADLExporter");
+    
+    private String type_ = "OPENCIMI";
  
+    public ADLExporter(String type)
+    {
+       this.type_ = type; 
+    }
+    
     @Override
     public String getContentType() 
     {

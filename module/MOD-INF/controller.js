@@ -42,7 +42,9 @@ function init()
 {
   var Exp = Packages.com.google.refine.exporters;
   Exp.ExporterRegistry.registerExporter(
-		  "D2Refine", new Packages.edu.mayo.d2refine.ADLExporterExtension.ADLExporter());
+		  "D2Refine1", new Packages.edu.mayo.d2refine.ADLExporterExtension.ADLExporter("OPENEHR"));  
+  Exp.ExporterRegistry.registerExporter(
+		  "D2Refine2", new Packages.edu.mayo.d2refine.ADLExporterExtension.ADLExporter("OPENCIMI"));
   
   // Script files to inject into /project page
   ClientSideResourceManager.addPaths(
