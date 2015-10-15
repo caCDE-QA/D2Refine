@@ -42,10 +42,6 @@ public class ADLExporter implements WriterExporter
         FilteredRows allRows = engine.getAllRows();
         allRows.accept(project, ddVisitor);
         
-        //String dividerText = "\n\n#########################\nThe following content comes from already loaded ADL\n##########################\n\n";
-            
-        //String reader = ADLUtils.getTestArchetypeText();
-        //writer.write(archText + dividerText + reader);
         return;
     }
 }

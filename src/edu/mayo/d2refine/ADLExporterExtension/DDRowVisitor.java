@@ -1,13 +1,11 @@
 package edu.mayo.d2refine.ADLExporterExtension;
 
-import static org.openehr.adl.am.AmObjectFactory.newCAttribute;
-import static org.openehr.adl.am.AmObjectFactory.newCComplexObject;
 import static org.openehr.adl.am.AmObjectFactory.newCInteger;
 import static org.openehr.adl.am.AmObjectFactory.newCReal;
 import static org.openehr.adl.am.AmObjectFactory.newCString;
+import static org.openehr.adl.am.AmObjectFactory.newCTerminologyCode;
 import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfInteger;
 import static org.openehr.adl.rm.RmObjectFactory.newIntervalOfReal;
-import static org.openehr.adl.am.AmObjectFactory.newCTerminologyCode;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -19,6 +17,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.openehr.adl.rm.RmType;
 import org.openehr.adl.rm.RmTypeAttribute;
+import org.openehr.jaxb.am.CAttribute;
 import org.openehr.jaxb.am.CComplexObject;
 import org.openehr.jaxb.am.CObject;
 import org.openehr.jaxb.rm.MultiplicityInterval;
@@ -157,10 +156,20 @@ public class DDRowVisitor implements RowVisitor
             CComplexObject constraint1 = null;
             
             if (this.rmKind_ != ADLRM.OPENEHR)
-            {
-                RmTypeAttribute code = metadata_.getRmAttribute(CODEDTEXT.getRmType(), "code");
+            {  
+                List<CAttribute> consts = new ArrayList<CAttribute>();
+                
                 RmTypeAttribute terminologyId = metadata_.getRmAttribute(CODEDTEXT.getRmType(), "terminology_id");
-
+                CObject vsConst = newCString(null, Arrays.asList(this.currentValueSetId_), null);                
+                consts.add(this.archetypeHelper_.createAttributeConstraint(terminologyId, null, null, ImmutableList.<CObject>of(vsConst)));
+                
+                RmTypeAttribute code = metadata_.getRmAttribute(CODEDTEXT.getRmType(), "code");
+                CObject cdConst = newCString(".*", null, null);
+                consts.add(this.archetypeHelper_.createAttributeConstraint(code, null, null, ImmutableList.<CObject>of(cdConst)));
+                                
+                constraint1 = this.archetypeHelper_.createComplexObjectConstraint(CODEDTEXT, constraint1ID, null, consts);
+                
+                /*
                 constraint1 = newCComplexObject(CODEDTEXT.getRmType(), null, constraint1ID, ImmutableList.of(
                         newCAttribute(terminologyId.getAttributeName(), null, null, ImmutableList.<CObject>of(
                                 newCString(null, Arrays.asList(this.currentValueSetId_), null)
@@ -169,15 +178,22 @@ public class DDRowVisitor implements RowVisitor
                                         newCString(".*", null, null)
                                 ))
                         ));
+                */
             }
             else
             {
-                RmTypeAttribute def_code = metadata_.getRmAttribute(CODEDTEXT.getRmType(), "defining_code");
+                RmTypeAttribute def_code = metadata_.getRmAttribute(CODEDTEXT.getRmType(), "defining_code");              
+                CObject termCodeConst = newCTerminologyCode(this.currentValueSetId_, null);
+                constraint1 = this.archetypeHelper_.createComplexObjectConstraint(CODEDTEXT, def_code, constraint1ID, null,  
+                                                                            ImmutableList.<CObject>of(termCodeConst)); 
+                
+                /*
                 constraint1 = newCComplexObject(CODEDTEXT.getRmType(), null, constraint1ID, ImmutableList.of(
                         newCAttribute(def_code.getAttributeName(), null, null, ImmutableList.<CObject>of(
                                 newCTerminologyCode(this.currentValueSetId_, null)
                         ))
                 ));
+                */
             }
             
             if (constraint1 != null)
@@ -232,6 +248,120 @@ public class DDRowVisitor implements RowVisitor
         return false;
     }
     
+
+    
+    public CObject getCIMIInterval(Interval interval, String id)
+    {
+        if (interval == null)
+            return null;
+        
+        MultiplicityInterval occurrence01 = this.archetypeHelper_.createMultiplicity(0, 1);
+        if (interval instanceof IntegerInterval)
+        {
+            RmType COUNT = metadata_.getRmType(getRMTypeName("COUNT"));
+            String countAttribute = (this.rmKind_ == ADLRM.OPENEHR)? "magnitude" : "value";
+            RmTypeAttribute avalue = metadata_.getRmAttribute(COUNT.getRmType(), countAttribute);
+            
+            IntegerInterval ii = (IntegerInterval) interval;
+            CObject intIntervalConst = newCInteger(newIntervalOfInteger(ii.min, ii.max), null);
+            return this.archetypeHelper_.createComplexObjectConstraint(COUNT, avalue, id, occurrence01,  
+                                                                        ImmutableList.<CObject>of(intIntervalConst)); 
+            /*
+            return newCComplexObject(COUNT.getRmType(), occurrence01, id, ImmutableList.of(
+                    newCAttribute(avalue.getAttributeName(), null, null, ImmutableList.<CObject>of(
+                            newCInteger(newIntervalOfInteger(ii.min, ii.max), null)
+                    ))
+            ));
+            */          
+        }
+        
+        if (interval instanceof RealInterval)
+        {
+ 
+            RmType QUANTITY = metadata_.getRmType(getRMTypeName("QUANTITY"));
+            
+            String quantityAttribute = (this.rmKind_ == ADLRM.OPENEHR)? "magnitude" : "value";
+            RmTypeAttribute qvalue = metadata_.getRmAttribute(QUANTITY.getRmType(), quantityAttribute);
+            
+            RealInterval ri = (RealInterval) interval;
+            CObject realIntervalConst = newCReal(newIntervalOfReal(ri.min, ri.max), null);
+            return this.archetypeHelper_.createComplexObjectConstraint(QUANTITY, qvalue, id, occurrence01,  
+                    ImmutableList.<CObject>of(realIntervalConst)); 
+            /*
+            return newCComplexObject(QUANTITY.getRmType(), occurrence01, id, ImmutableList.of(
+                    newCAttribute(qvalue.getAttributeName(), null, null, ImmutableList.<CObject>of(
+                            newCReal(newIntervalOfReal(ri.min, ri.max), null)
+                    ))
+            ));
+            */     
+        }
+        
+        return null;
+     }
+    
+    public void initValueSet(Row row)
+    {       
+        String valueSetName = this.template_.getValueSetName(row);
+        String valueSetDescription = this.template_.getValueSetDescription(row);
+        
+        this.currentValueSetId_ = this.archetype_.addNewId(IDType.VALUESET, valueSetName, valueSetDescription);
+        this.currentValueSet_ = new ArrayList<String>();
+    }
+    
+    public void processPermissibleValue(Row row)
+    { 
+        String name = this.template_.getValueSetMember(row);
+        String code = this.template_.getValueSetMemberCode(row);
+                
+        if (StringUtils.isEmpty(code))
+            code = name;
+        
+        if (StringUtils.isEmpty(code))
+            return;
+        
+        if (StringUtils.isEmpty(name))
+            name = code;
+        
+        String pvId = this.archetype_.addNewId(IDType.VALUESETMEMBER, code, name);        
+        this.archetype_.updateValueSet(this.currentValueSetId_, pvId);
+    }
+      
+    @Override
+    public void end(Project project) 
+    {
+        if ((this.valueSets_ != null) && (!this.valueSets_.isEmpty()))
+            for (String vsId : this.valueSets_.keySet())
+                if ((this.valueSets_.get(vsId) != null)&&(!this.valueSets_.get(vsId).isEmpty()))
+                    this.archetype_.updateValueSet(vsId, this.valueSets_.get(vsId).toArray(new String[this.valueSets_.get(vsId).size()]));
+        
+        RmType ITEM_GROUP = metadata_.getRmType(getRMTypeName("ITEM_GROUP"));
+        
+        RmTypeAttribute item = null;
+        
+        if (this.rmKind_ == ADLRM.OPENEHR)
+            item = metadata_.getRmAttribute(ITEM_GROUP.getRmType(), "items");
+        else
+            item = metadata_.getRmAttribute(ITEM_GROUP.getRmType(), "item");
+        
+        MultiplicityInterval occurrence01 = this.archetypeHelper_.createMultiplicity(0, 1);
+        
+       CComplexObject topConstraint = this.archetypeHelper_.createComplexObjectConstraint(ITEM_GROUP, item, topId, occurrence01, this.constraints_);
+       
+       this.archetype_.setDefinition(topConstraint);
+       
+       String archText = this.archetype_.serialize();
+        
+        try 
+        {
+            this.writer_.write(archText);
+        } 
+        catch (IOException e) 
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
     public String getIdentifyingType(String name, DataType type)
     {
         String lc = name.toLowerCase();
@@ -274,109 +404,5 @@ public class DDRowVisitor implements RowVisitor
         }
         
         return name;
-    }
-    
-    public CObject getCIMIInterval(Interval interval, String id)
-    {
-        if (interval == null)
-            return null;
-        
-        MultiplicityInterval occurrence01 = this.archetypeHelper_.createMultiplicity(0, 1);
-        if (interval instanceof IntegerInterval)
-        {
-            RmType COUNT = metadata_.getRmType(getRMTypeName("COUNT"));
-            String countAttribute = (this.rmKind_ == ADLRM.OPENEHR)? "magnitude" : "value";
-            RmTypeAttribute avalue = metadata_.getRmAttribute(COUNT.getRmType(), countAttribute);
-            
-            IntegerInterval ii = (IntegerInterval) interval;
-            
-            return newCComplexObject(COUNT.getRmType(), occurrence01, id, ImmutableList.of(
-                    newCAttribute(avalue.getAttributeName(), null, null, ImmutableList.<CObject>of(
-                            newCInteger(newIntervalOfInteger(ii.min, ii.max), null)
-                    ))
-            ));
-        }
-        
-        if (interval instanceof RealInterval)
-        {
-            RealInterval ri = (RealInterval) interval;
-            
-            RmType QUANTITY = metadata_.getRmType(getRMTypeName("QUANTITY"));
-            
-            String quantityAttribute = (this.rmKind_ == ADLRM.OPENEHR)? "magnitude" : "value";
-            RmTypeAttribute qvalue = metadata_.getRmAttribute(QUANTITY.getRmType(), quantityAttribute);
-            
-            return newCComplexObject(QUANTITY.getRmType(), occurrence01, id, ImmutableList.of(
-                    newCAttribute(qvalue.getAttributeName(), null, null, ImmutableList.<CObject>of(
-                            newCReal(newIntervalOfReal(ri.min, ri.max), null)
-                    ))
-            ));
-        }
-        
-        return null;
-     }
-    
-    public void initValueSet(Row row)
-    {       
-        String valueSetName = this.template_.getValueSetName(row);
-        String valueSetDescription = this.template_.getValueSetDescription(row);
-        
-        this.currentValueSetId_ = this.archetype_.addNewId(IDType.VALUESET, valueSetName, valueSetDescription);
-        this.currentValueSet_ = new ArrayList<String>();
-    }
-    
-    public void processPermissibleValue(Row row)
-    { 
-        String name = this.template_.getValueSetMember(row);
-        String code = this.template_.getValueSetMemberCode(row);
-                
-        if (StringUtils.isEmpty(code))
-            code = name;
-        
-        if (StringUtils.isEmpty(code))
-            return;
-        
-        if (StringUtils.isEmpty(name))
-            name = code;
-        
-        String pvId = this.archetype_.addNewId(IDType.VALUESETMEMBER, code, name);        
-        this.archetype_.updateValueSet(this.currentValueSetId_, pvId);
-    }
-    
-    
-    @Override
-    public void end(Project project) 
-    {
-        if ((this.valueSets_ != null) && (!this.valueSets_.isEmpty()))
-            for (String vsId : this.valueSets_.keySet())
-                if ((this.valueSets_.get(vsId) != null)&&(!this.valueSets_.get(vsId).isEmpty()))
-                    this.archetype_.updateValueSet(vsId, this.valueSets_.get(vsId).toArray(new String[this.valueSets_.get(vsId).size()]));
-        
-        RmType ITEM_GROUP = metadata_.getRmType(getRMTypeName("ITEM_GROUP"));
-        
-        RmTypeAttribute item = null;
-        
-        if (this.rmKind_ == ADLRM.OPENEHR)
-            item = metadata_.getRmAttribute(ITEM_GROUP.getRmType(), "items");
-        else
-            item = metadata_.getRmAttribute(ITEM_GROUP.getRmType(), "item");
-        
-        MultiplicityInterval occurrence01 = this.archetypeHelper_.createMultiplicity(0, 1);
-        
-       CComplexObject topConstraint = this.archetypeHelper_.createComplexObjectConstraint(ITEM_GROUP, item, topId, occurrence01, this.constraints_);
-       
-       this.archetype_.setDefinition(topConstraint);
-       
-       String archText = this.archetype_.serialize();
-        
-        try 
-        {
-            this.writer_.write(archText);
-        } 
-        catch (IOException e) 
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 }
