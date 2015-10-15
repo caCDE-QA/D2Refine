@@ -1,7 +1,7 @@
 # D2Refine
 D2Refine is an extension to OpenRefine (formerly Google Refine) to convert restrictions (specified in a spreadsheet like interface) into a clinical model.  
 
-D2Refine currently serializes the model into the OpenEHR's Archetype Definition Lanugage (ADL) 2.0.
+D2Refine currently serializes dbGap Data Dictionary Template into the OpenEHR's Archetype Definition Lanugage (ADL) 2.0.
 
 D2Refine leverages the functionality provided by following libraries and provides functionality that extends the OpenRefine's Export menu.
 
