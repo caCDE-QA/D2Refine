@@ -168,17 +168,6 @@ public class DDRowVisitor implements RowVisitor
                 consts.add(this.archetypeHelper_.createAttributeConstraint(code, null, null, ImmutableList.<CObject>of(cdConst)));
                                 
                 constraint1 = this.archetypeHelper_.createComplexObjectConstraint(CODEDTEXT, constraint1ID, null, consts);
-                
-                /*
-                constraint1 = newCComplexObject(CODEDTEXT.getRmType(), null, constraint1ID, ImmutableList.of(
-                        newCAttribute(terminologyId.getAttributeName(), null, null, ImmutableList.<CObject>of(
-                                newCString(null, Arrays.asList(this.currentValueSetId_), null)
-                                )),
-                                newCAttribute(code.getAttributeName(), null, null, ImmutableList.<CObject>of(
-                                        newCString(".*", null, null)
-                                ))
-                        ));
-                */
             }
             else
             {
@@ -186,14 +175,6 @@ public class DDRowVisitor implements RowVisitor
                 CObject termCodeConst = newCTerminologyCode(this.currentValueSetId_, null);
                 constraint1 = this.archetypeHelper_.createComplexObjectConstraint(CODEDTEXT, def_code, constraint1ID, null,  
                                                                             ImmutableList.<CObject>of(termCodeConst)); 
-                
-                /*
-                constraint1 = newCComplexObject(CODEDTEXT.getRmType(), null, constraint1ID, ImmutableList.of(
-                        newCAttribute(def_code.getAttributeName(), null, null, ImmutableList.<CObject>of(
-                                newCTerminologyCode(this.currentValueSetId_, null)
-                        ))
-                ));
-                */
             }
             
             if (constraint1 != null)
@@ -266,13 +247,6 @@ public class DDRowVisitor implements RowVisitor
             CObject intIntervalConst = newCInteger(newIntervalOfInteger(ii.min, ii.max), null);
             return this.archetypeHelper_.createComplexObjectConstraint(COUNT, avalue, id, occurrence01,  
                                                                         ImmutableList.<CObject>of(intIntervalConst)); 
-            /*
-            return newCComplexObject(COUNT.getRmType(), occurrence01, id, ImmutableList.of(
-                    newCAttribute(avalue.getAttributeName(), null, null, ImmutableList.<CObject>of(
-                            newCInteger(newIntervalOfInteger(ii.min, ii.max), null)
-                    ))
-            ));
-            */          
         }
         
         if (interval instanceof RealInterval)
@@ -286,14 +260,7 @@ public class DDRowVisitor implements RowVisitor
             RealInterval ri = (RealInterval) interval;
             CObject realIntervalConst = newCReal(newIntervalOfReal(ri.min, ri.max), null);
             return this.archetypeHelper_.createComplexObjectConstraint(QUANTITY, qvalue, id, occurrence01,  
-                    ImmutableList.<CObject>of(realIntervalConst)); 
-            /*
-            return newCComplexObject(QUANTITY.getRmType(), occurrence01, id, ImmutableList.of(
-                    newCAttribute(qvalue.getAttributeName(), null, null, ImmutableList.<CObject>of(
-                            newCReal(newIntervalOfReal(ri.min, ri.max), null)
-                    ))
-            ));
-            */     
+                                                                    ImmutableList.<CObject>of(realIntervalConst)); 
         }
         
         return null;
