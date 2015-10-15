@@ -12,7 +12,7 @@ This augments ADL2 Core libraries with an additonal Reference Model implementati
 * ADLWorks (https://github.com/semantix/ADLWorks)
 This library provides a layer of convenience methods to create ADL artefacts in memory.
 
-
+![alt tag](https://github.com/caCDE-QA/D2Refine/blob/master/docs/img/D2Refine.png)
 
 
 
