@@ -16,6 +16,6 @@ This library provides a layer of convenience methods to create ADL artefacts in 
 
 ## Installation
 
-## Development Environment Setup with build.xml
+## Development Environment
 
 
