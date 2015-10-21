@@ -2,11 +2,11 @@
 
 <!--+
     |
-    |  OpenRefine Extension ADLExporter Extension Build File    
+    |  OpenRefine Extension D2Refine Extension Build File    
     |                
     +-->
     
-<project name="refine-ADLExporter-extension" default="build" basedir=".">
+<project name="D2Refine" default="build" basedir=".">
 
     <property environment="env"/>
 	<property name="java_version" value="1.7"/>
@@ -41,7 +41,20 @@
     <property name="modinf.dir" value="${module.dir}/MOD-INF" />
     <property name="lib.dir" value="${modinf.dir}/lib" />
     <property name="classes.dir" value="${modinf.dir}/classes" />
-
+	
+	<!-- Third party libraries locations, versions.
+	     These libraries must be downloaded from their 
+	     Maven repository locations -->
+	
+	<property name="maven-repo.dir" value="${user.home}/.m2/repository" />
+	<property name="adl2-core.version" value="1.3.0" />
+	<property name="adlworks.version" value="1.0.0" />
+	<property name="model-rm-opencimi.version" value="${adl2-core.version}" />
+	
+	<!-- Properties for deploy and release mechanism -->
+	<property name="openrefine.extensions.dir" value="${user.home}/Library/Application Support/OpenRefine/extensions" />
+	<property name="D2Refine.git.dir" value="${user.home}/A123/git/Guoqian/D2Refine" />
+			
     <path id="class.path">
         <fileset dir="${lib.dir}" erroronmissingdir="false">
             <include name="**/*.jar" />
@@ -54,7 +67,7 @@
         </fileset>
         <pathelement path="${refine.classes.dir}"/>
     </path>
-            
+	            
     <target name="build_java">
         <mkdir dir="${classes.dir}" />
         <javac source="${java_version}" target="${java_version}" encoding="utf-8" destdir="${classes.dir}" debug="true" includeAntRuntime="no">
@@ -63,8 +76,43 @@
         </javac>
     </target>
 
-    <target name="build" depends="build_java" />
-
+    <target name="build" depends="getAdlLibs, build_java" >
+    	<tstamp>
+    		<format property="timestmp" pattern="MM/dd/yyyy hh:mm:ss aa" unit="hour"/>
+    	</tstamp>
+        <echo message="Building D2Refine...${timestmp}" />
+    	<zip destfile="../D2Refine/D2Refine.zip" basedir="../D2Refine/module" />
+    	<echo message="Deploying the extension to ${openrefine.extensions.dir}" />    	
+    	<unzip src="./D2Refine.zip" dest="${openrefine.extensions.dir}/D2Refine" overwrite="true" />
+    	
+    	<copy todir="${D2Refine.git.dir}" overwrite="true">
+    	    <fileset dir="../D2Refine">
+    	    	<!--exclude name="build.xml"/-->
+    		</fileset>
+    	</copy>
+    </target>
+	
+	<target name="getAdlLibs">
+		<delete dir="../D2Refine/module/MOD-INF/lib" />
+		<copy todir="../D2Refine/module/MOD-INF/lib" overwrite="true">
+			
+			<!-- These come from Public Maven Repositories -->
+			<fileset file="${maven-repo.dir}/org/slf4j/slf4j-api/1.7.7/slf4j-api-1.7.7.jar" />
+			<fileset file="${maven-repo.dir}/ch/qos/logback/logback-classic/1.1.3/logback-classic-1.1.3.jar" />
+			<fileset file="${maven-repo.dir}/ch/qos/logback/logback-core/1.1.3/logback-core-1.1.3.jar" />
+			
+			<!-- These comes from Maven Central "http://repo1.maven.org/maven2" -->	    	
+			<fileset file="${maven-repo.dir}/org/openehr/adl2-core/adl-parser/${adl2-core.version}/adl-parser-${adl2-core.version}.jar" />
+			<fileset file="${maven-repo.dir}/org/openehr/adl2-core/model-am/${adl2-core.version}/model-am-${adl2-core.version}.jar" />
+			<fileset file="${maven-repo.dir}/org/openehr/adl2-core/model-rm/${adl2-core.version}/model-rm-${adl2-core.version}.jar" />
+			<fileset file="${maven-repo.dir}/org/openehr/adl2-core/model-rm-openehr/${adl2-core.version}/model-rm-openehr-${adl2-core.version}.jar" />
+			
+			<!-- mini CIMI RM implementation comes from Mayo Informatics Maven Repository -->
+			<fileset file="${maven-repo.dir}/edu/mayo/samepage/adlworks/${adlworks.version}/adlworks-${adlworks.version}.jar" />
+			<fileset file="${maven-repo.dir}/org/openehr/adl2core/model-rm-opencimi/${model-rm-opencimi.version}/model-rm-opencimi-${model-rm-opencimi.version}.jar" />
+	    </copy>
+	</target>
+	
     <target name="clean">
         <delete dir="${classes.dir}" />
     </target>
