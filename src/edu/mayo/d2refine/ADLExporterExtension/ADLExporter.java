@@ -35,7 +35,8 @@ public class ADLExporter implements WriterExporter
     }
     
     public void export(Project project, Properties options, Engine engine, Writer writer) throws IOException
-    {               
+    { 
+        logger.debug("Exporting Project " + project.getMetadata().getName() + " using " + this.type_ + " Reference Model...");
         D2RefineTemplate template = new DBGapTemplate(project);
         DDRowVisitor ddVisitor = new DDRowVisitor(template, this.type_, writer);
         

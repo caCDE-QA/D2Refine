@@ -1,0 +1,61 @@
+<ivysettings>
+
+	<property name="adl2-core.version" value="1.3.0" />
+	<property name="adlworks.version" value="1.0.0" />
+	<property name="model-rm-opencimi.version" value="${adl2-core.version}" />
+	
+	<property name="ivy.revision" value="1.0.0"/>
+	<property name="informatics.snapshots.repo" value="http://informatics.mayo.edu/maven/content/repositories/snapshots" />
+	<property name="informatics.releases.repo" value="http://informatics.mayo.edu/maven/content/repositories/releases" />
+	<property name="informatics.thirdparty.repo" value="http://informatics.mayo.edu/maven/content/repositories/thirdparty" /> 
+	
+	<settings defaultResolver="d2refine-chain" />
+	<caches defaultCacheDir="${user.home}/.ivy2" useOrigin="true"/>
+	
+	<!-- 
+		Add `-Dinformatics.password=xxxx` to the ant build command
+		to publish the artifact to informatics.
+	 -->
+	<credentials host="informatics.mayo.edu" 
+		username="deployment" 
+		realm="Sonatype Nexus Repository Manager" 
+		passwd="${informatics.password}"/>
+	
+	<resolvers>
+		<filesystem name="user-local-repo" local="true" m2compatible="true" changingPattern=".*-SNAPSHOT">
+			<artifact pattern="${user.home}/.ivy2/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+			<ivy pattern="${user.home}/.ivy2/[organisation]/[module]/[revision]/ivy.xml" />
+  		</filesystem> 
+  		
+  		<filesystem name="local-m2-repo" m2compatible="true" changingPattern=".*-SNAPSHOT">
+	      <artifact pattern="${user.home}/.m2/repository/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+	    </filesystem>
+   		
+		<chain name="informatics">
+			<url name="informatics-releases" m2compatible="true">
+				<ivy
+					pattern="${informatics.releases.repo}/[organisation]/[module]/[revision]/ivy.xml" />
+				<artifact
+					pattern="${informatics.releases.repo}/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+			</url>
+			<url name="informatics-snapshots" m2compatible="true" changingPattern=".*-SNAPSHOT">
+				<ivy
+					pattern="${informatics.snapshots.repo}/[organisation]/[module]/[revision]/ivy.xml" />
+				<artifact
+					pattern="${informatics.snapshots.repo}/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+			</url>		
+		</chain>
+	
+		<chain name="d2refine-chain" checkmodified="true">
+		 	<filesystem name="user-local-repo1" local="true" m2compatible="true" changingPattern=".*-SNAPSHOT">
+				<artifact pattern="${user.home}/.ivy2/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+				<ivy pattern="${user.home}/.ivy2/[organisation]/[module]/[revision]/ivy.xml" />
+	  		</filesystem> 
+
+      		<url name="maven-central" m2compatible="true">
+      			  <artifact pattern="http://repo1.maven.org/maven2/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+      		</url>
+      		 <ibiblio name="informatics-thirdparty-works" m2compatible="true" root="http://informatics.mayo.edu/maven/content/repositories/thirdparty/"/>			
+ 		</chain>
+	</resolvers>
+</ivysettings>
