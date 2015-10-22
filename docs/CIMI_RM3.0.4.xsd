@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.openehr.org/v1"
+           targetNamespace="http://schemas.openehr.org/v1" elementFormDefault="qualified" version="v1.0.2"
+           id="BaseTypes.xsd">
+    
+    <!-- CIMI Primitive Types mapping -->
+    <xs:simpleType name="Boolean">
+        <xs:restriction base="xs:boolean"/>
+    </xs:simpleType>
+    
+    <xs:simpleType name="Real">
+        <xs:restriction base="xs:float"/>
+    </xs:simpleType>
+    
+    <xs:simpleType name="Integer">
+        <xs:restriction base="xs:long"/>
+    </xs:simpleType>
+    
+    <xs:simpleType name="String">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    
+    <xs:simpleType name="URI">
+        <xs:restriction base="xs:anyURI"/>
+    </xs:simpleType>
+    
+    <!-- CIMI Data Value Types -->
+    <xs:complexType name="DATA_VALUE" abstract="true">
+        <xs:sequence/>
+    </xs:complexType>
+    
+    <xs:complexType name="YESNO">
+        <xs:complexContent>
+            <xs:extension base="DATA_VALUE">
+                <xs:sequence>
+                    <xs:element name="value" type="Boolean"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="IDENTIFIER">
+        <xs:complexContent>
+            <xs:extension base="DATA_VALUE">
+                <xs:sequence>
+                    <xs:element name="issuer" type="String"/>
+                    <xs:element name="id" type="String"/>
+                    <xs:element name="type" type="CODED_TEXT"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="URI_VALUE">
+        <xs:complexContent>
+            <xs:extension base="DATA_VALUE">
+                <xs:sequence>
+                    <xs:element name="value" type="URI"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="EHR_URI">
+        <xs:complexContent>
+            <xs:extension base="URI_VALUE"/>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <!-- Encapsulated Types -->
+    <xs:complexType name="ENCAPSULATED" abstract="true">
+        <xs:complexContent>
+            <xs:extension base="DATA_VALUE"/>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="MULTIMEDIA">
+        <xs:complexContent>
+            <xs:extension base="ENCAPSULATED">
+                <xs:sequence>
+                    <xs:element name="alternate_text" type="xs:base64Binary" minOccurs="0"/>
+                    <xs:element name="data" type="xs:base64Binary" minOccurs="0"/>
+                    <xs:element name="media_type" type="CODED_TEXT"/>
+                    <xs:element name="uri" type="URI_VALUE" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="PARSABLE">
+        <xs:complexContent>
+            <xs:extension base="ENCAPSULATED">
+                <xs:sequence>
+                    <xs:element name="value" type="String"/>
+                    <xs:element name="formalism" type="CODED_TEXT"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <!-- Ordered Value -->
+    <xs:complexType name="ORDERED_VALUE" abstract="true">
+        <xs:complexContent>
+            <xs:extension base="DATA_VALUE"/>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="ORDINAL">
+        <xs:complexContent>
+            <xs:extension base="ORDERED_VALUE">
+                <xs:sequence>
+                    <xs:element name="value" type="Real"/>
+                    <xs:element name="symbol" type="CODED_TEXT"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="INTERVAL_VALUE">
+        <xs:complexContent>
+            <xs:extension base="DATA_VALUE">
+                <xs:sequence>
+                    <xs:element name="lower" type="ORDERED_VALUE" minOccurs="0"/>
+                    <xs:element name="upper" type="ORDERED_VALUE" minOccurs="0"/>
+                    <xs:element name="lower_included" type="Boolean"/>
+                    <xs:element name="upper_included" type="Boolean"/>
+                    <xs:element name="lower_unbounded" type="Boolean"/>
+                    <xs:element name="upper_unbounded" type="Boolean"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="QUANTIFIED" abstract="true">
+        <xs:complexContent>
+            <xs:extension base="ORDERED_VALUE">
+                <xs:sequence>
+                    <xs:element name="value_status" type="QuantifiedValueStatusEnum" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:simpleType name="QuantifiedValueStatusEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="="/>
+            <xs:enumeration value=">"/>
+            <xs:enumeration value="&lt;"/>
+            <xs:enumeration value="~"/>
+            <xs:enumeration value="&lt;="/>
+            <xs:enumeration value=">"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="AMOUNT">
+        <xs:complexContent>
+            <xs:extension base="QUANTIFIED">
+                <xs:sequence>
+                    <xs:element name="accuracy" type="Real" minOccurs="0"/>
+                    <xs:element name="accuracy_is_percent" type="Boolean" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="COUNT">
+        <xs:complexContent>
+            <xs:extension base="AMOUNT">
+                <xs:sequence>
+                    <xs:element name="value" type="Integer"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="QUANTITY">
+        <xs:complexContent>
+            <xs:extension base="AMOUNT">
+                <xs:sequence>
+                    <xs:element name="value" type="Real"/>
+                    <xs:element name="units" type="CODED_TEXT"/>
+                    <xs:element name="precision" type="Integer" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="DURATION">
+        <xs:complexContent>
+            <xs:extension base="QUANTITY">
+                <xs:sequence>
+                    <xs:element name="duration_text" type="Iso8601Duration" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="PROPORTION">
+        <xs:complexContent>
+            <xs:extension base="AMOUNT">
+                <xs:sequence>
+                    <xs:element name="numerator" type="Real"/>
+                    <xs:element name="denominator" type="Real"/>
+                    <xs:element name="type" type="CODED_TEXT"/>
+                    <xs:element name="precision" type="Integer" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <!-- Date and time -->
+    <xs:simpleType name="Iso8601DateTime">
+        <xs:restriction base="xs:string">
+            <xs:pattern
+                value="\d{4}((0[1-9]|1[0-2])((0[1-9]|[12]\d|3[01])(T?([01]\d|2[0-3])([0-5]\d([0-5]\d([,.]\d+)?)?)?(Z|([+\-]((0\d)|(1[0-2]))(00|30)?))?)?)?)?|\d{4}(\-(0[1-9]|1[0-2])(\-(0[1-9]|[12]\d|3[01])(T([01]\d|2[0-3])(:[0-5]\d(:[0-5]\d([,.]\d+)?)?)?(Z|([+\-]((0\d)|(1[0-2]))(:(00|30))?))?)?)?)?"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="Iso8601Date">
+        <xs:restriction base="Iso8601DateTime">
+            <xs:pattern
+                value="\d{4}((((0[1-9])|(1[0-2]))((0[1-9])|([12]\d)|(3[01]))?)?|(\-(((0[1-9])|(1[0-2]))(\-((0[1-9])|([12]\d)|(3[01])))?)?)?)"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="Iso8601Time">
+        <xs:restriction base="Iso8601DateTime">
+            <xs:pattern
+                value="([01]\d|2[0-3])([0-5]\d([0-5]\d([,.]\d+)?)?)?(Z|([+\-]((0\d)|(1[0-2]))(00|30)?))?|([01]\d|2[0-3])(:[0-5]\d(:[0-5]\d([,.]\d+)?)?)?(Z|([+\-]((0\d)|(1[0-2]))(:(00|30))?))?"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="Iso8601Duration">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="P(\d+Y)?(\d+M)?(\d+W)?(\d+D)?(T(\d+H)?(\d+M)?(\d+(\.\d+)?S)?)?"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="DATE_TIME">
+        <xs:complexContent>
+            <xs:extension base="QUANTIFIED">
+                <xs:sequence>
+                    <xs:element name="value" type="Iso8601DateTime"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="TIME">
+        <xs:complexContent>
+            <xs:restriction base="DATE_TIME">
+                <xs:sequence>
+                    <xs:element name="value" type="Iso8601Time"/>
+                </xs:sequence>
+            </xs:restriction>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="DATE">
+        <xs:complexContent>
+            <xs:restriction base="DATE_TIME">
+                <xs:sequence>
+                    <xs:element name="value" type="Iso8601Date"/>
+                </xs:sequence>
+            </xs:restriction>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <!-- Intervals -->
+    
+    <xs:complexType name="Interval" abstract="true">
+        <xs:sequence>
+            <xs:element name="lower_included" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="upper_included" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="lower_unbounded" type="xs:boolean"/>
+            <xs:element name="upper_unbounded" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="IntervalOfInteger">
+        <xs:complexContent>
+            <xs:extension base="Interval">
+                <xs:sequence>
+                    <xs:element name="lower" type="xs:int" minOccurs="0"/>
+                    <xs:element name="upper" type="xs:int" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="MultiplicityInterval">
+        <xs:complexContent>
+            <xs:extension base="IntervalOfInteger">
+                <xs:sequence/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="IntervalOfReal">
+        <xs:complexContent>
+            <xs:extension base="Interval">
+                <xs:sequence>
+                    <xs:element name="lower" type="xs:float" minOccurs="0"/>
+                    <xs:element name="upper" type="xs:float" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="IntervalOfDate">
+        <xs:complexContent>
+            <xs:extension base="Interval">
+                <xs:sequence>
+                    <xs:element name="lower" type="Iso8601Date" minOccurs="0"/>
+                    <xs:element name="upper" type="Iso8601Date" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="IntervalOfDateTime">
+        <xs:complexContent>
+            <xs:extension base="Interval">
+                <xs:sequence>
+                    <xs:element name="lower" type="Iso8601DateTime" minOccurs="0"/>
+                    <xs:element name="upper" type="Iso8601DateTime" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="IntervalOfTime">
+        <xs:complexContent>
+            <xs:extension base="Interval">
+                <xs:sequence>
+                    <xs:element name="lower" type="Iso8601Time" minOccurs="0"/>
+                    <xs:element name="upper" type="Iso8601Time" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="IntervalOfDuration">
+        <xs:complexContent>
+            <xs:extension base="Interval">
+                <xs:sequence>
+                    <xs:element name="lower" type="Iso8601Duration" minOccurs="0"/>
+                    <xs:element name="upper" type="Iso8601Duration" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+   
+    
+    <!-- Text -->
+    <xs:complexType name="TEXT">
+        <xs:complexContent>
+            <xs:extension base="DATA_VALUE">
+                <xs:sequence>
+                    <xs:element name="value" type="String"/>
+                    <xs:element name="mapping" type="TERM_MAPPING" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="PLAIN_TEXT">
+        <xs:complexContent>
+            <xs:extension base="TEXT">
+                <xs:sequence>
+                    <xs:element name="language" type="CODED_TEXT" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="CODED_TEXT">
+        <xs:complexContent>
+            <xs:extension base="TEXT">
+                <xs:sequence>
+                    <xs:element name="uri" type="URI" minOccurs="0"/>
+                    <xs:element name="terminology_id" type="xs:string"/>
+                    <xs:element name="code" type="TERMINOLOGY_CODE"/>
+                    <xs:element name="terminology_version" type="xs:string" minOccurs="0"/>
+                    <xs:element name="term" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:simpleType name="TermMappingMatchEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value=">"/>
+            <xs:enumeration value="="/>
+            <xs:enumeration value="&lt;"/>
+            <xs:enumeration value="?"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <!-- Note: target might need to be a reference... -->
+    <xs:complexType name="TERM_MAPPING">
+        <xs:sequence>
+            <xs:element name="match" type="TermMappingMatchEnum" default="?"/>
+            <xs:element name="purpose" type="CODED_TEXT" minOccurs="0"/>
+            <xs:element name="target" type="CODED_TEXT"/>
+        </xs:sequence>
+    </xs:complexType>
+   
+    <xs:simpleType name="TERMINOLOGY_CODE">
+        <xs:restriction base="xs:string">
+            <xs:pattern
+                    value="\[[a-zA-Z0-9()._\-]+::[ \t]*[a-zA-Z0-9()._\-]+\]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <!-- CIMI Core Model -->
+    <xs:complexType name="LINK">
+        <xs:sequence>
+            <xs:element name="meaning" type="TEXT"/>
+            <xs:element name="details" type="ITEM" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="LOCATABLE" abstract="true">
+        <xs:sequence>
+            <xs:element name="name" type="String"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="ARCHETYPED">
+        <xs:sequence>
+            <xs:element name="archetype_id" type="String"/>
+            <xs:element name="rm_version" type="String"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="ITEM" abstract="true">
+        <xs:complexContent>
+            <xs:extension base="LOCATABLE"/>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="ITEM_GROUP">
+        <xs:complexContent>
+            <xs:extension base="ITEM">
+                <xs:sequence>
+                    <xs:element name="item" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="ELEMENT">
+        <xs:complexContent>
+            <xs:extension base="ITEM">
+                <xs:sequence>
+                    <xs:element name="null_flavor" type="CODED_TEXT" minOccurs="0"/>
+                    <xs:element name="value" type="DATA_VALUE" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- CIMI Party Model -->
+    <xs:complexType name="PARTY_RELATIONSHIP">
+        <xs:complexContent>
+            <xs:extension base="LOCATABLE">
+                <xs:sequence>
+                    <xs:element name="type" type="CODED_TEXT"/>
+                    <xs:element name="details" type="ITEM" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="target" type="PARTY"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <!-- TODO: Party relationship target is not a containment relationship.  Check this elsewhere as well -->
+    <xs:complexType name="PARTY" abstract="true">
+        <xs:complexContent>
+            <xs:extension base="LOCATABLE">
+                <xs:sequence>
+                    <xs:element name="relationship" type="PARTY_RELATIONSHIP" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="details" type="ITEM" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="ROLE">
+        <xs:complexContent>
+            <xs:extension base="PARTY">
+                <xs:sequence>
+                    <xs:element name="type" type="CODED_TEXT"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="ACTOR">
+        <xs:complexContent>
+            <xs:extension base="PARTY">
+                <xs:sequence>
+                    <xs:element name="type" type="CODED_TEXT"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

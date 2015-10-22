@@ -1,0 +1,240 @@
+archetype (adl_version=2.0.5; rm_release=2.0.2)
+	CIMI-CORE-ITEM_GROUP.dbGapDD.v0.0.1
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	lifecycle_state = <"unmanaged">
+	original_author = <
+		["name"] = <"Deepak Sharma">
+		["organisation"] = <"Mayo Clinic">
+		["email"] = <"sharma.deepak2@mayo.edu">
+		["date"] = <"2015-07-02">
+	>
+	custodian_namespace = <"edu.mayo">
+	custodian_organisation = <"Mayo Clinic <http://www.mayo.edu>">
+	copyright = <"Copyright © 2015 Mayo Clinic <http://www.mayo.edu>">
+	licence = <"Creative Commons CC-BY-SA <https://creativecommons.org/licenses/by-sa/3.0/>">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Demonstrates a dbGap DD transformed as an ADL Archetype">
+			keywords = <"ADL", "test", "tuples">
+		>
+	>
+
+definition
+	ITEM_GROUP[id1] matches {	-- Epigenetic Colorectal Cancer DD
+		item matches {
+			ELEMENT[id2] occurrences matches {1} 	-- SUBJID
+			ELEMENT[id3] occurrences matches {0..1} matches {	-- Site of Primary (Event)
+				value matches {
+					CODED_TEXT[id4] 	-- COLN
+					CODED_TEXT[id5] 	-- RECT
+				}
+			}
+			ELEMENT[id6] occurrences matches {0..1} matches {	-- Age
+				value matches {
+					INTERVAL_VALUE<Integer>[id7] occurrences matches {0..1} matches {	-- age interval
+						lower matches {33}
+						upper matches {90}
+					}
+					CODED_TEXT[id8] 	-- 9999
+					CODED_TEXT[id9] 	-- 1000
+				}
+			}
+			ELEMENT[id10] occurrences matches {0..1} matches {	-- sex
+				value matches {
+					CODED_TEXT[id11] 	-- F
+					CODED_TEXT[id12] 	-- M
+					CODED_TEXT[id13] 	-- NA
+					CODED_TEXT[id14] 	-- UNK
+				}
+			}
+			ELEMENT[id15] occurrences matches {0..1} matches {	-- Site(s) of Disease
+				value matches {
+					CODED_TEXT[id16] 	-- BRAIN
+					CODED_TEXT[id17] 	-- DIS NODE
+					CODED_TEXT[id18] 	-- LIVER
+					CODED_TEXT[id19] 	-- LUNG
+					CODED_TEXT[id20] 	-- N/A
+					CODED_TEXT[id21] 	-- NODES
+					CODED_TEXT[id22] 	-- NODES, PRIM
+					CODED_TEXT[id23] 	-- NODES, PRIM, SOFT TIS
+					CODED_TEXT[id24] 	-- OTH
+					CODED_TEXT[id25] 	-- PRIM
+					CODED_TEXT[id26] 	-- PRIM, LIVER
+					CODED_TEXT[id27] 	-- PRIM, SOFT TIS
+					CODED_TEXT[id28] 	-- SKELETAL
+					CODED_TEXT[id29] 	-- SOFT TIS
+					CODED_TEXT[id30] 	-- UNK
+				}
+			}
+			ELEMENT[id31] occurrences matches {0..1} 	-- Treatment Status
+		}
+	}
+
+terminology
+	term_definitions = <
+		["en"] = <
+			["id1"] = <
+				text = <"Epigenetic Colorectal Cancer DD">
+				description = <"Epigenetic Colorectal Cancer Subject Phenotypes Data Dictionary">
+			>
+			["id2"] = <
+				text = <"SUBJID">
+				description = <"De-identified Subject ID">
+			>
+			["id3"] = <
+				text = <"Site of Primary (Event)">
+				description = <"Indicates the site of primary for the patient's cancer">
+			>
+			["id4"] = <
+				text = <"COLN">
+				description = <"Colonic (includes appendix)">
+			>
+			["id5"] = <
+				text = <"RECT">
+				description = <"Rectal">
+			>
+			["id6"] = <
+				text = <"Age">
+				description = <"Age at the time the specimen was taken">
+			>
+			["id7"] = <
+				text = <"age interval">
+				description = <"Valid age Interval">
+			>
+			["id8"] = <
+				text = <"9999">
+				description = <"Missing">
+			>
+			["id9"] = <
+				text = <"1000">
+				description = <"Not assessed">
+			>
+			["id10"] = <
+				text = <"sex">
+				description = <"Gender of participant">
+			>
+			["id11"] = <
+				text = <"F">
+				description = <"Female">
+			>
+			["id12"] = <
+				text = <"M">
+				description = <"Male">
+			>
+			["id13"] = <
+				text = <"NA">
+				description = <"Not applicable">
+			>
+			["id14"] = <
+				text = <"UNK">
+				description = <"Unknown">
+			>
+			["id15"] = <
+				text = <"Site(s) of Disease">
+				description = <"This field describes all sites of disease present at the beginning of this diagnosis (event).">
+			>
+			["id16"] = <
+				text = <"BRAIN">
+				description = <"Brain">
+			>
+			["id17"] = <
+				text = <"DIS NODE">
+				description = <"Distant Nodes">
+			>
+			["id18"] = <
+				text = <"LIVER">
+				description = <"Liver">
+			>
+			["id19"] = <
+				text = <"LUNG">
+				description = <"Lung">
+			>
+			["id20"] = <
+				text = <"N/A">
+				description = <"Not Applicable">
+			>
+			["id21"] = <
+				text = <"NODES">
+				description = <"Local Nodes">
+			>
+			["id22"] = <
+				text = <"NODES, PRIM">
+				description = <"Local Nodes; Primary">
+			>
+			["id23"] = <
+				text = <"NODES, PRIM, SOFT TIS">
+				description = <"Local Nodes; Primary; Soft Tissue">
+			>
+			["id24"] = <
+				text = <"OTH">
+				description = <"Other">
+			>
+			["id25"] = <
+				text = <"PRIM">
+				description = <"Primary">
+			>
+			["id26"] = <
+				text = <"PRIM, LIVER">
+				description = <"Primary; Liver">
+			>
+			["id27"] = <
+				text = <"PRIM, SOFT TIS">
+				description = <"Primary; Soft Tissue">
+			>
+			["id28"] = <
+				text = <"SKELETAL">
+				description = <"Skeletal">
+			>
+			["id29"] = <
+				text = <"SOFT TIS">
+				description = <"Soft Tissue">
+			>
+			["id30"] = <
+				text = <"UNK">
+				description = <"Unknown">
+			>
+			["id31"] = <
+				text = <"Treatment Status">
+				description = <"Whether treatment was administered">
+			>
+		>
+	>
+	term_bindings = <
+		["snomed-ct"] = <
+			["id2"] = <http://snomed.info/id/118522005>
+			["id3"] = <http://snomed.info/id/399687005>
+			["id4"] = <http://snomed.info/id/413196009>
+			["id5"] = <http://snomed.info/id/255582007>
+			["id6"] = <http://snomed.info/id/424144002>
+			["id7"] = <http://snomed.info/id/2667000>
+			["id8"] = <http://snomed.info/id/385660001>
+			["id9"] = <http://snomed.info/id/263495000>
+			["id10"] = <http://snomed.info/id/703117000>
+			["id11"] = <http://snomed.info/id/385432009>
+			["id12"] = <http://snomed.info/id/394743007>
+			["id13"] = <http://snomed.info/id/385432009>
+			["id14"] = <http://snomed.info/id/394743007>
+			["id15"] = <http://snomed.info/id/118522005>
+			["id16"] = <http://snomed.info/id/118522005>
+			["id17"] = <http://snomed.info/id/118522005>
+			["id18"] = <http://snomed.info/id/118522005>
+			["id19"] = <http://snomed.info/id/118522005>
+			["id20"] = <http://snomed.info/id/385432009>
+			["id21"] = <http://snomed.info/id/118522005>
+			["id22"] = <http://snomed.info/id/118522005>
+			["id23"] = <http://snomed.info/id/118522005>
+			["id24"] = <http://snomed.info/id/118522005>
+			["id25"] = <http://snomed.info/id/118522005>
+			["id26"] = <http://snomed.info/id/118522005>
+			["id27"] = <http://snomed.info/id/118522005>
+			["id28"] = <http://snomed.info/id/118522005>
+			["id29"] = <http://snomed.info/id/118522005>
+			["id30"] = <http://snomed.info/id/261665006>
+			["id31"] = <http://snomed.info/id/118522005>
+		>
+	>
