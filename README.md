@@ -16,6 +16,10 @@ This library provides a layer of convenience methods to create ADL artefacts in 
 
 ## Installation
 
+1. Find the location of OpenRefine's "extensions" folder. You can find out by clicking on the link "Browse workspace directory" on OpenRefine's project list. [Usually on webpage "http://127.0.0.1:3333", when OpenRefine is running].  There should be an "extensions" folder in workspace directory. Create it if it does not exist.
+2. Download file "D2Refine.zip" and copy the content to the OpenRefine's "extensions" folder.
+3. Restart OpenRefine.
+
 ## Development Environment
 
 
