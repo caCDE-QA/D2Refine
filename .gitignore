@@ -2,6 +2,7 @@
 ./build.xml
 .settings
 .cache
+.metadata
 .project
 .classpath
 .DS_Store

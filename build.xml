@@ -76,7 +76,7 @@
         </javac>
     </target>
 
-    <target name="build" depends="resolve, build_java" >
+    <target name="build" depends="build_java" >
     	<tstamp>
     		<format property="timestmp" pattern="MM/dd/yyyy hh:mm:ss aa" unit="hour"/>
     	</tstamp>

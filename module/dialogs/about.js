@@ -1,4 +1,4 @@
-function D2RAboutDialog() {}
+function D2RAboutDialog() {
 
 D2RAboutDialog.prototype = {
   init: function () {
@@ -15,4 +15,5 @@ D2RAboutDialog.prototype = {
   hide: function () {
     DialogSystem.dismissUntil(this.dialogLevel - 1);
   },
+};
 };

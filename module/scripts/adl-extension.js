@@ -10,7 +10,7 @@ ExtensionBar.addExtensionMenu({
     },
     { /* separator */ },
     {
-      id   : "D2Refine/about",
+      id   : "about",
       label: "About...",
       click: dialogHandler(D2RAboutDialog),
     },
