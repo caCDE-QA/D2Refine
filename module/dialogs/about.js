@@ -1,8 +1,8 @@
-function D2RAboutDialog() {
+function D2RefineAboutDialog() {}
 
-D2RAboutDialog.prototype = {
+D2RefineAboutDialog.prototype = {
   init: function () {
-    this.dialogElement = $(DOM.loadHTML("D2Refine", "dialogs/about.html"));
+    this.dialogElement = $(DOM.loadHTML("d2refine", "dialogs/about.html"));
     var controls = DOM.bind(this.dialogElement);
     controls.close.click(this.bound("hide"));
   },
@@ -15,5 +15,4 @@ D2RAboutDialog.prototype = {
   hide: function () {
     DialogSystem.dismissUntil(this.dialogLevel - 1);
   },
-};
 };

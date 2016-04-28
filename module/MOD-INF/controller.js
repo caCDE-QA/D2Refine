@@ -1,6 +1,6 @@
 /*
 
-Copyright 2010, Google Inc.
+Copyright 2010, Google Inc. 
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,63 +28,59 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
- */
+*/
 
 var html = "text/html";
 var encoding = "UTF-8";
+
+// OpenRefine
 var ClientSideResourceManager = Packages.com.google.refine.ClientSideResourceManager;
+var RefineServlet = Packages.com.google.refine.RefineServlet;
+var Exporters = Packages.com.google.refine.exporters;
+
+// D2Refine
+var D2RefinePkg = Packages.edu.mayo.d2refine;
+var D2ADLExpPkg = D2RefinePkg.exporter.ADLExporterExtension;
+var D2ReconPkg = D2RefinePkg.reconciliation;
+
+
+var LF = Packages.org.slf4j.LoggerFactory;
+var logger = LF.getLogger("d2refine");
 
 /*
  * Function invoked to initialize the extension.
  */
+ 
 function init() 
-{
-  var Exp = Packages.com.google.refine.exporters;
-  Exp.ExporterRegistry.registerExporter(
-		  "D2Refine1", new Packages.edu.mayo.d2refine.ADLExporterExtension.ADLExporter("OPENEHR"));  
-  Exp.ExporterRegistry.registerExporter(
-		  "D2Refine2", new Packages.edu.mayo.d2refine.ADLExporterExtension.ADLExporter("OPENCIMI"));
-  
-  // Script files to inject into /project page
-  ClientSideResourceManager.addPaths(
-    "project/scripts",
-    module,
-    [
-      "scripts/config.js",
-      "scripts/adl-export.js",
-      "scripts/adl-extension.js",
-      "dialogs/about.js"
-    ]
-  );
+{   
+    logger.info("Initializing D2Refine Extensions...");
+    
+    // Registering Exporters
+    Exporters.ExporterRegistry.registerExporter("adl_with_openehr",
+            new D2ADLExpPkg.ADLExporter("OPENEHR"));    
+    Exporters.ExporterRegistry.registerExporter("adl_with_opencimi",
+            new D2ADLExpPkg.ADLExporter("OPENCIMI"));
+    
+    // Registering Commands
+    RefineServlet.registerCommand(module, "term-reconcile", 
+            new D2ReconPkg.TermReconciliationService());
+    
+    // Script files to inject into /project page
+    ClientSideResourceManager.addPaths(
+            "project/scripts", 
+            module, [
+            "scripts/config.js", 
+            "scripts/exporter/model-export-menu.js",
+            "scripts/extension-bar-menu.js", 
+            "dialogs/about.js" ]);
 
-  // Style files to inject into /project page
-  ClientSideResourceManager.addPaths(
-    "project/styles",
-    module,
-    [
-      "styles/project-injection.less"
-    ]
-  );
-}
-
-/*
- * Function invoked to handle each request in a custom way.
- */
-function process(path, request, response) {
-  // Analyze path and handle this request yourself.
-
-  if (path == "/" || path == "") {
-    var context = {};
-    // here's how to pass things into the .vt templates
-    context.someList = ["Superior","Michigan","Huron","Erie","Ontario"];
-    context.someString = "foo";
-    //context.someInt = Packages.com.google.refine.sampleExtension.SampleUtil.stringArrayLength(context.someList);
-
-    send(request, response, "index.vt", context);
-  }
-}
-
-function send(request, response, template, context) {
-  butterfly.sendTextFromTemplate(request, response, context, template, encoding, html);
+    // Style files to inject into /project page
+    ClientSideResourceManager.addPaths(
+            "project/styles", 
+            module,
+            [ 
+              "styles/project-injection.less",
+              "styles/d2r-dialogs.less",
+              "styles/about.less"
+            ]);
 }

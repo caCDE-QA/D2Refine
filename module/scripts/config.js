@@ -1,3 +1,15 @@
 /* Expose configuration */
 var D2RefineExtension = {};
-D2RefineExtension.commandPath = "/command/D2Refine/";
+
+ReconciliationManager.registerService({
+    name: "D2refine",
+    url: "extension/d2refine",
+    // By setting the URL to "{{id}}",
+    // this whole string will be replaced with the actual URL
+    view: { 
+        url: "{{id}}" 
+          },
+  });
+
+//ReconciliationManager.registerService("D2Refine");
+//ReconciliationManager._rebuildMap();
