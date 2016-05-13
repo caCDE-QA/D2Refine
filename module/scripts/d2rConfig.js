@@ -2,10 +2,11 @@
 var D2RefineExtension = {};
 
 ReconciliationManager.registerService({
-    name: "D2refine",
+    name: "d2refine",
     url: "command/d2refine/term-reconcile",
     ui: function(){
         var ad = new D2RefineAboutDialog();
+        ad.init();
         ad.show();
     },
     // By setting the URL to "{{id}}",

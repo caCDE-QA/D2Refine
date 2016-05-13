@@ -18,7 +18,7 @@ import com.google.refine.model.Project;
 
 public class TermReconciliationService extends Command 
 {
-    final static Logger logger = LoggerFactory.getLogger("D2Refine");
+    final static Logger logger = LoggerFactory.getLogger("TermReconciliationService");
     
     protected void createOperation(Project project,
             HttpServletRequest request, JSONObject engineConfig) throws Exception 

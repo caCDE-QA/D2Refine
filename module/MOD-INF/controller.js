@@ -30,6 +30,12 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+importPackage(edu.mayo.d2refine);
+importPackage(edu.mayo.d2refine.command);
+importPackage(edu.mayo.d2refine.reconciliation);
+importPackage(edu.mayo.d2refine.exporter.ADLExporterExtension);
+
+
 var html = "text/html";
 var encoding = "UTF-8";
 
@@ -37,12 +43,6 @@ var encoding = "UTF-8";
 var ClientSideResourceManager = Packages.com.google.refine.ClientSideResourceManager;
 var RefineServlet = Packages.com.google.refine.RefineServlet;
 var Exporters = Packages.com.google.refine.exporters;
-
-// D2Refine
-var D2RefinePkg = Packages.edu.mayo.d2refine;
-var D2ADLExpPkg = D2RefinePkg.exporter.ADLExporterExtension;
-var D2ReconPkg = D2RefinePkg.reconciliation;
-
 
 var LF = Packages.org.slf4j.LoggerFactory;
 var logger = LF.getLogger("d2refine");
@@ -57,22 +57,24 @@ function init()
     
     // Registering Exporters
     Exporters.ExporterRegistry.registerExporter("adl_with_openehr",
-            new D2ADLExpPkg.ADLExporter("OPENEHR"));    
+            new ADLExporter("OPENEHR"));    
     Exporters.ExporterRegistry.registerExporter("adl_with_opencimi",
-            new D2ADLExpPkg.ADLExporter("OPENCIMI"));
+            new ADLExporter("OPENCIMI"));
     
     // Registering Commands
     RefineServlet.registerCommand(module, "term-reconcile", 
-            new D2ReconPkg.TermReconciliationService());
+            new D2RefineCommand());
     
     // Script files to inject into /project page
     ClientSideResourceManager.addPaths(
             "project/scripts", 
             module, [
-            "scripts/config.js", 
+            "scripts/d2rReconciliation.js",
+            "scripts/utils/util.js",
             "scripts/exporter/model-export-menu.js",
-            "scripts/extension-bar-menu.js", 
-            "dialogs/about.js" ]);
+            "scripts/extension-bar-menu.js",
+            "dialogs/d2rReconPanel.js",
+            "dialogs/d2rAbout.js" ]);
 
     // Style files to inject into /project page
     ClientSideResourceManager.addPaths(
@@ -80,7 +82,20 @@ function init()
             module,
             [ 
               "styles/project-injection.less",
-              "styles/d2r-dialogs.less",
-              "styles/about.less"
+              "dialogs/d2rDialogs.less",
+              "dialogs/d2rAbout.less"
             ]);
+}
+
+function process(path, request, response) 
+{
+    logger.info(">>>>>D2Refine comes in process()");
+    
+    logger.info("path=" + path);
+    logger.info("request.method=" + request.getMethod());
+    logger.info("request.method=" + request.getParameter("columnName"));
+    
+    if (path == "/" || path == "") {
+        butterfly.redirect(request, response, "index.html");
+    }
 }
