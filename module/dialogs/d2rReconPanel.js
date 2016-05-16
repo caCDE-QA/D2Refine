@@ -6,7 +6,6 @@ function D2RefineReconPanel(column, service, container) {
 }
 
 D2RefineReconPanel.prototype._constructUI = function() {
-  var self = this;
   this._panel = $(DOM.loadHTML("d2refine", "dialogs/d2rReconPanel.html")).appendTo(this._container);
   this._elmts = DOM.bind(this._panel);
 };
@@ -29,8 +28,6 @@ D2RefineReconPanel.prototype.dispose = function() {
 };
 
 D2RefineReconPanel.prototype.start = function() {
-  var self = this;
-
   Refine.postCoreProcess(
     "reconcile",
     {},

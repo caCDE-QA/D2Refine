@@ -82,8 +82,8 @@
     	</tstamp>
         <echo message="Building D2Refine...${timestmp}" />
     	<zip destfile="../D2Refine/D2Refine.zip" basedir="../D2Refine/module" />
-    	<echo message="Deploying the extension to ${openrefine.extensions.dir}" />    	
-    	<unzip src="./D2Refine.zip" dest="${openrefine.extensions.dir}/D2Refine" overwrite="true" />
+    	<!--echo message="Deploying the extension to ${openrefine.extensions.dir}" />    	
+    	<unzip src="./D2Refine.zip" dest="${openrefine.extensions.dir}/D2Refine" overwrite="true" /-->
     	
     	<copy todir="${D2Refine.git.dir}" overwrite="true">
     	    <fileset dir="../D2Refine">

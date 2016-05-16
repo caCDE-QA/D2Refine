@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.refine.RefineServlet;
 import com.google.refine.commands.Command;
-import com.google.refine.commands.recon.ReconcileCommand;
-import com.google.refine.model.AbstractOperation;
 import com.google.refine.model.Project;
 
 public class TermReconciliationService extends Command 
