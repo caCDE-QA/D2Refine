@@ -1,4 +1,4 @@
-package edu.mayo.d2refine.services.recon.model;
+package edu.mayo.d2refine.services.reconciliation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +11,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 
-import edu.mayo.d2refine.services.model.IF.ServiceType;
-import edu.mayo.d2refine.services.recon.model.IF.ReconciliationService;
+import edu.mayo.d2refine.model.ServiceType;
+import edu.mayo.d2refine.model.reconciliation.ReconciliationCandidate;
+import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest;
+import edu.mayo.d2refine.model.reconciliation.ReconciliationService;
 
 public abstract class AbstractReconciliationService implements ReconciliationService
 {

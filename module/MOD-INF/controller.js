@@ -30,9 +30,8 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-importPackage(edu.mayo.d2refine);
-importPackage(edu.mayo.d2refine.command);
-importPackage(edu.mayo.d2refine.reconciliation);
+importPackage(edu.mayo.d2refine.services);
+importPackage(edu.mayo.d2refine.commands);
 importPackage(edu.mayo.d2refine.exporter.ADLExporterExtension);
 
 
@@ -62,8 +61,7 @@ function init()
             new ADLExporter("OPENCIMI"));
     
     // Registering Commands
-    RefineServlet.registerCommand(module, "term-reconcile", 
-            new D2RefineCommand());
+    RefineServlet.registerCommand(module, "registerD2RefineServices", new RegistrationCommand());
     
     // Script files to inject into /project page
     ClientSideResourceManager.addPaths(
@@ -89,13 +87,33 @@ function init()
 
 function process(path, request, response) 
 {
-    logger.info(">>>>>D2Refine comes in process()");
+    logger.info(">>>>> Received D2Refine process Request");
     
     logger.info("path=" + path);
     logger.info("request.method=" + request.getMethod());
     logger.info("request.method=" + request.getParameter("columnName"));
+        
+    if (path.match(/^services\/main/g))
+    {
+        logger.info("Calling Handle Request");
+        var jsonResponse = D2RefineServiceManager.instance().handle(path, request);
+        
+        logger.info("Response:" + jsonResponse);
+        
+        if(jsonResponse)
+        {
+            logger.info(jsonResponse);
+            butterfly.sendString(request, response, jsonResponse ,"UTF-8", "text/javascript");
+            return;
+        }
+        else
+        {
+            butterfly.sendError(request, response, 404, "unknown service");
+        }
+    }
     
-    if (path == "/" || path == "") {
+    if (path == "/" || path == "") 
+    {
         butterfly.redirect(request, response, "index.html");
     }
 }

@@ -1,4 +1,4 @@
-package edu.mayo.d2refine.services.recon.impl;
+package edu.mayo.d2refine.services.reconciliation;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,10 +10,9 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.mayo.d2refine.services.model.IF.ServiceType;
-import edu.mayo.d2refine.services.recon.model.AbstractReconciliationService;
-import edu.mayo.d2refine.services.recon.model.ReconciliationCandidate;
-import edu.mayo.d2refine.services.recon.model.ReconciliationRequest;
+import edu.mayo.d2refine.model.ServiceType;
+import edu.mayo.d2refine.model.reconciliation.ReconciliationCandidate;
+import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest;
 
 public class TermReconciliationService extends AbstractReconciliationService
 {
