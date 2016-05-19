@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableMap;
 
 import edu.mayo.d2refine.model.ServiceType;
-import edu.mayo.d2refine.model.reconciliation.ReconciliationCandidate;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest;
+import edu.mayo.d2refine.model.reconciliation.ReconciliationResponse;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationService;
 
 public abstract class AbstractReconciliationService implements ReconciliationService
@@ -51,26 +51,22 @@ public abstract class AbstractReconciliationService implements ReconciliationSer
             this.serviceType = serviceType;
         }
         
-        public ImmutableMap<String, ReconciliationCandidate> reconcile(ImmutableMap<String, ReconciliationRequest> multiQueryRequest) 
+        public ImmutableMap<String, ReconciliationResponse> reconcile(ImmutableMap<String, ReconciliationRequest> multiQueryRequest) 
         {
-                Map<String, ReconciliationCandidate> multiQueryResponse = new HashMap<String, ReconciliationCandidate>();
-                for(Entry<String, ReconciliationRequest> entry: multiQueryRequest.entrySet())
-                {
-                        try
-                        {
-                                String key = entry.getKey();
-                                ReconciliationRequest request = entry.getValue();
-                                ReconciliationCandidate candidate = (ReconciliationCandidate) reconcile(request);
-                                multiQueryResponse.put(key, candidate);
-                                Thread.sleep(300);
-                        }
-                        catch(Exception e)
-                        {
-                                multiQueryResponse.put(entry.getKey(), new ReconciliationCandidate(id, id, null, 0, false));
-                                logger.error("error reconciling '" + entry.getValue().getQueryString() + "'",e);
-                        }
-                }
-                return ImmutableMap.copyOf(multiQueryResponse);
+            Map<String, ReconciliationResponse> multiQueryResponse = new HashMap<String, ReconciliationResponse>();
+            for(Entry<String, ReconciliationRequest> entry: multiQueryRequest.entrySet()){
+                    try{
+                            String key = entry.getKey();
+                            ReconciliationRequest request = entry.getValue();
+                            ReconciliationResponse response = reconcile(request);
+                            multiQueryResponse.put(key, response);
+                            Thread.sleep(300);
+                    }catch(Exception e){
+                            multiQueryResponse.put(entry.getKey(), new ReconciliationResponse());
+                            logger.error("error reconciling '" + entry.getValue().getQueryString() + "'",e);
+                    }
+            }
+            return ImmutableMap.copyOf(multiQueryResponse);
         }
 
         public void writeAsJson(JSONWriter jsonWriter)

@@ -4,7 +4,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import edu.mayo.d2refine.model.ServiceType;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationCandidate;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest;
+import edu.mayo.d2refine.model.reconciliation.ReconciliationResponse;
 
 public class TermReconciliationService extends AbstractReconciliationService
 {
@@ -23,25 +26,31 @@ public class TermReconciliationService extends AbstractReconciliationService
         setServiceType(ServiceType.TERM_RECONCILIATION);
     }
 
-    public ReconciliationCandidate reconcile(ReconciliationRequest request) 
+    public ReconciliationResponse reconcile(ReconciliationRequest request) 
     {
-        List<ReconciliationCandidate> results = new ArrayList<ReconciliationCandidate>();
+        Set<ReconciliationCandidate> candidates = new LinkedHashSet<ReconciliationCandidate>();
+        //int limit = request.getLimit();
         
-        String[] types = {};
-        ReconciliationCandidate rc1 = new ReconciliationCandidate("100", "Chevy", types , 1.0, Boolean.FALSE);
-        results.add(rc1);
-        //ReconciliationCandidate rc2 = new ReconciliationCandidate("200", "C0001", null, 1.0, Boolean.FALSE);
-        //results.add(rc2);
-        /*
-        for (int i=0; i < 10; i++)
+        double score = 0.0;
+        if (request.getQueryString().toLowerCase().indexOf("chevy") != -1)
         {
-            String term = "TERM_" + RandomStringUtils.randomAlphanumeric(6).toUpperCase();
-            ReconciliationCandidate rc = new ReconciliationCandidate("" + i, term, null, 1, Boolean.TRUE);
-            results.add(rc);          
+            score = 1.0;
+            
+            String[] types = {};
+            ReconciliationCandidate rc1 = new ReconciliationCandidate("100", "Chevy", types , score, Boolean.FALSE);
+            candidates.add(rc1);
+            ReconciliationCandidate rc2 = new ReconciliationCandidate("200", "C0001", types, score, Boolean.FALSE);
+            candidates.add(rc2);
         }
-        */
         
-        return rc1;
+        return wrapCandidates(new ArrayList<ReconciliationCandidate>(candidates));
+    }
+        
+    private ReconciliationResponse wrapCandidates(List<? extends ReconciliationCandidate> candidates)
+    {
+        ReconciliationResponse response = new ReconciliationResponse();
+        response.setResults(candidates);
+        return response;
     }
 
     @Override

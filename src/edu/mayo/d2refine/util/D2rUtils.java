@@ -18,6 +18,7 @@ import com.google.common.collect.ImmutableMap;
 
 import edu.mayo.d2refine.model.reconciliation.ReconciliationCandidate;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest;
+import edu.mayo.d2refine.model.reconciliation.ReconciliationResponse;
 
 public class D2rUtils 
 {
@@ -34,62 +35,46 @@ public class D2rUtils
         return callback + "(" + obj + ")";
     }
     
-    public static ObjectNode getJsonReconciliationCandidates(ImmutableMap<String, ReconciliationCandidate> candidates) 
+//    public static ObjectNode getJsonReconciliationResponse(ImmutableMap<String, ReconciliationResponse> candidates) 
+//    {
+//        
+//        ObjectMapper mapper = new ObjectMapper();
+//        ObjectNode multiResponseObj = mapper.createObjectNode();
+//        for(Entry<String, ReconciliationCandidate> entry: candidates.entrySet()){
+//                String key = entry.getKey();
+//                ReconciliationCandidate candidate  = entry.getValue();
+//                multiResponseObj.put(key, getCandidate(candidate));
+//        }
+//        
+//        return multiResponseObj;
+//    }
+    
+    public static ObjectNode getMultipleResponse(ImmutableMap<String,ReconciliationResponse> multiResponse) 
     {
-        
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode multiResponseObj = mapper.createObjectNode();
-        for(Entry<String, ReconciliationCandidate> entry: candidates.entrySet()){
+        for(Entry<String, ReconciliationResponse> entry: multiResponse.entrySet())
+        {
                 String key = entry.getKey();
-                ReconciliationCandidate candidate  = entry.getValue();
-                multiResponseObj.put(key, getCandidate(candidate));
+                ReconciliationResponse response  = entry.getValue();
+                multiResponseObj.put(key, getResponse(response));
         }
         
         return multiResponseObj;
     }
     
-    public static ImmutableMap<String, ReconciliationRequest> getMultipleRequest(String queries) 
-                                    throws JsonParseException, JsonMappingException, IOException
-    {
-            Map<String, ReconciliationRequest> multiRequest = new HashMap<String, ReconciliationRequest>();
-            
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readValue(queries, JsonNode.class);
-            Iterator<String> keysIter = root.getFieldNames();
-            while(keysIter.hasNext()){
-                    String key = keysIter.next();
-                    //FIXME parsed twice 
-                    ReconciliationRequest request = ReconciliationRequest.valueOf(root.path(key).toString());
-                    multiRequest.put(key, request);
-            }
-            
-            return ImmutableMap.copyOf(multiRequest);
-    }
-    
-    public static ObjectNode getMultipleCandidates(ImmutableMap<String,ReconciliationCandidate> multiCandidates) 
+    public static ObjectNode getResponse(ReconciliationResponse response) 
     {
         ObjectMapper mapper = new ObjectMapper();
-        ObjectNode multiCandidateObj = mapper.createObjectNode();
-        for(Entry<String, ReconciliationCandidate> entry: multiCandidates.entrySet()){
-                String key = entry.getKey();
-                ReconciliationCandidate candidate  = entry.getValue();
-                multiCandidateObj.put(key, D2rUtils.getCandidate(candidate));
-        }
-        
-        return multiCandidateObj;
-    }
-    
-    public static ObjectNode getCandidate(ReconciliationCandidate candidate) 
-    {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode candidateObj = mapper.createObjectNode();
+        ObjectNode responseObj = mapper.createObjectNode();
         ArrayNode resultArr = mapper.createArrayNode();
+        for(ReconciliationCandidate result:response.getResults()){
+                ObjectNode resultItemObj = getResultItem(result);
+                resultArr.add(resultItemObj);
+        }
+        responseObj.put("result", resultArr);
         
-        ObjectNode resultItemObj = getResultItem(candidate);
-        resultArr.add(resultItemObj);
-        candidateObj.put("result", resultArr);
-        
-        return candidateObj;
+        return responseObj;
     }
     
     public static ObjectNode getResultItem(ReconciliationCandidate item)
@@ -120,6 +105,52 @@ public class D2rUtils
         
         return resultItemObj;
     }
+    
+    public static ImmutableMap<String, ReconciliationRequest> getMultipleRequest(String queries) 
+                                    throws JsonParseException, JsonMappingException, IOException
+    {
+            Map<String, ReconciliationRequest> multiRequest = new HashMap<String, ReconciliationRequest>();
+            
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readValue(queries, JsonNode.class);
+            Iterator<String> keysIter = root.getFieldNames();
+            while(keysIter.hasNext()){
+                    String key = keysIter.next();
+                    //FIXME parsed twice 
+                    ReconciliationRequest request = ReconciliationRequest.valueOf(root.path(key).toString());
+                    multiRequest.put(key, request);
+            }
+            
+            return ImmutableMap.copyOf(multiRequest);
+    }
+    
+//    public static ObjectNode getMultipleCandidates(ImmutableMap<String,ReconciliationCandidate> multiCandidates) 
+//    {
+//        ObjectMapper mapper = new ObjectMapper();
+//        ObjectNode multiCandidateObj = mapper.createObjectNode();
+//        for(Entry<String, ReconciliationCandidate> entry: multiCandidates.entrySet()){
+//                String key = entry.getKey();
+//                ReconciliationCandidate candidate  = entry.getValue();
+//                multiCandidateObj.put(key, D2rUtils.getCandidate(candidate));
+//        }
+//        
+//        return multiCandidateObj;
+//    }
+    
+//    public static ObjectNode getCandidate(ReconciliationCandidate candidate) 
+//    {
+//        ObjectMapper mapper = new ObjectMapper();
+//        ObjectNode candidateObj = mapper.createObjectNode();
+//        ArrayNode resultArr = mapper.createArrayNode();
+//        
+//        ObjectNode resultItemObj = getResultItem(candidate);
+//        resultArr.add(resultItemObj);
+//        candidateObj.put("result", resultArr);
+//        
+//        return candidateObj;
+//    }
+    
+
     
     public static int getNamespaceEndPosition(String uri)
     {
