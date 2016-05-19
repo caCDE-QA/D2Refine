@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,18 +23,25 @@ public class TermReconciliationService extends AbstractReconciliationService
         setServiceType(ServiceType.TERM_RECONCILIATION);
     }
 
-    @Override
-    public List<ReconciliationCandidate> reconcile(ReconciliationRequest request) 
+    public ReconciliationCandidate reconcile(ReconciliationRequest request) 
     {
         List<ReconciliationCandidate> results = new ArrayList<ReconciliationCandidate>();
+        
+        String[] types = {};
+        ReconciliationCandidate rc1 = new ReconciliationCandidate("100", "Chevy", types , 1.0, Boolean.FALSE);
+        results.add(rc1);
+        //ReconciliationCandidate rc2 = new ReconciliationCandidate("200", "C0001", null, 1.0, Boolean.FALSE);
+        //results.add(rc2);
+        /*
         for (int i=0; i < 10; i++)
         {
             String term = "TERM_" + RandomStringUtils.randomAlphanumeric(6).toUpperCase();
             ReconciliationCandidate rc = new ReconciliationCandidate("" + i, term, null, 1, Boolean.TRUE);
             results.add(rc);          
         }
+        */
         
-        return results;
+        return rc1;
     }
 
     @Override

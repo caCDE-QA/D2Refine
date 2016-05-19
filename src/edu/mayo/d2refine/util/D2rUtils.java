@@ -1,12 +1,23 @@
 package edu.mayo.d2refine.util;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 
+import com.google.common.collect.ImmutableMap;
+
 import edu.mayo.d2refine.model.reconciliation.ReconciliationCandidate;
+import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest;
 
 public class D2rUtils 
 {
@@ -23,21 +34,102 @@ public class D2rUtils
         return callback + "(" + obj + ")";
     }
     
-    public static ObjectNode getJsonReconciliationCandidates(List<ReconciliationCandidate> candidates) 
+    public static ObjectNode getJsonReconciliationCandidates(ImmutableMap<String, ReconciliationCandidate> candidates) 
     {
+        
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode multiResponseObj = mapper.createObjectNode();
-        
-        if (candidates == null)
-            return multiResponseObj;
-        
-        for(ReconciliationCandidate candidate : candidates)
-        {
-                String key = candidate.getId();
-                String value = candidate.getName();
-                multiResponseObj.put(key, value);
+        for(Entry<String, ReconciliationCandidate> entry: candidates.entrySet()){
+                String key = entry.getKey();
+                ReconciliationCandidate candidate  = entry.getValue();
+                multiResponseObj.put(key, getCandidate(candidate));
         }
         
         return multiResponseObj;
     }
+    
+    public static ImmutableMap<String, ReconciliationRequest> getMultipleRequest(String queries) 
+                                    throws JsonParseException, JsonMappingException, IOException
+    {
+            Map<String, ReconciliationRequest> multiRequest = new HashMap<String, ReconciliationRequest>();
+            
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readValue(queries, JsonNode.class);
+            Iterator<String> keysIter = root.getFieldNames();
+            while(keysIter.hasNext()){
+                    String key = keysIter.next();
+                    //FIXME parsed twice 
+                    ReconciliationRequest request = ReconciliationRequest.valueOf(root.path(key).toString());
+                    multiRequest.put(key, request);
+            }
+            
+            return ImmutableMap.copyOf(multiRequest);
+    }
+    
+    public static ObjectNode getMultipleCandidates(ImmutableMap<String,ReconciliationCandidate> multiCandidates) 
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode multiCandidateObj = mapper.createObjectNode();
+        for(Entry<String, ReconciliationCandidate> entry: multiCandidates.entrySet()){
+                String key = entry.getKey();
+                ReconciliationCandidate candidate  = entry.getValue();
+                multiCandidateObj.put(key, D2rUtils.getCandidate(candidate));
+        }
+        
+        return multiCandidateObj;
+    }
+    
+    public static ObjectNode getCandidate(ReconciliationCandidate candidate) 
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode candidateObj = mapper.createObjectNode();
+        ArrayNode resultArr = mapper.createArrayNode();
+        
+        ObjectNode resultItemObj = getResultItem(candidate);
+        resultArr.add(resultItemObj);
+        candidateObj.put("result", resultArr);
+        
+        return candidateObj;
+    }
+    
+    public static ObjectNode getResultItem(ReconciliationCandidate item)
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode resultItemObj = mapper.createObjectNode();
+        resultItemObj.put("id", item.getId());
+        resultItemObj.put("name", item.getName());
+        resultItemObj.put("score", item.getScore());
+        resultItemObj.put("match", item.isMatch());
+
+        ArrayNode typesArr = mapper.createArrayNode();
+        for(int i=0;i<item.getTypes().length;i++){
+                String id = item.getTypes()[i];
+                //int index = D2rUtils.getNamespaceEndPosition(id);
+                //String prefix = prefixManager.getPrefix(id.substring(0,index));
+                ObjectNode typeObj = mapper.createObjectNode();
+                typeObj.put("id", id);
+                //if(prefix!=null){
+                //        String localName = id.substring(index);
+                //        typeObj.put("name", prefix +":" + localName);
+                //}else{
+                        typeObj.put("name", id);
+                //}
+                typesArr.add(typeObj);
+        }
+        resultItemObj.put("type", typesArr);
+        
+        return resultItemObj;
+    }
+    
+    public static int getNamespaceEndPosition(String uri)
+    {
+        if(uri.indexOf("#")!=-1){
+                return uri.indexOf("#")+1;
+        }else{
+                return uri.lastIndexOf("/") + 1;
+        }
+    }
+
+    public static final String URI_SPACE = "http://www.ietf.org/rfc/rfc3986";
+
 }

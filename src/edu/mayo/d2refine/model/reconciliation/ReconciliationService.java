@@ -14,7 +14,7 @@ import edu.mayo.d2refine.model.Service;
 
 public interface ReconciliationService extends Service
 {
-        public List<ReconciliationCandidate> reconcile(ReconciliationRequest request);        
+        public ReconciliationCandidate reconcile(ReconciliationRequest request);        
         public ImmutableMap<String, ReconciliationCandidate> reconcile(ImmutableMap<String, ReconciliationRequest> multiQueryRequest);
         
         public void save(FileOutputStream out) throws IOException;

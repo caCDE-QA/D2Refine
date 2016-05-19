@@ -1,11 +1,18 @@
 package edu.mayo.d2refine.services;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 
+import com.google.common.collect.ImmutableMap;
+
+import edu.mayo.d2refine.model.reconciliation.ReconciliationCandidate;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationService;
 import edu.mayo.d2refine.services.reconciliation.TermReconciliationService;
@@ -30,7 +37,7 @@ public class D2RefineServiceManager
         return manager_;
     }
      
-    public String handle(String path, HttpServletRequest request)
+    public String handle(String path, HttpServletRequest request) throws JsonParseException, JsonMappingException, IOException
     {
         // Callback will only be there when service meta data is requested
         String callback = request.getParameter("callback");
@@ -41,8 +48,11 @@ public class D2RefineServiceManager
             String name = "CTS2Reconciliation";
             
             ReconciliationService  service = new TermReconciliationService(id, name);
-            ReconciliationRequest reconRequest = new ReconciliationRequest("chevy", 5);
-            return D2rUtils.getJsonReconciliationCandidates(service.reconcile(reconRequest)).toString();
+            
+            String queries = request.getParameter("queries");
+            ImmutableMap<String, ReconciliationRequest> multiQueryRequest = D2rUtils.getMultipleRequest(queries);
+            ImmutableMap<String, ReconciliationCandidate> multiCandidates = service.reconcile(multiQueryRequest);
+            return D2rUtils.getJsonReconciliationCandidates(multiCandidates).toString();
         }
         
         ObjectMapper mapper = new ObjectMapper();
