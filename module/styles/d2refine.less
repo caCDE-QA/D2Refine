@@ -1,0 +1,24 @@
+.data-table-cell-content a {
+	color : green;
+}
+
+.data-table-cell-content a:before{
+	position:relative;
+}
+.data-table-cell-content a:after{
+	content:attr(href);
+	color:#fff;
+	background:#333;
+	background:rgba(51,51,51,0.75);
+	padding:5px;
+	position:absolute;
+	left:-9999px;
+	opacity:0;
+	bottom:100%;
+	white-space:nowrap;
+	-webkit-transition:0.25s linear opacity;
+}
+.data-table-cell-content a:hover::after{
+	left:5px;
+	opacity:1;
+}

@@ -7,13 +7,15 @@ import java.io.IOException;
 import org.json.JSONException;
 import org.json.JSONWriter;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import edu.mayo.d2refine.model.Service;
 
 public interface ReconciliationService extends Service
 {
-        public ReconciliationResponse reconcile(ReconciliationRequest request);        
+        public ReconciliationResponse reconcile(ReconciliationRequest request);
+        public ImmutableList<SearchResultItem> suggestType(String searchTerm);
         public ImmutableMap<String, ReconciliationResponse> reconcile(ImmutableMap<String, ReconciliationRequest> multiQueryRequest);
         
         public void save(FileOutputStream out) throws IOException;

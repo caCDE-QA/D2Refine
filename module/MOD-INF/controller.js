@@ -80,6 +80,7 @@ function init()
             module,
             [ 
               "styles/project-injection.less",
+              "styles/d2refine.less",
               "dialogs/d2rDialogs.less",
               "dialogs/d2rAbout.less"
             ]);

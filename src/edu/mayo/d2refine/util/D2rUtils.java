@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -14,11 +15,13 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import edu.mayo.d2refine.model.reconciliation.ReconciliationCandidate;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationResponse;
+import edu.mayo.d2refine.model.reconciliation.SearchResultItem;
 
 public class D2rUtils 
 {
@@ -35,19 +38,32 @@ public class D2rUtils
         return callback + "(" + obj + ")";
     }
     
-//    public static ObjectNode getJsonReconciliationResponse(ImmutableMap<String, ReconciliationResponse> candidates) 
-//    {
-//        
-//        ObjectMapper mapper = new ObjectMapper();
-//        ObjectNode multiResponseObj = mapper.createObjectNode();
-//        for(Entry<String, ReconciliationCandidate> entry: candidates.entrySet()){
-//                String key = entry.getKey();
-//                ReconciliationCandidate candidate  = entry.getValue();
-//                multiResponseObj.put(key, getCandidate(candidate));
-//        }
-//        
-//        return multiResponseObj;
-//    }
+    public static ObjectNode jsonizeSearchResult(ImmutableList<SearchResultItem> results, String prefix) throws JsonGenerationException, JsonMappingException, IOException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode resultObj = mapper.createObjectNode();
+        resultObj.put("code", "/api/status/ok");
+        resultObj.put("status", "200 OK");
+        resultObj.put("prefix", prefix);
+        
+        ArrayNode resultArr = mapper.createArrayNode();
+        for(SearchResultItem item: results){
+                ObjectNode resultItemObj = mapper.createObjectNode();
+                resultItemObj.put("id", item.getId());
+                resultItemObj.put("name", item.getName());
+                
+                //FIXME id is used instead of type to enable the suggest autocomplete to function as it doesn't work when no type is given
+                ObjectNode tmpObj = mapper.createObjectNode();
+                tmpObj.put("id", item.getId());
+                tmpObj.put("name", item.getId());
+                resultItemObj.put("type", tmpObj);                      
+                
+                resultArr.add(resultItemObj);
+        }
+        resultObj.put("result", resultArr);
+        
+        return resultObj;
+    }
     
     public static ObjectNode getMultipleResponse(ImmutableMap<String,ReconciliationResponse> multiResponse) 
     {

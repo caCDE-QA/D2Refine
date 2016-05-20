@@ -10,11 +10,13 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationResponse;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationService;
+import edu.mayo.d2refine.model.reconciliation.SearchResultItem;
 import edu.mayo.d2refine.services.reconciliation.TermReconciliationService;
 import edu.mayo.d2refine.util.D2rUtils;
 
@@ -61,15 +63,9 @@ public class D2RefineServiceManager
         }
         else
         {
-            // Sending the same set of response for suggest or any other type of request
-//            String queries = request.getParameter("queries");
-//            ImmutableMap<String, ReconciliationRequest> multiQueryRequest = D2rUtils.getMultipleRequest(queries);
-//            ImmutableMap<String, ReconciliationResponse> multiResponse = service.reconcile(multiQueryRequest);
-//            ObjectNode node = D2rUtils.getMultipleResponse(multiResponse);
-//            return D2rUtils.toJSONP(callback, node); 
-            
-            String str = "{\"q2\":{\"result\":[{\"id\":\"100\",\"name\":\"Guess1\",\"score\":0.5,\"match\":false,\"type\":[]},{\"id\":\"200\",\"name\":\"Guess2\",\"score\":1.0,\"match\":false,\"type\":[]}]},\"q1\":{\"result\":[]},\"q0\":{\"result\":[]}}";
-            return str;
+            String prefix = request.getParameter("prefix");
+            ImmutableList<SearchResultItem> results = service.suggestType(prefix);
+            return D2rUtils.toJSONP(callback, D2rUtils.jsonizeSearchResult(results, prefix));
         }
     }
     
