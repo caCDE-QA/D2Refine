@@ -16,6 +16,8 @@ public class SearchResultItem
 	 */
 	private final double score;
 	
+	private final String title;
+	
 	public SearchResultItem(String id, String name){
 		this(id,name,0);
 	}
@@ -24,6 +26,7 @@ public class SearchResultItem
 		this.id = id;
 		this.name = name;
 		this.score = score;
+		this.title = "hoopla";
 	}
 
 	public String getId() {
@@ -37,5 +40,9 @@ public class SearchResultItem
 	public double getScore() {
 		return score;
 	}
+
+        public String getTitle() {
+            return title;
+        }
 	
 }

@@ -1,13 +1,3 @@
-/* Expose configuration */
-//var D2RefineExtension = {};
-//
-// Register a dummy reconciliation service that will be used to display named entities
-//ReconciliationManager.registerService({
-//  name: "D2Refine",
-//  url: "d2refine",
-//  ui: {"handler" : "D2RefineReconPanel"},
-//});
-
 var TermReconciliationManager = {};
 
 TermReconciliationManager.registerService = function(data,level){
@@ -47,3 +37,7 @@ TermReconciliationManager.synchronizeServices = function(onDone){
 };
 
 TermReconciliationManager.synchronizeServices();
+
+$("div.data-table-cell-content:nth-child(2)").attr("href");
+var ahref2 = $('div.data-table-cell-content:nth-child(2)').target;
+var ahref3 = $('div.data-table-cell-content:nth-child(2)').href;

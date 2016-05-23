@@ -78,7 +78,7 @@ function init()
     ClientSideResourceManager.addPaths(
             "project/styles", 
             module,
-            [ 
+            [            
               "styles/project-injection.less",
               "styles/d2refine.less",
               "dialogs/d2rDialogs.less",

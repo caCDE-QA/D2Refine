@@ -69,8 +69,8 @@ public class D2RefineServiceManager
         }
     }
     
-    public String getServiceMetadataAsJsonP(ReconciliationService service, String callback, String baseServiceUrl){
-        
+    public String getServiceMetadataAsJsonP(ReconciliationService service, String callback, String baseServiceUrl)
+    {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode obj = mapper.createObjectNode();
         obj.put("name", serviceName_);
