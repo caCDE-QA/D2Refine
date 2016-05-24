@@ -6,20 +6,16 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.refine.RefineServlet;
+import com.google.refine.util.ParsingUtilities;
 
-import edu.mayo.d2refine.model.ServiceType;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationService;
 import edu.mayo.d2refine.services.reconciliation.TermReconciliationService;
-import edu.mayo.d2refine.util.D2rUtils;
-
-import com.google.refine.util.ParsingUtilities;
 
 public class ReconciliationCommand extends AbstractReconciliationCommand 
 {

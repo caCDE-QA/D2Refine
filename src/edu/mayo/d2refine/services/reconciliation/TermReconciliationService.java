@@ -1,8 +1,11 @@
 package edu.mayo.d2refine.services.reconciliation;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,10 +13,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.ExtendedProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
+
+import com.google.refine.ProjectManager;
+import com.google.refine.RefineServlet;
+import com.google.refine.io.FileProjectManager;
 
 import edu.mayo.d2refine.model.ServiceType;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationCandidate;
@@ -21,11 +29,14 @@ import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationResponse;
 import edu.mayo.d2refine.model.reconciliation.SearchResultItem;
 import edu.mayo.d2refine.util.CTS2Transforms;
+import edu.mit.simile.butterfly.ButterflyModule;
 
 public class TermReconciliationService extends AbstractReconciliationService
 {
     final static Logger logger = LoggerFactory.getLogger("TermReconciliationService");
-    public static VocabularyServices service = new VocabularyServices("extensions/D2Refine/CTS2Profiles.properties");
+    
+    public static FileProjectManager fm = ((FileProjectManager) FileProjectManager.singleton);
+    public static VocabularyServices service = null;
     
     public TermReconciliationService(String id, String name)
     {
@@ -39,6 +50,31 @@ public class TermReconciliationService extends AbstractReconciliationService
         //int limit = request.getLimit();
         
         String phrase = request.getQueryString();
+        
+        FileProjectManager fm = ((FileProjectManager) FileProjectManager.singleton);
+        String path = fm.getWorkspaceDir().getAbsolutePath();
+        
+        logger.warn("<<<<<<<<<<< PATH=" + fm.getWorkspaceDir().getAbsolutePath());
+        
+        if (service == null)
+        {
+            File extPath = fm.getWorkspaceDir();
+            String propertiesPath = extPath.getAbsolutePath().replace(" ", "%20");
+            propertiesPath += File.separator + "extensions" + File.separator + "D2Refine" + File.separator + "CTS2Profiles.properties";
+            
+            File propFile = null;
+            try 
+            {
+                propFile = new File (new URI("file:///" + propertiesPath));
+            } 
+            catch (URISyntaxException e) 
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+                       
+            service = new VocabularyServices("/Users/dks02/Library/Application\\ Support/OpenRefine/extensions/D2Refine/CTS2Profiles.properties");
+        }
         String entityDirectory = service.search(null,  null, phrase);
         candidates = CTS2Transforms.readEntitiesAsCandidates(phrase, entityDirectory);
         
