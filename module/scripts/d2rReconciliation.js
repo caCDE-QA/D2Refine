@@ -38,6 +38,5 @@ TermReconciliationManager.synchronizeServices = function(onDone){
 
 TermReconciliationManager.synchronizeServices();
 
-$("div.data-table-cell-content:nth-child(2)").attr("href");
-var ahref2 = $('div.data-table-cell-content:nth-child(2)').target;
-var ahref3 = $('div.data-table-cell-content:nth-child(2)').href;
+$(document).ready(function(){
+	$('div.data-table-cell-content a:nth-child(2)').mouseover(function() {alert('class');})});

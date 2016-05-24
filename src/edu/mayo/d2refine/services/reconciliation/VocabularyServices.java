@@ -18,7 +18,19 @@ public class VocabularyServices
     
     private RESTContext serviceContext_ = null;
     
-    private ConvenienceMethods cm_ = ConvenienceMethods.instance();
+    private ConvenienceMethods cm_ = null;
+    
+    public VocabularyServices(String extensionProperties)
+    {
+        try
+        {
+            this.cm_ = ConvenienceMethods.instance(extensionProperties);
+        }
+        catch(Exception e)
+        {
+            this.cm_ = ConvenienceMethods.instance();
+        }
+    }
     
     public ServiceResultFormat getOutputFormat() 
     {

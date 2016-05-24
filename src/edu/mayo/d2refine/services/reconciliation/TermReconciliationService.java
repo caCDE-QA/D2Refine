@@ -25,7 +25,7 @@ import edu.mayo.d2refine.util.CTS2Transforms;
 public class TermReconciliationService extends AbstractReconciliationService
 {
     final static Logger logger = LoggerFactory.getLogger("TermReconciliationService");
-    public static VocabularyServices service = new VocabularyServices();
+    public static VocabularyServices service = new VocabularyServices("extensions/D2Refine/CTS2Profiles.properties");
     
     public TermReconciliationService(String id, String name)
     {
