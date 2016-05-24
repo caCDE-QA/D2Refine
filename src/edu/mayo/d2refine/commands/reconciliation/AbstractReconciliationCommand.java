@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import com.google.refine.RefineServlet;
 import com.google.refine.commands.Command;
 
-import edu.mayo.d2refine.model.Service;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationService;
 
 

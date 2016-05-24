@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONWriter;
 import org.slf4j.Logger;
@@ -58,6 +59,10 @@ public abstract class AbstractReconciliationService implements ReconciliationSer
                     try{
                             String key = entry.getKey();
                             ReconciliationRequest request = entry.getValue();
+                            
+                            if (StringUtils.isBlank(request.getQueryString()))
+                                continue;
+                            
                             ReconciliationResponse response = reconcile(request);
                             multiQueryResponse.put(key, response);
                             Thread.sleep(300);

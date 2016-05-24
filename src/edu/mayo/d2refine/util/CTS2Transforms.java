@@ -28,6 +28,7 @@ public class CTS2Transforms
                 
                 if ((entityDirectory != null)&&(Integer.valueOf(entityDirectory.getString("numEntries")) > 0))
                 {
+                    // TODO: Check if it not an array - check in case phrase "cigra" using py4cts2
                     JSONArray entries = entityDirectory.getJSONArray("entry");
                     for (int i = 0; i < entries.length(); i++)
                     {

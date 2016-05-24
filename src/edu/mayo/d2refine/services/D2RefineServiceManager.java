@@ -46,7 +46,7 @@ public class D2RefineServiceManager
         
         String id = "terms";
         String name = "CTS2Reconciliation";
-        ReconciliationService  service = new TermReconciliationService(id, name);
+        ReconciliationService  service = new TermReconciliationService(id, name, false);
         String serviceURL = request.getRequestURL().toString();
         
         if (path.endsWith("main"))
