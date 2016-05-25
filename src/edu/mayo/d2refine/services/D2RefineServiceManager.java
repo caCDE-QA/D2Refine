@@ -62,11 +62,25 @@ public class D2RefineServiceManager
             return getServiceMetadataAsJsonP(service, callback, serviceURL);
         }
         else
-        {
-            String prefix = request.getParameter("prefix");
-            ImmutableList<SearchResultItem> results = service.suggestType(prefix);
-            return D2rUtils.toJSONP(callback, D2rUtils.jsonizeSearchResult(results, prefix));
-        }
+//            if (path.endsWith("preview"))
+//            {        
+//                String entityId = request.getParameter("prefix");
+//                String dummyHTML = "<div> DEEPAK DEEPAK DEEPAK DEEPAK</div>";
+//                
+//                ObjectMapper mapper = new ObjectMapper();
+//                ObjectNode obj = mapper.createObjectNode();
+//                obj.put("name", serviceName_);
+//                obj.put("schemaSpace", D2rUtils.URI_SPACE);
+//                obj.put("identifierSpace", D2rUtils.URI_SPACE);
+//                
+//                return D2rUtils.toJSONP(callback, obj);
+//            }
+//            else
+            {
+                String prefix = request.getParameter("prefix");
+                ImmutableList<SearchResultItem> results = service.suggestType(prefix);
+                return D2rUtils.toJSONP(callback, D2rUtils.jsonizeSearchResult(results, prefix));
+            }
     }
     
     public String getServiceMetadataAsJsonP(ReconciliationService service, String callback, String baseServiceUrl)
