@@ -1,7 +1,7 @@
 # D2Refine
-D2Refine is an extension to OpenRefine (formerly Google Refine) to convert restrictions (specified in a spreadsheet like interface) into a clinical model.  
+D2Refine is a clinical study metadata harmonization and validation workbench based on OpenRefine (formerly Google Refine).  It includes a collection of the OpenRefine plugins that 1) convert restrictions (specified in a spreadsheet like interface) into a clinical model; and 2) provide metadata reconciliation services leveraging the [common terminology services 2 (CTS2)] (http://informatics.mayo.edu/cts2/index.php/Main_Page).  
 
-D2Refine currently serializes dbGap Data Dictionary Template into the OpenEHR's Archetype Definition Lanugage (ADL) 2.0.
+D2Refine currently 1) serializes dbGap Data Dictionary Template into the OpenEHR's Archetype Definition Lanugage (ADL) 2.0; and 2) provides the CTS2-based metadata reconciliation services.
 
 D2Refine leverages the functionality provided by following libraries and provides functionality that extends the OpenRefine's Export menu.
 
