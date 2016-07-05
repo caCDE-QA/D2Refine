@@ -1,21 +1,31 @@
 package edu.mayo.d2refine.commands.reconciliation;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableMap;
 
 import com.google.refine.RefineServlet;
 import com.google.refine.util.ParsingUtilities;
 
+import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest;
+import edu.mayo.d2refine.model.reconciliation.ReconciliationResponse;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationService;
 import edu.mayo.d2refine.services.reconciliation.TermReconciliationService;
+import edu.mayo.d2refine.util.D2rUtils;
 
 public class ReconciliationCommand extends AbstractReconciliationCommand 
 {
@@ -34,28 +44,25 @@ public class ReconciliationCommand extends AbstractReconciliationCommand
     {
         String id = "terms";
         String name = "CTS2Reconciliation";
-        
-        ReconciliationService  service = new TermReconciliationService(id, name, false);
-        
-        try 
-        {
-            JSONArray arr = ParsingUtilities.evaluateJsonStringToArray(request.getParameter("services"));
-            
-            Set<String> urls = new HashSet<String>();
-            for(int i=0;i<arr.length();i++)
+        return new TermReconciliationService(id, name, false);           
+    } 
+    
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+    {
+            try
             {
-                urls.add(arr.getString(i));
+                ReconciliationService service = getService(request);
+                response.setCharacterEncoding("UTF-8");
+                response.setHeader("Content-Type", "application/json");                            
+                String queries = request.getParameter("queries");
+                ImmutableMap<String, ReconciliationRequest> multiQueryRequest = D2rUtils.getMultipleRequest(queries);
+                ImmutableMap<String, ReconciliationResponse> multiResponse = service.reconcile(multiQueryRequest);
+                response.getWriter().write(D2rUtils.getMultipleResponse(multiResponse).toString());
+            } 
+            catch (Exception e) 
+            {
+                    respondException(response, e);
             }
-            
-            // Here you store the service details to a file if needed - same as RDF plugin
-            
-            //GRefineServiceManager.singleton.synchronizeServices(urls);
-            //GRefineServiceManager.singleton.addService(service);
-            return service;
-        } 
-        catch (JSONException e) 
-        {
-            throw new RuntimeException("Failed to initialize Sindice service", e);
-        }        
-    }    
+    }
 }

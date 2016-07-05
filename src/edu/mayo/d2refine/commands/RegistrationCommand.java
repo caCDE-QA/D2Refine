@@ -39,8 +39,19 @@ public class RegistrationCommand extends Command
                 writer.key("code"); 
                 writer.value("ok");
                 writer.key("service");
-                writer.value("main");                
-                writer.endObject();
+                    writer.object();
+                    writer.key("id"); 
+                    writer.value("main");
+                    writer.key("name"); 
+                    writer.value("D2Refine");
+                    writer.key("ui");
+                        writer.object();
+                        writer.key("handler");
+                        //writer.value("CTS2QueryPanel");
+                        writer.value("ReconStandardServicePanel");
+                        writer.endObject();
+                    writer.endObject();
+                 writer.endObject();
                 w.flush();
                 w.close();
             } 

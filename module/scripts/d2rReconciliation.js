@@ -6,12 +6,13 @@ TermReconciliationManager.registerService = function(data,level){
     }else{
             var url = location.href;
             var baseURL = url.substring(0,url.lastIndexOf('/'));
-            var service_url = baseURL + '/extension/d2refine/services/' + data.service;
+            var service_url = baseURL + '/extension/d2refine/services/' + data.service.id;
+            data.service.url = service_url;
             //ReconciliationManager doesnot call this method upon unregister.. this is why I am calling it myself
             ReconciliationManager._rebuildMap();
             
             if(!ReconciliationManager.getServiceFromUrl(service_url)){
-                    ReconciliationManager.registerStandardService(service_url);
+                    ReconciliationManager.registerStandardService(data.service.url);
             }
             if(level){
                     DialogSystem.dismissUntil(level - 1);
@@ -37,6 +38,3 @@ TermReconciliationManager.synchronizeServices = function(onDone){
 };
 
 TermReconciliationManager.synchronizeServices();
-
-$(document).ready(function(){
-	$('div.data-table-cell-content a:nth-child(2)').mouseover(function() {alert('class');})});

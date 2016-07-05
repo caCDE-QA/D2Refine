@@ -46,13 +46,17 @@ public class TermReconciliationService extends AbstractReconciliationService
         String path = "";
         try
         {
-            FileProjectManager fm = ((FileProjectManager) FileProjectManager.singleton);
-            path = fm.getWorkspaceDir().getPath() + 
+            if ((service == null)||(refreshContextForEachRequest_))
+            {
+                logger.warn("Refresing Service....");
+                FileProjectManager fm = ((FileProjectManager) FileProjectManager.singleton);
+                path = fm.getWorkspaceDir().getPath() + 
                     File.separator + "extensions" + 
                     File.separator + "D2Refine" + 
                     File.separator + "CTS2Profiles.properties";
-            if ((service == null)||(refreshContextForEachRequest_))
+            
                 service = new VocabularyServices(path);
+            }
         }
         catch(Exception e)
         {

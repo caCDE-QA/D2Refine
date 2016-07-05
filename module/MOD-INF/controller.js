@@ -32,6 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 importPackage(edu.mayo.d2refine.services);
 importPackage(edu.mayo.d2refine.commands);
+importPackage(edu.mayo.d2refine.commands.reconciliation);
 importPackage(edu.mayo.d2refine.exporter.ADLExporterExtension);
 
 
@@ -62,6 +63,7 @@ function init()
     
     // Registering Commands
     RefineServlet.registerCommand(module, "registerD2RefineServices", new RegistrationCommand());
+    RefineServlet.registerCommand(module, "reconcileWithCTS2", new ReconciliationCommand());
     
     // Script files to inject into /project page
     ClientSideResourceManager.addPaths(
@@ -71,6 +73,7 @@ function init()
             "scripts/utils/util.js",
             "scripts/exporter/model-export-menu.js",
             "scripts/extension-bar-menu.js",
+            "dialogs/cts2-query-panel.js",
             "dialogs/d2rReconPanel.js",
             "dialogs/d2rAbout.js" ]);
 

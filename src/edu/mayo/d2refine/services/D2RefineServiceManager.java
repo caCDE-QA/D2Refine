@@ -54,9 +54,12 @@ public class D2RefineServiceManager
             if (StringUtils.isBlank(callback))
             {
                 String queries = request.getParameter("queries");
-                ImmutableMap<String, ReconciliationRequest> multiQueryRequest = D2rUtils.getMultipleRequest(queries);
-                ImmutableMap<String, ReconciliationResponse> multiResponse = service.reconcile(multiQueryRequest);
-                return D2rUtils.getMultipleResponse(multiResponse).toString();
+                if (!StringUtils.isBlank(queries))
+                {
+                    ImmutableMap<String, ReconciliationRequest> multiQueryRequest = D2rUtils.getMultipleRequest(queries);
+                    ImmutableMap<String, ReconciliationResponse> multiResponse = service.reconcile(multiQueryRequest);
+                    return D2rUtils.getMultipleResponse(multiResponse).toString();
+                }
             }
         
             return getServiceMetadataAsJsonP(service, callback, serviceURL);
@@ -95,6 +98,11 @@ public class D2RefineServiceManager
         ObjectNode viewObj = mapper.createObjectNode();
         viewObj.put("url", baseServiceUrl + "/view?id={{id}}");
         obj.put("view", viewObj);
+        
+        //ui handler
+        //ObjectNode uiHandler = mapper.createObjectNode();
+        //uiHandler.put("handler", "CTS2QueryPanel");
+        //obj.put("ui", uiHandler);
         
         //preview object
         ObjectNode previewObj = mapper.createObjectNode();
