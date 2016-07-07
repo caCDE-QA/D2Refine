@@ -50,10 +50,7 @@
 	     Maven repository locations -->
 	
 	<property name="maven-repo.dir" value="${user.home}/.m2/repository" />
-	
-	<!-- Properties for deploy and release mechanism -->
-	<property name="openrefine.extensions.dir" value="${user.home}/Library/Application Support/OpenRefine/extensions" />
-			
+
     <path id="class.path">
         <fileset dir="${lib.dir}" erroronmissingdir="false">
             <include name="**/*.jar" />
@@ -80,13 +77,6 @@
     		<format property="timestmp" pattern="MM/dd/yyyy hh:mm:ss aa" unit="hour"/>
     	</tstamp>
         <echo message="Building D2Refine...${timestmp}" />
-    	<zip destfile="../D2Refine/D2Refine.zip" basedir="../D2Refine/module" />
-    </target>
-
-    <target name="deploy" depends="build"
-        description="This deploys D2Refine or any other test extensions to the workspace directory">
-        <echo message="Deploying the extension to ${openrefine.extensions.dir}" />
-        <unzip src="./D2Refine.zip" dest="${openrefine.extensions.dir}/D2Refine" overwrite="true" />
     </target>
 
 	<target name="ivy-clean-cache" 
