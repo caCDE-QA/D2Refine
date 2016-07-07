@@ -82,20 +82,13 @@
         <echo message="Building D2Refine...${timestmp}" />
     	<zip destfile="../D2Refine/D2Refine.zip" basedir="../D2Refine/module" />
     </target>
-	
-	<property name="D2Refine.git.dir" value="${user.home}/A123/git/Guoqian/D2Refine" />
-	<target name="release"
-		description="makes a copy to relase, this task is for testing for the developers only. Please ignore this task.">
-		<!--echo message="Deploying the extension to ${openrefine.extensions.dir}" />    	
-		<unzip src="./D2Refine.zip" dest="${openrefine.extensions.dir}/D2Refine" overwrite="true" /-->
-		    	
-		<copy todir="${D2Refine.git.dir}" overwrite="true">
-		   <fileset dir="../D2Refine">
-		   <!--exclude name="build.xml"/-->
-			</fileset>
-		</copy>
-	</target>
-	
+
+    <target name="deploy" depends="build"
+        description="This deploys D2Refine or any other test extensions to the workspace directory">
+        <echo message="Deploying the extension to ${openrefine.extensions.dir}" />
+        <unzip src="./D2Refine.zip" dest="${openrefine.extensions.dir}/D2Refine" overwrite="true" />
+    </target>
+
 	<target name="ivy-clean-cache" 
 		description="removes the local Ivy cache. WARNING! After removal, this may take significant time to rebuild. Only use this if you are having problems with a corrupt or stale cache.">
 		<ivy:cleancache/>
