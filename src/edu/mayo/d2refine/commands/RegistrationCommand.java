@@ -1,18 +1,16 @@
 package edu.mayo.d2refine.commands;
 
-import java.io.IOException;
-import java.io.Writer;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.google.refine.RefineServlet;
+import com.google.refine.commands.Command;
 import org.json.JSONWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.refine.RefineServlet;
-import com.google.refine.commands.Command;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.Writer;
 
 public class RegistrationCommand extends Command 
 {
@@ -34,7 +32,7 @@ public class RegistrationCommand extends Command
                     
                 Writer w = response.getWriter();
                 JSONWriter writer = new JSONWriter(w);
-                
+
                 writer.object();
                 writer.key("code"); 
                 writer.value("ok");
@@ -47,7 +45,6 @@ public class RegistrationCommand extends Command
                     writer.key("ui");
                         writer.object();
                         writer.key("handler");
-                        //writer.value("CTS2QueryPanel");
                         writer.value("ReconStandardServicePanel");
                         writer.endObject();
                     writer.endObject();

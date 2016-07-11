@@ -8,7 +8,6 @@ ExtensionBar.addExtensionMenu({
       label: "About D2Refine...",
       click: function(){
           var aboutDl = new D2RefineAboutDialog();
-          //var dlg = aboutDl.prototype;
           aboutDl.show();
       }
     },

@@ -69,11 +69,11 @@ function init()
     ClientSideResourceManager.addPaths(
             "project/scripts", 
             module, [
-            "scripts/d2rReconciliation.js",
+            //"scripts/d2rReconciliation.js",
             "scripts/utils/util.js",
             "scripts/exporter/model-export-menu.js",
             "scripts/extension-bar-menu.js",
-            "dialogs/cts2-query-panel.js",
+            //"dialogs/cts2-query-panel.js",
             "dialogs/d2rReconPanel.js",
             "dialogs/d2rAbout.js" ]);
 

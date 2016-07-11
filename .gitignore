@@ -10,4 +10,5 @@
 *.ipr
 *.iws
 *.bak
+*.class
 .idea/

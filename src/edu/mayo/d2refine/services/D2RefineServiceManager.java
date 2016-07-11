@@ -1,24 +1,21 @@
 package edu.mayo.d2refine.services;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-
 import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationResponse;
 import edu.mayo.d2refine.model.reconciliation.ReconciliationService;
 import edu.mayo.d2refine.model.reconciliation.SearchResultItem;
 import edu.mayo.d2refine.services.reconciliation.TermReconciliationService;
 import edu.mayo.d2refine.util.D2rUtils;
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 public class D2RefineServiceManager 
 {
@@ -98,12 +95,7 @@ public class D2RefineServiceManager
         ObjectNode viewObj = mapper.createObjectNode();
         viewObj.put("url", baseServiceUrl + "/view?id={{id}}");
         obj.put("view", viewObj);
-        
-        //ui handler
-        //ObjectNode uiHandler = mapper.createObjectNode();
-        //uiHandler.put("handler", "CTS2QueryPanel");
-        //obj.put("ui", uiHandler);
-        
+
         //preview object
         ObjectNode previewObj = mapper.createObjectNode();
         previewObj.put("url", baseServiceUrl + "/preview/template?id={{id}}");

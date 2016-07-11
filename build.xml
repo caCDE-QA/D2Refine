@@ -11,6 +11,7 @@
 
     <property environment="env"/>
 	<property name="java_version" value="1.7"/>
+    <property name="groovy_version" value="2.4.7"/>
     <condition property="version" value="trunk">
         <not><isset property="version"/></not>
     </condition>
@@ -63,16 +64,20 @@
         </fileset>
         <pathelement path="${refine.classes.dir}"/>
     </path>
-	            
-    <target name="build_java">
+
+    <taskdef name="groovyc"
+             classname="org.codehaus.groovy.ant.Groovyc"
+             classpathref="class.path"/>
+
+    <target name="build_groovy">
         <mkdir dir="${classes.dir}" />
-        <javac source="${java_version}" target="${java_version}" encoding="utf-8" destdir="${classes.dir}" debug="true" includeAntRuntime="no">
-            <src path="${src.dir}"/>
+        <groovyc srcdir="${src.dir}" destdir="${classes.dir}" verbose="Yes">
+            <javac source="${java_version}" target="${java_version}" debug="on" />
             <classpath refid="class.path" />
-        </javac>
+        </groovyc>
     </target>
 
-    <target name="build" depends="build_java" >
+    <target name="build" depends="build_groovy" >
     	<tstamp>
     		<format property="timestmp" pattern="MM/dd/yyyy hh:mm:ss aa" unit="hour"/>
     	</tstamp>
