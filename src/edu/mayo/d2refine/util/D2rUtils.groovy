@@ -6,8 +6,6 @@ import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest
 import edu.mayo.d2refine.model.reconciliation.ReconciliationResponse
 import edu.mayo.d2refine.model.reconciliation.SearchResultItem
 import groovy.json.JsonBuilder
-import org.apache.commons.lang.StringUtils
-import org.codehaus.jackson.JsonGenerationException
 import org.codehaus.jackson.JsonNode
 import org.codehaus.jackson.JsonParseException
 import org.codehaus.jackson.map.JsonMappingException
@@ -19,39 +17,39 @@ import java.util.Map.Entry
 
 public class D2rUtils
 {
-    public static String getIdForString(String name)
+    static String getIdForString(String name)
     {
-        if (StringUtils.isBlank(name))
-            return null;
-        
-        return name.toLowerCase().replaceAll("\\s+", "-").replaceAll("[^-.a-zA-Z0-9]", "").replaceAll("\\-\\-+", "-");
+        name?.toLowerCase().replaceAll("\\s+", "-").replaceAll("[^-.a-zA-Z0-9]", "").replaceAll("\\-\\-+", "-");
     }
     
-    public static String toJSONP(String callback, ObjectNode obj)
+    static String toJSONP(String callback, String obj)
     {
-        return callback + "(" + obj + ")";
+        "${callback}(${obj})"
     }
     
-    public static ObjectNode jsonizeSearchResult(ImmutableList<SearchResultItem> results, String prefix) throws JsonGenerationException, JsonMappingException, IOException
+    static ObjectNode jsonizeSearchResult(ImmutableList<SearchResultItem> results, String prefix)
     {
         def jsonBuilder = new JsonBuilder()
 
-        def groovyJson = JsonBuilder{
-            code: "/api/status/ok"
-            status: '200 OK'
-            prefix: prefix
-            result: jsonBuilder {
+        JsonBuilder{
+            code '/api/status/ok'
+            status '200 OK'
+            prefix prefix
+            result {
                 results.collect {item ->
-                    id: item.id
-                    name: item.name
-                    type: {
-                        id: item.id
-                        name: item.name
+                    id item.id
+                    name item.name
+                    type {
+                        id item.id
+                        name item.name
                     }
                 }
             }
         }
 
+        jsonBuilder.toString()
+
+        /*
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode resultObj = mapper.createObjectNode();
         resultObj.put("code", "/api/status/ok");
@@ -75,9 +73,10 @@ public class D2rUtils
         resultObj.put("result", resultArr);
         
         return resultObj;
+        */
     }
     
-    public static ObjectNode getMultipleResponse(ImmutableMap<String,ReconciliationResponse> multiResponse) 
+    static ObjectNode getMultipleResponse(ImmutableMap<String,ReconciliationResponse> multiResponse)
     {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode multiResponseObj = mapper.createObjectNode();
@@ -91,7 +90,7 @@ public class D2rUtils
         return multiResponseObj;
     }
     
-    public static ObjectNode getResponse(ReconciliationResponse response) 
+    static ObjectNode getResponse(ReconciliationResponse response)
     {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode responseObj = mapper.createObjectNode();
@@ -105,7 +104,7 @@ public class D2rUtils
         return responseObj;
     }
     
-    public static ObjectNode getResultItem(ReconciliationCandidate item)
+    static ObjectNode getResultItem(ReconciliationCandidate item)
     {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode resultItemObj = mapper.createObjectNode();
@@ -134,7 +133,7 @@ public class D2rUtils
         return resultItemObj;
     }
     
-    public static ImmutableMap<String, ReconciliationRequest> getMultipleRequest(String queries) 
+    static ImmutableMap<String, ReconciliationRequest> getMultipleRequest(String queries)
                                     throws JsonParseException, JsonMappingException, IOException
     {
             Map<String, ReconciliationRequest> multiRequest = new HashMap<String, ReconciliationRequest>();
@@ -180,7 +179,7 @@ public class D2rUtils
     
 
     
-    public static int getNamespaceEndPosition(String uri)
+    static int getNamespaceEndPosition(String uri)
     {
         if(uri.indexOf("#")!=-1){
                 return uri.indexOf("#")+1;
@@ -189,6 +188,5 @@ public class D2rUtils
         }
     }
 
-    public static final String URI_SPACE = "http://www.ietf.org/rfc/rfc3986";
-
+    static final String URI_SPACE = "http://www.ietf.org/rfc/rfc3986";
 }

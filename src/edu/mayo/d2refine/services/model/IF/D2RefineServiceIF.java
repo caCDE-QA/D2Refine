@@ -4,5 +4,5 @@ public interface D2RefineServiceIF
 {
         public String getServiceId();        
         public String getServiceName();
-        public D2RefineServiceType getServiceType();       
+        public ServiceType getServiceType();
 }
