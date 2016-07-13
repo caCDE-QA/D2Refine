@@ -6,14 +6,12 @@ import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationResponse
 import edu.mayo.d2refine.services.reconciliation.model.SearchResultItem
 import groovy.json.JsonBuilder
-import groovy.json.JsonSlurper
 import org.codehaus.jackson.JsonNode
 import org.codehaus.jackson.JsonParseException
 import org.codehaus.jackson.map.JsonMappingException
 import org.codehaus.jackson.map.ObjectMapper
 import org.codehaus.jackson.node.ArrayNode
 import org.codehaus.jackson.node.ObjectNode
-import java.util.Map.Entry
 
 public class D2rUtils
 {
@@ -78,23 +76,24 @@ public class D2rUtils
 
     static String getMultipleResponse(ImmutableMap<String,ReconciliationResponse> multiResponse)
     {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode multiResponseObj = mapper.createObjectNode();
-        for(Entry<String, ReconciliationResponse> entry: multiResponse.entrySet())
-        {
-                String key = entry.getKey();
-                ReconciliationResponse response  = entry.getValue();
-                multiResponseObj.put(key, getResponse(response));
-        }
+//        ObjectMapper mapper = new ObjectMapper();
+//        ObjectNode multiResponseObj = mapper.createObjectNode();
+//        for(Entry<String, ReconciliationResponse> entry: multiResponse.entrySet())
+//        {
+//                String key = entry.getKey();
+//                ReconciliationResponse response  = entry.getValue();
+//                multiResponseObj.put(key, getResponse(response));
+//        }
 
+        // if this fails in returning correct values - uncomment other lines in this method
         String jb = getMultipleResponseWithJSONBuilder(multiResponse)
 
-        def map1 = new JsonSlurper().parseText(jb)
-        def map2 = new JsonSlurper().parseText(multiResponseObj.toString())
-
-        boolean same = (map1 == map2)
-
-        return multiResponseObj.toString();
+//        def map1 = new JsonSlurper().parseText(jb)
+//        def map2 = new JsonSlurper().parseText(multiResponseObj.toString())
+//
+//        boolean same = (map1 == map2)
+//
+//        return multiResponseObj.toString();
     }
     
     static ObjectNode getResponse(ReconciliationResponse response)
