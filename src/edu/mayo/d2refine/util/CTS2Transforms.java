@@ -1,16 +1,15 @@
 package edu.mayo.d2refine.util;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationCandidate;
+import edu.mayo.d2refine.services.reconciliation.model.SearchResultItem;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import edu.mayo.d2refine.model.reconciliation.ReconciliationCandidate;
-import edu.mayo.d2refine.model.reconciliation.SearchResultItem;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 public class CTS2Transforms 
 {

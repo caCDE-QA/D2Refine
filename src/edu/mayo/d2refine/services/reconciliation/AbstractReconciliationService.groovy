@@ -1,9 +1,9 @@
 package edu.mayo.d2refine.services.reconciliation
 import com.google.common.collect.ImmutableMap
-import edu.mayo.d2refine.services.model.IF.ServiceType
-import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest
-import edu.mayo.d2refine.model.reconciliation.ReconciliationResponse
-import edu.mayo.d2refine.model.reconciliation.ReconciliationService
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationResponse
+import edu.mayo.d2refine.util.D2rUtils
+import edu.mayo.d2refine.util.ServiceType
 import org.apache.commons.lang.StringUtils
 import org.json.JSONException
 import org.json.JSONWriter
@@ -31,7 +31,7 @@ abstract class AbstractReconciliationService implements ReconciliationService
                             if (StringUtils.isBlank(request.getQueryString()))
                                 continue;
                             
-                            ReconciliationResponse response = reconcile(request);
+                            ReconciliationResponse response = D2rUtils.wrapCandidates(reconcile(request));
                             multiQueryResponse.put(key, response);
                             Thread.sleep(300);
                     }catch(Exception e){

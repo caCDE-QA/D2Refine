@@ -1,10 +1,11 @@
 package edu.mayo.d2refine.services
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap
-import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest
-import edu.mayo.d2refine.model.reconciliation.ReconciliationResponse
-import edu.mayo.d2refine.model.reconciliation.ReconciliationService
-import edu.mayo.d2refine.model.reconciliation.SearchResultItem
+import edu.mayo.d2refine.services.reconciliation.ReconciliationService
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationResponse
+
+import edu.mayo.d2refine.services.reconciliation.model.SearchResultItem
 import edu.mayo.d2refine.services.reconciliation.TermReconciliationService
 import edu.mayo.d2refine.util.D2rUtils
 import groovy.json.JsonBuilder
@@ -48,7 +49,7 @@ public class D2RefineServiceManager
                 {
                     ImmutableMap<String, ReconciliationRequest> multiQueryRequest = D2rUtils.getMultipleRequest(queries)
                     ImmutableMap<String, ReconciliationResponse> multiResponse = service.reconcile(multiQueryRequest)
-                    return D2rUtils.getMultipleResponse(multiResponse).toString()
+                    return D2rUtils.getMultipleResponse(multiResponse)
                 }
             }
         

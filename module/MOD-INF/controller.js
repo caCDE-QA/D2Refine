@@ -31,8 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 importPackage(edu.mayo.d2refine.services);
-importPackage(edu.mayo.d2refine.commands);
-importPackage(edu.mayo.d2refine.commands.reconciliation);
+importPackage(edu.mayo.d2refine.services.commands);
 importPackage(edu.mayo.d2refine.exporter.ADLExporterExtension);
 
 

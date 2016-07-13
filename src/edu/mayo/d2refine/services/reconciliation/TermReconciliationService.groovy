@@ -1,12 +1,11 @@
 package edu.mayo.d2refine.services.reconciliation
 import com.google.common.collect.ImmutableList
 import com.google.refine.io.FileProjectManager
-import edu.mayo.d2refine.model.reconciliation.ReconciliationCandidate
-import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest
-import edu.mayo.d2refine.model.reconciliation.ReconciliationResponse
-import edu.mayo.d2refine.model.reconciliation.SearchResultItem
-import edu.mayo.d2refine.services.model.IF.ServiceType
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationCandidate
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
+import edu.mayo.d2refine.services.reconciliation.model.SearchResultItem
 import edu.mayo.d2refine.util.CTS2Transforms
+import edu.mayo.d2refine.util.ServiceType
 
 class TermReconciliationService extends AbstractReconciliationService
 {
@@ -55,8 +54,8 @@ class TermReconciliationService extends AbstractReconciliationService
         
         service != null
     }
-    
-    public ReconciliationResponse reconcile(ReconciliationRequest request) 
+
+    public List<ReconciliationCandidate> reconcile(ReconciliationRequest request)
     {
         Set<ReconciliationCandidate> candidates = new LinkedHashSet<ReconciliationCandidate>();
         //int limit = request.getLimit();
@@ -110,7 +109,8 @@ class TermReconciliationService extends AbstractReconciliationService
             }
             */
         }
-        return wrapCandidates(new ArrayList<ReconciliationCandidate>(candidates));
+
+        new ArrayList<ReconciliationCandidate>(candidates)
     }
     
     public ImmutableList<SearchResultItem> suggestType(String searchTerm)
@@ -143,12 +143,7 @@ class TermReconciliationService extends AbstractReconciliationService
         return ImmutableList.copyOf(items);
     }
     
-    private ReconciliationResponse wrapCandidates(List<? extends ReconciliationCandidate> candidates)
-    {
-        ReconciliationResponse response = new ReconciliationResponse();
-        response.setResults(candidates);
-        return response;
-    }
+
 
     @Override
     public void save(FileOutputStream out)

@@ -1,25 +1,25 @@
 package edu.mayo.d2refine.util
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap
-import edu.mayo.d2refine.model.reconciliation.ReconciliationCandidate
-import edu.mayo.d2refine.model.reconciliation.ReconciliationRequest
-import edu.mayo.d2refine.model.reconciliation.ReconciliationResponse
-import edu.mayo.d2refine.model.reconciliation.SearchResultItem
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationCandidate
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationResponse
+import edu.mayo.d2refine.services.reconciliation.model.SearchResultItem
 import groovy.json.JsonBuilder
+import groovy.json.JsonSlurper
 import org.codehaus.jackson.JsonNode
 import org.codehaus.jackson.JsonParseException
 import org.codehaus.jackson.map.JsonMappingException
 import org.codehaus.jackson.map.ObjectMapper
 import org.codehaus.jackson.node.ArrayNode
 import org.codehaus.jackson.node.ObjectNode
-
 import java.util.Map.Entry
 
 public class D2rUtils
 {
     static String getIdForString(String name)
     {
-        name?.toLowerCase().replaceAll("\\s+", "-").replaceAll("[^-.a-zA-Z0-9]", "").replaceAll("\\-\\-+", "-");
+        name?.toLowerCase()?.replaceAll("\\s+", "-")?.replaceAll("[^-.a-zA-Z0-9]", "")?.replaceAll("\\-\\-+", "-");
     }
     
     static String toJSONP(String callback, String obj)
@@ -27,56 +27,56 @@ public class D2rUtils
         "${callback}(${obj})"
     }
     
-    static ObjectNode jsonizeSearchResult(ImmutableList<SearchResultItem> results, String prefix)
+    static String jsonizeSearchResult(ImmutableList<SearchResultItem> results, String pref)
     {
         def jsonBuilder = new JsonBuilder()
 
-        JsonBuilder{
-            code '/api/status/ok'
-            status '200 OK'
-            prefix prefix
-            result {
+        jsonBuilder {
+            code: '/api/status/ok'
+            status: '200 OK'
+            prefix: pref
+            result: {
                 results.collect {item ->
-                    id item.id
-                    name item.name
-                    type {
-                        id item.id
-                        name item.name
+                    id: item.id
+                    name: item.name
+                    type: {
+                        id: item.id
+                        name: item.name
                     }
                 }
             }
         }
 
         jsonBuilder.toString()
-
-        /*
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode resultObj = mapper.createObjectNode();
-        resultObj.put("code", "/api/status/ok");
-        resultObj.put("status", "200 OK");
-        resultObj.put("prefix", prefix);
-        
-        ArrayNode resultArr = mapper.createArrayNode();
-        for(SearchResultItem item: results){
-                ObjectNode resultItemObj = mapper.createObjectNode();
-                resultItemObj.put("id", item.getId());
-                resultItemObj.put("name", item.getName());
-                
-                //FIXME id is used instead of type to enable the suggest autocomplete to function as it doesn't work when no type is given
-                ObjectNode tmpObj = mapper.createObjectNode();
-                tmpObj.put("id", item.getId());
-                tmpObj.put("name", item.getId());
-                resultItemObj.put("type", tmpObj);                      
-                
-                resultArr.add(resultItemObj);
-        }
-        resultObj.put("result", resultArr);
-        
-        return resultObj;
-        */
     }
-    
-    static ObjectNode getMultipleResponse(ImmutableMap<String,ReconciliationResponse> multiResponse)
+
+    static String getMultipleResponseWithJSONBuilder(ImmutableMap<String,ReconciliationResponse> multiResponse)
+    {
+        // This method creates the response using JSONBuilder.
+        // But at the end we have to replace "results" and "types" into thier singular forms as required by OpenRefine.
+        // Find out easy way before using this instead of Jackson library for JSON Object.
+        def data = [
+                keys: multiResponse.each { k, v ->
+                    k:
+                    [
+                        v.results?.collect {
+                            ['id' : it.id,
+                            'name' : it.name,
+                            'type' : it.types as List,
+                            'score' : it.score,
+                            'match' : it.match ]
+                        },
+                    ]
+                }
+            ]
+
+        def jbl = new JsonBuilder(data.values()?.first())
+
+        String val = jbl.toString()
+        val?.replaceAll("results", "result").replaceAll("types", "type")
+    }
+
+    static String getMultipleResponse(ImmutableMap<String,ReconciliationResponse> multiResponse)
     {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode multiResponseObj = mapper.createObjectNode();
@@ -86,8 +86,15 @@ public class D2rUtils
                 ReconciliationResponse response  = entry.getValue();
                 multiResponseObj.put(key, getResponse(response));
         }
-        
-        return multiResponseObj;
+
+        String jb = getMultipleResponseWithJSONBuilder(multiResponse)
+
+        def map1 = new JsonSlurper().parseText(jb)
+        def map2 = new JsonSlurper().parseText(multiResponseObj.toString())
+
+        boolean same = (map1 == map2)
+
+        return multiResponseObj.toString();
     }
     
     static ObjectNode getResponse(ReconciliationResponse response)
@@ -100,8 +107,16 @@ public class D2rUtils
                 resultArr.add(resultItemObj);
         }
         responseObj.put("result", resultArr);
-        
+
         return responseObj;
+
+    }
+
+    static ReconciliationResponse wrapCandidates(List<? extends ReconciliationCandidate> candidates)
+    {
+        ReconciliationResponse response = new ReconciliationResponse();
+        response.setResults(candidates);
+        return response;
     }
     
     static ObjectNode getResultItem(ReconciliationCandidate item)
@@ -129,7 +144,7 @@ public class D2rUtils
                 typesArr.add(typeObj);
         }
         resultItemObj.put("type", typesArr);
-        
+
         return resultItemObj;
     }
     
@@ -150,43 +165,7 @@ public class D2rUtils
             
             return ImmutableMap.copyOf(multiRequest);
     }
-    
-//    public static ObjectNode getMultipleCandidates(ImmutableMap<String,ReconciliationCandidate> multiCandidates) 
-//    {
-//        ObjectMapper mapper = new ObjectMapper();
-//        ObjectNode multiCandidateObj = mapper.createObjectNode();
-//        for(Entry<String, ReconciliationCandidate> entry: multiCandidates.entrySet()){
-//                String key = entry.getKey();
-//                ReconciliationCandidate candidate  = entry.getValue();
-//                multiCandidateObj.put(key, D2rUtils.getCandidate(candidate));
-//        }
-//        
-//        return multiCandidateObj;
-//    }
-    
-//    public static ObjectNode getCandidate(ReconciliationCandidate candidate) 
-//    {
-//        ObjectMapper mapper = new ObjectMapper();
-//        ObjectNode candidateObj = mapper.createObjectNode();
-//        ArrayNode resultArr = mapper.createArrayNode();
-//        
-//        ObjectNode resultItemObj = getResultItem(candidate);
-//        resultArr.add(resultItemObj);
-//        candidateObj.put("result", resultArr);
-//        
-//        return candidateObj;
-//    }
-    
 
-    
-    static int getNamespaceEndPosition(String uri)
-    {
-        if(uri.indexOf("#")!=-1){
-                return uri.indexOf("#")+1;
-        }else{
-                return uri.lastIndexOf("/") + 1;
-        }
-    }
 
     static final String URI_SPACE = "http://www.ietf.org/rfc/rfc3986";
 }
