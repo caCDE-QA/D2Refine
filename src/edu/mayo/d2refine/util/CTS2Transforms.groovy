@@ -1,17 +1,11 @@
-package edu.mayo.d2refine.util;
+package edu.mayo.d2refine.util
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationCandidate
+import edu.mayo.d2refine.services.reconciliation.model.SearchResultItem
+import org.apache.commons.lang.StringUtils
+import org.json.JSONArray
+import org.json.JSONObject
 
-import edu.mayo.d2refine.services.reconciliation.model.ReconciliationCandidate;
-import edu.mayo.d2refine.services.reconciliation.model.SearchResultItem;
-import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
-public class CTS2Transforms 
+public class CTS2Transforms
 {
     public static Set<ReconciliationCandidate> readEntitiesAsCandidates(String phrase, String json)
     {
@@ -84,7 +78,7 @@ public class CTS2Transforms
                         
                         designation += idQualification;
                                 
-                        String[] types = {};
+                        String[] types = [ServiceType.TERM.toString()];
                         ReconciliationCandidate rc1 = new ReconciliationCandidate(id, designation, types , score, Boolean.FALSE);
                         candidates.add(rc1);                       
                     }

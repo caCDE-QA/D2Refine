@@ -1,20 +1,18 @@
-package edu.mayo.d2refine.services.commands;
+package edu.mayo.d2refine.services.commands
+import com.google.common.collect.ImmutableMap
+import com.google.refine.RefineServlet
+import edu.mayo.d2refine.services.reconciliation.ReconciliationService
+import edu.mayo.d2refine.services.reconciliation.TermReconciliationService
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationResponse
+import edu.mayo.d2refine.util.D2rUtils
+import org.json.JSONException
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-import com.google.common.collect.ImmutableMap;
-import com.google.refine.RefineServlet;
-import edu.mayo.d2refine.services.reconciliation.ReconciliationService;
-import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest;
-import edu.mayo.d2refine.services.reconciliation.model.ReconciliationResponse;
-import edu.mayo.d2refine.services.reconciliation.TermReconciliationService;
-import edu.mayo.d2refine.util.D2rUtils;
-import org.json.JSONException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.servlet.ServletException
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 public class ReconciliationCommand extends AbstractReconciliationCommand
 {
