@@ -69,12 +69,10 @@ function init()
             "project/scripts", 
             module, [
             "scripts/d2rReconciliation.js",
-            //"scripts/config.js",
             "scripts/utils/util.js",
             "scripts/exporter/model-export-menu.js",
             "scripts/extension-bar-menu.js",
-            //"dialogs/cts2-query-panel.js",
-            "dialogs/d2rReconPanel.js",
+            "dialogs/d2rAddReconService.js",
             "dialogs/d2rAbout.js" ]);
 
     // Style files to inject into /project page

@@ -5,7 +5,7 @@ import edu.mayo.d2refine.services.reconciliation.model.ReconciliationCandidate
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
 import edu.mayo.d2refine.services.reconciliation.model.SearchResultItem
 import edu.mayo.d2refine.util.CTS2Transforms
-import edu.mayo.d2refine.util.ServiceType
+import edu.mayo.d2refine.util.D2RC
 
 class TermReconciliationService extends AbstractReconciliationService
 {
@@ -18,7 +18,7 @@ class TermReconciliationService extends AbstractReconciliationService
     {
         setId(id)
         setName(name)
-        setServiceType(ServiceType.TERM)
+        setServiceType(D2RC.ServiceType.TERM)
         refreshContextForEachRequest_ = refreshContextForEachRequest;
     }
 

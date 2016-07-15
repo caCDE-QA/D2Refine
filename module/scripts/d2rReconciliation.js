@@ -20,6 +20,7 @@ TermReconciliationManager.registerService = function(data,level){
     }
 };
 
+// It takes a function which is executed when registration is a success
 TermReconciliationManager.synchronizeServices = function(onDone){
     var services = ReconciliationManager.getAllServices();
     var ids = [];
@@ -28,13 +29,19 @@ TermReconciliationManager.synchronizeServices = function(onDone){
                     ids.push(services[i].url);
             }
     }
-    // This call invokes the Registration command to register the D2Refine Services
-    $.post("command/d2refine/registerD2RefineServices",{"services":JSON.stringify(ids)},function(data){
-        TermReconciliationManager.registerService(data);
-            if(onDone){
-                    onDone();
-            }
-    },"json");
+    // This call invokes the Registration command with all
+    // existing Standard Services
+    // This invokes RegistrationCommand.doPost() which can validate
+    // and send information about the new service, so that it can register
+    // via the callback functin here.
+    $.post("command/d2refine/registerD2RefineServices",
+                {"services":JSON.stringify(ids)},
+                function(data){
+                        TermReconciliationManager.registerService(data);
+                        if(onDone){
+                            onDone();
+                        }
+                },"json");
 };
-
+// Calling Synchronization Service
 TermReconciliationManager.synchronizeServices();

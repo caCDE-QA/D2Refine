@@ -2,11 +2,11 @@ package edu.mayo.d2refine.services
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap
 import edu.mayo.d2refine.services.reconciliation.ReconciliationService
+import edu.mayo.d2refine.services.reconciliation.TermReconciliationService
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationResponse
-
 import edu.mayo.d2refine.services.reconciliation.model.SearchResultItem
-import edu.mayo.d2refine.services.reconciliation.TermReconciliationService
+import edu.mayo.d2refine.util.D2RC
 import edu.mayo.d2refine.util.D2rUtils
 import groovy.json.JsonBuilder
 
@@ -69,8 +69,8 @@ public class D2RefineServiceManager
 
         jsonBuilder{
             name serviceName_
-            schemaSpace D2rUtils.URI_SPACE
-            identifierSpace D2rUtils.URI_SPACE
+            schemaSpace D2RC.URI_SPACE
+            identifierSpace D2RC.URI_SPACE
             view {
                 url baseServiceUrl + '/view?id={{id}}'
             }

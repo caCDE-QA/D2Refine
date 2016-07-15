@@ -24,6 +24,8 @@ public class RegistrationCommand extends Command
     {
             try
             {
+                def services = request.getParameter('services')
+
                 response.setCharacterEncoding("UTF-8");
                 response.setHeader("Content-Type", "application/json");
                     

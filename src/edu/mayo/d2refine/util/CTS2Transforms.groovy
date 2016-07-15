@@ -78,7 +78,7 @@ public class CTS2Transforms
                         
                         designation += idQualification;
                                 
-                        String[] types = [ServiceType.TERM.toString()];
+                        String[] types = [D2RC.ServiceType.TERM.toString()];
                         ReconciliationCandidate rc1 = new ReconciliationCandidate(id, designation, types , score, Boolean.FALSE);
                         candidates.add(rc1);                       
                     }
