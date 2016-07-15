@@ -41,5 +41,12 @@ class D2RC {
         MODEL
     }
 
-    static String URI_SPACE = "http://www.d2refine.org/identifiers";
+    static String URI_SPACE = 'http://www.d2refine.org/identifiers'
+
+    static int DEFAULT_RESULT_LIMIT = 3
+    static int MAXIMUM_RESULT_LIMIT = 10
+
+    static String PROP_FILE_PATH = 'extensions' + File.separator +
+                                    'D2Refine' + File.separator +
+                                    'CTS2Profiles.properties'
 }

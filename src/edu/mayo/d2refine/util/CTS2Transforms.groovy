@@ -39,8 +39,7 @@ import org.json.JSONObject
  *
  * @author <a href="mailto:sharma.deepak2@mayo.edu>Deepak Sharma</a>
  */
-public class CTS2Transforms
-{
+class CTS2Transforms {
     public static Set<ReconciliationCandidate> readEntitiesAsCandidates(String phrase, String json)
     {
         Set<ReconciliationCandidate> candidates = new LinkedHashSet<ReconciliationCandidate>();
@@ -113,7 +112,8 @@ public class CTS2Transforms
                         designation += idQualification;
                                 
                         String[] types = [D2RC.ServiceType.TERM.toString()];
-                        ReconciliationCandidate rc1 = new ReconciliationCandidate(id, designation, types , score, Boolean.FALSE);
+                        ReconciliationCandidate rc1 =
+                                new ReconciliationCandidate(id: id, name: designation, types: types , score: score, match: Boolean.FALSE);
                         candidates.add(rc1);                       
                     }
                 }

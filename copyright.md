@@ -1,4 +1,3 @@
-
 /*
  Copyright (c) 2016, Mayo Clinic
  All rights reserved.
@@ -28,9 +27,3 @@
  OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-
-/**
- *  
- *
- * @author <a href="mailto:sharma.deepak2@mayo.edu>Deepak Sharma</a>
- */

@@ -30,19 +30,12 @@
 
 package edu.mayo.d2refine.util
 import com.google.common.collect.ImmutableList
-import com.google.common.collect.ImmutableMap
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationCandidate
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationResponse
 import edu.mayo.d2refine.services.reconciliation.model.SearchResultItem
 import groovy.json.JsonBuilder
-import org.codehaus.jackson.JsonNode
-import org.codehaus.jackson.JsonParseException
-import org.codehaus.jackson.map.JsonMappingException
-import org.codehaus.jackson.map.ObjectMapper
-import org.codehaus.jackson.node.ArrayNode
-import org.codehaus.jackson.node.ObjectNode
-
+import groovy.json.JsonSlurper
 /**
  *  Common Utility Methods
  *
@@ -84,7 +77,7 @@ public class D2rUtils
         jsonBuilder.toString()
     }
 
-    static String getMultipleResponseWithJSONBuilder(ImmutableMap<String,ReconciliationResponse> multiResponse)
+    static String getMultipleResponse(Map<String,ReconciliationResponse> multiResponse)
     {
         // This method creates the response using JSONBuilder.
         // But at the end we have to replace "results" and "types" into thier singular forms as required by OpenRefine.
@@ -110,96 +103,35 @@ public class D2rUtils
         val?.replaceAll("results", "result").replaceAll("types", "type")
     }
 
-    static String getMultipleResponse(ImmutableMap<String,ReconciliationResponse> multiResponse)
-    {
-//        ObjectMapper mapper = new ObjectMapper();
-//        ObjectNode multiResponseObj = mapper.createObjectNode();
-//        for(Entry<String, ReconciliationResponse> entry: multiResponse.entrySet())
-//        {
-//                String key = entry.getKey();
-//                ReconciliationResponse response  = entry.getValue();
-//                multiResponseObj.put(key, getResponse(response));
-//        }
-
-        // if this fails in returning correct values - uncomment other lines in this method
-        String jb = getMultipleResponseWithJSONBuilder(multiResponse)
-
-//        def map1 = new JsonSlurper().parseText(jb)
-//        def map2 = new JsonSlurper().parseText(multiResponseObj.toString())
-//
-//        boolean same = (map1 == map2)
-//
-//        return multiResponseObj.toString();
-    }
-
-    @Deprecated
-    static ObjectNode getResponse(ReconciliationResponse response)
-    {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode responseObj = mapper.createObjectNode();
-        ArrayNode resultArr = mapper.createArrayNode();
-        for(ReconciliationCandidate result:response.getResults()){
-                ObjectNode resultItemObj = getResultItem(result);
-                resultArr.add(resultItemObj);
-        }
-        responseObj.put("result", resultArr);
-
-        return responseObj;
-
-    }
-
     static ReconciliationResponse wrapCandidates(List<? extends ReconciliationCandidate> candidates)
     {
-        ReconciliationResponse response = new ReconciliationResponse();
-        response.setResults(candidates);
+        ReconciliationResponse response = new ReconciliationResponse()
+        response.results = candidates
         return response;
     }
 
-    @Deprecated
-    static ObjectNode getResultItem(ReconciliationCandidate item)
-    {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode resultItemObj = mapper.createObjectNode();
-        resultItemObj.put("id", item.getId());
-        resultItemObj.put("name", item.getName());
-        resultItemObj.put("score", item.getScore());
-        resultItemObj.put("match", item.isMatch());
+    static Map<String, ReconciliationRequest> getMultipleRequest(String queries){
+            Map multiRequest = [:]
+            JsonSlurper slurper = new JsonSlurper()
+            def jsonQueries = slurper.parseText(queries)
+            jsonQueries.each {k,v ->
+                if (v) {
+                    //def js = slurper.parseText(v)
+                    ReconciliationRequest req
+                    if (v.query) {
+                        def resultLimit = (v.type)?D2RC.DEFAULT_RESULT_LIMIT:D2RC.MAXIMUM_RESULT_LIMIT
 
-        ArrayNode typesArr = mapper.createArrayNode();
-        for(int i=0;i<item.getTypes().length;i++){
-                String id = item.getTypes()[i];
-                //int index = D2rUtils.getNamespaceEndPosition(id);
-                //String prefix = prefixManager.getPrefix(id.substring(0,index));
-                ObjectNode typeObj = mapper.createObjectNode();
-                typeObj.put("id", id);
-                //if(prefix!=null){
-                //        String localName = id.substring(index);
-                //        typeObj.put("name", prefix +":" + localName);
-                //}else{
-                        typeObj.put("name", id);
-                //}
-                typesArr.add(typeObj);
-        }
-        resultItemObj.put("type", typesArr);
+                        req = new ReconciliationRequest(queryString: v.query, limit: resultLimit)
 
-        return resultItemObj;
-    }
-    
-    static ImmutableMap<String, ReconciliationRequest> getMultipleRequest(String queries)
-                                    throws JsonParseException, JsonMappingException, IOException
-    {
-            Map<String, ReconciliationRequest> multiRequest = new HashMap<String, ReconciliationRequest>();
-            
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readValue(queries, JsonNode.class);
-            Iterator<String> keysIter = root.getFieldNames();
-            while(keysIter.hasNext()){
-                    String key = keysIter.next();
-                    //FIXME parsed twice 
-                    ReconciliationRequest request = ReconciliationRequest.valueOf(root.path(key).toString());
-                    multiRequest.put(key, request);
+                        if (v.type)
+                            req.types = v.type as String[]
+
+                        if (v.properties)
+                            req.context = v.properties
+                    }
+                    multiRequest.put(k, req)
+                }
             }
-            
-            return ImmutableMap.copyOf(multiRequest);
+            multiRequest
     }
 }

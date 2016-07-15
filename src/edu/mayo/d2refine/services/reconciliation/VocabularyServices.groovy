@@ -27,97 +27,56 @@
  OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package edu.mayo.d2refine.services.reconciliation;
-
-import org.apache.commons.lang.StringUtils;
-
-import edu.mayo.bsi.cts.cts2connector.cts2search.ConvenienceMethods;
-import edu.mayo.bsi.cts.cts2connector.cts2search.RESTContext;
-import edu.mayo.bsi.cts.cts2connector.cts2search.aux.MatchAlgorithm;
-import edu.mayo.bsi.cts.cts2connector.cts2search.aux.SearchException;
-import edu.mayo.bsi.cts.cts2connector.cts2search.aux.ServiceResultFormat;
-import edu.mayo.bsi.cts.cts2connector.cts2search.aux.VocabularyId;
+package edu.mayo.d2refine.services.reconciliation
+import edu.mayo.bsi.cts.cts2connector.cts2search.ConvenienceMethods
+import edu.mayo.bsi.cts.cts2connector.cts2search.RESTContext
+import edu.mayo.bsi.cts.cts2connector.cts2search.aux.MatchAlgorithm
+import edu.mayo.bsi.cts.cts2connector.cts2search.aux.SearchException
+import edu.mayo.bsi.cts.cts2connector.cts2search.aux.ServiceResultFormat
+import edu.mayo.bsi.cts.cts2connector.cts2search.aux.VocabularyId
 /**
  *
  *
  * @author <a href="mailto:sharma.deepak2@mayo.edu>Deepak Sharma</a>
  */
-public class VocabularyServices 
-{
-    private String EMPTY = "";
-    private String serviceName_ = null;
-    private MatchAlgorithm matchAlgorithm_ = MatchAlgorithm.EXACT;
-    private ServiceResultFormat outputFormat_ = ServiceResultFormat.JSON;
+class VocabularyServices {
+
+    String cts2ServiceName
+    MatchAlgorithm cts2MatchAlgorithm = MatchAlgorithm.EXACT
+    ServiceResultFormat cts2ResultOutputFormat = ServiceResultFormat.JSON
     
-    private RESTContext serviceContext_ = null;
+    RESTContext cts2ServiceContext
+    ConvenienceMethods cm_
     
-    private ConvenienceMethods cm_ = null;
-    
-    public VocabularyServices(String extensionProperties)
-    {
-        try
-        {
-            this.cm_ = ConvenienceMethods.instance(extensionProperties);
+    VocabularyServices(String propertyFilePath) {
+        try {
+            this.cm_ = ConvenienceMethods.instance(propertyFilePath)
         }
-        catch(Exception e)
-        {
-            this.cm_ = ConvenienceMethods.instance();
+        catch(Exception e) {
+            this.cm_ = ConvenienceMethods.instance()
         }
     }
-    
-    public ServiceResultFormat getOutputFormat() 
-    {
-        return outputFormat_;
-    }
-   
-    public void setOutputFormat(ServiceResultFormat outputFormat) 
-    {
-        this.outputFormat_ = outputFormat;
-    }
 
-    public String getServiceName() 
-    {
-        return serviceName_;
-    }
-    
-    public void setServiceName(String serviceName) 
-    {
-        this.serviceName_ = serviceName;
-    }
+    void prepare(String requestedCTS2ServiceName) throws SearchException {
 
-    public MatchAlgorithm getMatchAlgorithm() 
-    {
-        return matchAlgorithm_;
-    }
-
-    public void setMatchAlgorithm(MatchAlgorithm matchAlgorithm) 
-    {
-        this.matchAlgorithm_ = matchAlgorithm;
-    }
-    
-    public void prepare(String serviceName) throws SearchException
-    {
-        if ((StringUtils.isBlank(serviceName))||
-            (!cm_.getAvailableProfiles().contains(serviceName)))
-            this.setServiceName(cm_.getDefaultProfileName());
+        // If requested service profile does not exist then a default CTS2
+        // Service profile will be returned.
+        if ((!requestedCTS2ServiceName)||
+            (!(requestedCTS2ServiceName in cm_.getAvailableProfiles())))
+            cts2ServiceName = cm_.getDefaultProfileName()
         
-        serviceContext_ = cm_.getContext(getServiceName());
-        serviceContext_.setOutputFormat(getOutputFormat());
-        serviceContext_.matchAlgorithm_ = getMatchAlgorithm();
+        cts2ServiceContext = cm_.getContext(cts2ServiceName)
+        cts2ServiceContext.outputFormat = cts2ResultOutputFormat
+        cts2ServiceContext.matchAlgorithm_ = cts2MatchAlgorithm
     }
     
-    public String search (String serviceName, VocabularyId vocabulary, String matchPhrase)
-    {
-        try
-        {        
-            prepare(serviceName);                        
-            return cm_.getVocabularyEntities(matchPhrase, vocabulary, serviceContext_);
+    String search (String cts2Service, VocabularyId vocabulary, String matchPhrase) {
+        try {
+            prepare(cts2Service);
+            return cm_.getVocabularyEntities(matchPhrase, vocabulary, cts2ServiceContext)
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
+        catch(Exception e) {
+            e.printStackTrace()
         }
-        
-        return EMPTY;
     }
 }

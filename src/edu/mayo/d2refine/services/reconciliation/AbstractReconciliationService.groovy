@@ -28,18 +28,15 @@
  OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package edu.mayo.d2refine.services.reconciliation
-import com.google.common.collect.ImmutableMap
+
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationResponse
 import edu.mayo.d2refine.util.D2RC
 import edu.mayo.d2refine.util.D2rUtils
-import org.apache.commons.lang.StringUtils
 import org.json.JSONException
 import org.json.JSONWriter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import java.util.Map.Entry
 /**
  *
  *
@@ -47,47 +44,60 @@ import java.util.Map.Entry
  */
 abstract class AbstractReconciliationService implements ReconciliationService
 {
-        final static Logger logger = LoggerFactory.getLogger("AbstractReconciliationService")
+    final static Logger logger = LoggerFactory.getLogger("AbstractReconciliationService")
 
-        String name
-        String id
-        D2RC.ServiceType serviceType
+    String name
+    String id
+    D2RC.ServiceType serviceType
 
-        public ImmutableMap<String, ReconciliationResponse> reconcile(ImmutableMap<String, ReconciliationRequest> multiQueryRequest)
-        {
-            Map<String, ReconciliationResponse> multiQueryResponse = new HashMap<String, ReconciliationResponse>();
-            for(Entry<String, ReconciliationRequest> entry: multiQueryRequest.entrySet()){
-                    try{
-                            String key = entry.getKey();
-                            ReconciliationRequest request = entry.getValue();
-                            
-                            if (StringUtils.isBlank(request.getQueryString()))
-                                continue;
-                            
-                            ReconciliationResponse response = D2rUtils.wrapCandidates(reconcile(request));
-                            multiQueryResponse.put(key, response);
-                            Thread.sleep(300);
-                    }catch(Exception e){
-                            multiQueryResponse.put(entry.getKey(), new ReconciliationResponse());
-                            logger.error("error reconciling '" + entry.getValue().getQueryString() + "'",e);
-                    }
+    Map<String, ReconciliationResponse> reconcile(
+            Map<String, ReconciliationRequest> multiQueryRequest) {
+
+        Map<String, ReconciliationResponse> multiQueryResponse =
+                            new HashMap<String, ReconciliationResponse>();
+
+        try {
+            multiQueryRequest.each { key, reconciliationRequest ->
+                if (reconciliationRequest.queryString) {
+                    multiQueryResponse.put(
+                            key, D2rUtils.wrapCandidates(
+                                    reconcile(reconciliationRequest)))
+                    Thread.sleep(300);
+                }
             }
-            return ImmutableMap.copyOf(multiQueryResponse);
+        }
+        catch(Exception e){
+            logger.error("error reconciling '" + entry.getValue().getQueryString() + "'",e);
         }
 
-        public void writeAsJson(JSONWriter jsonWriter)
-                throws JSONException 
-        {
-            jsonWriter.object();
-            jsonWriter.key("type"); 
-            jsonWriter.value(serviceType);
-            
-            jsonWriter.key("id");
-            jsonWriter.value(id);
-            
-            jsonWriter.key("name");
-            jsonWriter.value(name);
-            
-            jsonWriter.endObject();        
-        }   
+        multiQueryResponse
+
+        /*
+        for(Entry<String, ReconciliationRequest> entry: multiQueryRequest.entrySet()){
+                try{
+                        String key = entry.getKey();
+                        ReconciliationRequest request = entry.getValue();
+
+                        if (StringUtils.isBlank(request.getQueryString()))
+                            continue;
+
+                        ReconciliationResponse response = D2rUtils.wrapCandidates(reconcile(request));
+                        multiQueryResponse.put(key, response);
+                        Thread.sleep(300);
+                }catch(Exception e){
+                        multiQueryResponse.put(entry.getKey(), new ReconciliationResponse());
+                        logger.error("error reconciling '" + entry.getValue().getQueryString() + "'",e);
+                }
+        }
+        return ImmutableMap.copyOf(multiQueryResponse);
+        */
+    }
+
+    void writeAsJson(JSONWriter jsonWriter) throws JSONException {
+        jsonWriter.object()
+            jsonWriter.key("type"); jsonWriter.value(serviceType)
+            jsonWriter.key("id"); jsonWriter.value(id)
+            jsonWriter.key("name"); jsonWriter.value(name)
+        jsonWriter.endObject();
+    }
 }

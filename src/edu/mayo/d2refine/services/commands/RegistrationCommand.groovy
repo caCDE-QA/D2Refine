@@ -34,7 +34,6 @@ import org.json.JSONWriter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 /**
@@ -42,51 +41,41 @@ import javax.servlet.http.HttpServletResponse
  *
  * @author <a href="mailto:sharma.deepak2@mayo.edu>Deepak Sharma</a>
  */
-public class RegistrationCommand extends Command
-{
+class RegistrationCommand extends Command {
+
     final static Logger logger = LoggerFactory.getLogger("RegistrationCommand");
     
     @Override
-    public void init(RefineServlet servlet) 
-    {
+    void init(RefineServlet servlet) {
         super.init(servlet);
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-    {
-            try
-            {
-                def services = request.getParameter('services')
+    void doPost(HttpServletRequest request, HttpServletResponse response){
+        try {
+            def services = request.getParameter('services')
 
-                response.setCharacterEncoding("UTF-8");
-                response.setHeader("Content-Type", "application/json");
-                    
-                Writer w = response.getWriter();
-                JSONWriter writer = new JSONWriter(w);
+            response.setCharacterEncoding("UTF-8")
+            response.setHeader("Content-Type", "application/json")
 
-                writer.object();
-                writer.key("code"); 
-                writer.value("ok");
-                writer.key("service");
-                    writer.object();
-                    writer.key("id"); 
-                    writer.value("main");
-                    writer.key("name"); 
-                    writer.value("D2Refine");
-                    writer.key("ui");
-                        writer.object();
-                        writer.key("handler");
-                        writer.value("ReconStandardServicePanel");
-                        writer.endObject();
-                    writer.endObject();
-                 writer.endObject();
-                w.flush();
-                w.close();
-            } 
-            catch (Exception e) 
-            {
-                    respondException(response, e);
+            Writer w = response.getWriter()
+            JSONWriter writer = new JSONWriter(w)
+
+            writer.object()
+                writer.key("code"); writer.value("ok")
+                writer.key("service"); writer.object()
+                    writer.key("id"); writer.value("main")
+                    writer.key("name"); writer.value("D2Refine")
+                    writer.key("ui"); writer.object()
+                        writer.key("handler"); writer.value("ReconStandardServicePanel")
+                    writer.endObject()
+                writer.endObject()
+            writer.endObject()
+            w.flush()
+            w.close()
+            }
+            catch (Exception e) {
+                respondException(response, e)
             }
     }
 }

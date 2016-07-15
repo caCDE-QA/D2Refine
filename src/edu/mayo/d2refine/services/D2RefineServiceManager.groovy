@@ -30,8 +30,6 @@
 
 package edu.mayo.d2refine.services
 
-import com.google.common.collect.ImmutableList
-import com.google.common.collect.ImmutableMap
 import edu.mayo.d2refine.services.reconciliation.ReconciliationService
 import edu.mayo.d2refine.services.reconciliation.TermReconciliationService
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
@@ -42,69 +40,66 @@ import edu.mayo.d2refine.util.D2rUtils
 import groovy.json.JsonBuilder
 
 import javax.servlet.http.HttpServletRequest
-
 /**
  *  D2Refine Service Manager to handle incoming D2Refine Requests.
  *
  * @author <a href="mailto:sharma.deepak2@mayo.edu>Deepak Sharma</a>
  */
-public class D2RefineServiceManager
-{
-    static final String serviceName_ = "D2Refine"
-    static D2RefineServiceManager manager_
+class D2RefineServiceManager {
+
+    static final String serviceName = "D2Refine"
+    static D2RefineServiceManager manager
     
     private D2RefineServiceManager() {}
     /**
      * Create a static method to get instance.
      */
-    static D2RefineServiceManager instance()
-    {
-        if(!manager_)
-            manager_ = new D2RefineServiceManager();
+    static D2RefineServiceManager instance() {
+        if(!manager)
+            manager = new D2RefineServiceManager();
         
-        manager_;
+        manager;
     }
      
-    String handle(String path, HttpServletRequest request)
-            throws IOException
-    {
+    String handle(String path, HttpServletRequest request) throws IOException {
         // Callback will only be there when service meta data is requested
         String callback = request.getParameter('callback');
-        
-        String id = 'terms'
-        String name = 'CTS2Reconciliation'
-        ReconciliationService  service = new TermReconciliationService(id, name, false)
+
+        ReconciliationService  service = new TermReconciliationService(
+                                            id : 'terms',
+                                            name : 'CTS2Reconciliation',
+                                            refreshContext:false)
+
         String serviceURL = request.getRequestURL().toString()
-        
-        if (path.endsWith("main"))
-        {
-            if (!callback)
-            {
+
+        if (path.endsWith("main")) {
+            if (!callback) {
                 String queries = request.getParameter("queries")
-                if (queries)
-                {
-                    ImmutableMap<String, ReconciliationRequest> multiQueryRequest = D2rUtils.getMultipleRequest(queries)
-                    ImmutableMap<String, ReconciliationResponse> multiResponse = service.reconcile(multiQueryRequest)
+                if (queries){
+                    Map<String, ReconciliationRequest> multiQueryRequest =
+                            D2rUtils.getMultipleRequest(queries)
+                    Map<String, ReconciliationResponse> multiResponse =
+                            service.reconcile(multiQueryRequest)
                     return D2rUtils.getMultipleResponse(multiResponse)
                 }
             }
         
             getServiceMetadataAsJsonP(service, callback, serviceURL)
         }
-        else
-        {
+        else {
             String prefix = request.getParameter("prefix")
-            ImmutableList<SearchResultItem> results = service.suggestType(prefix)
+            List<SearchResultItem> results = service.suggestType(prefix)
             D2rUtils.toJSONP(callback, D2rUtils.jsonizeSearchResult(results, prefix))
         }
     }
     
-    public String getServiceMetadataAsJsonP(ReconciliationService service, String callback, String baseServiceUrl)
-    {
+    String getServiceMetadataAsJsonP(ReconciliationService service,
+                                     String callback,
+                                     String baseServiceUrl) {
         def jsonBuilder = new JsonBuilder()
 
         jsonBuilder{
-            name serviceName_
+            name serviceName
             schemaSpace D2RC.URI_SPACE
             identifierSpace D2RC.URI_SPACE
             view {

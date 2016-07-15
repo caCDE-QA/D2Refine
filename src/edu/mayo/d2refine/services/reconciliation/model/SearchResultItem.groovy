@@ -33,49 +33,20 @@ package edu.mayo.d2refine.services.reconciliation.model;
  *
  * @author <a href="mailto:sharma.deepak2@mayo.edu>Deepak Sharma</a>
  */
-public class SearchResultItem 
-{
+class SearchResultItem {
 	/**
 	 * strong identifier
 	 */
-	private final String id;
+	String id
 	/**
 	 * human friendly name
 	 */
-	private final String name;
+	String name
 	
 	/**
 	 * relevance of the search result item in [0..1]
 	 */
-	private final double score;
-	
-	private final String title;
-	
-	public SearchResultItem(String id, String name){
-		this(id,name,0);
-	}
-	
-	public SearchResultItem(String id, String name, double score) {
-		this.id = id;
-		this.name = name;
-		this.score = score;
-		this.title = "hoopla";
-	}
+	double score
 
-	public String getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public double getScore() {
-		return score;
-	}
-
-        public String getTitle() {
-            return title;
-        }
-	
+	String title
 }
