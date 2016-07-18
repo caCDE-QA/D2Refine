@@ -96,8 +96,10 @@ function process(path, request, response)
     logger.info("request.method=" + request.getMethod());
     logger.info("request.method=" + request.getParameter("columnName"));
         
-    if (path.match(/^services\/main/g))
+    if (path.indexOf("services\/d2refine") != -1)
     {
+        logger.info("Service Found for " + path);
+
         logger.info("Calling Handle Request");
         var jsonResponse = D2RefineServiceManager.instance().handle(path, request);
         
@@ -113,6 +115,10 @@ function process(path, request, response)
         {
             butterfly.sendError(request, response, 404, "unknown service");
         }
+    }
+    else
+    {
+        logger.info("Service NOT Found for " + path);
     }
     
     if (path == "/" || path == "") 

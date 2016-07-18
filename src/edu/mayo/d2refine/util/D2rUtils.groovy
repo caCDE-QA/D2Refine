@@ -29,11 +29,10 @@
 */
 
 package edu.mayo.d2refine.util
-import com.google.common.collect.ImmutableList
+
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationCandidate
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationResponse
-import edu.mayo.d2refine.services.reconciliation.model.SearchResultItem
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 /**
@@ -54,7 +53,7 @@ public class D2rUtils
         "${callback}(${obj})"
     }
     
-    static String jsonizeSearchResult(ImmutableList<SearchResultItem> results, String pref)
+    static String jsonizeSearchResult(List<ReconciliationCandidate> results, String pref)
     {
         def jsonBuilder = new JsonBuilder()
 
@@ -68,7 +67,7 @@ public class D2rUtils
                     name: item.name
                     type: {
                         id: item.id
-                        name: item.name
+                        name: item.id
                     }
                 }
             }

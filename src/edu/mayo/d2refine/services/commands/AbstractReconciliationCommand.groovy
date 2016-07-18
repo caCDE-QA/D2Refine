@@ -62,7 +62,8 @@ abstract class AbstractReconciliationCommand extends Command {
                 JSONWriter writer = new JSONWriter(w)
                 writer.object()
                     writer.key("code") ; writer.value("ok")
-                    writer.key("service"); service.writeAsJson(writer)
+                    writer.key("service");
+                    service.writeAsJson(writer)
                 writer.endObject()
                 w.flush()
                 w.close()

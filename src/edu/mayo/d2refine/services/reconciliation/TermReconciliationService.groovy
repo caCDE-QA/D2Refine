@@ -28,12 +28,9 @@
  OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package edu.mayo.d2refine.services.reconciliation
-
 import com.google.refine.io.FileProjectManager
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationCandidate
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
-import edu.mayo.d2refine.services.reconciliation.model.SearchResultItem
-import edu.mayo.d2refine.util.CTS2Transforms
 import edu.mayo.d2refine.util.D2RC
 /**
  *
@@ -43,7 +40,7 @@ import edu.mayo.d2refine.util.D2RC
 class TermReconciliationService extends AbstractReconciliationService
 {
     static FileProjectManager fm = ((FileProjectManager) FileProjectManager.singleton)
-    static VocabularyServices service = null
+    VocabularyServices cts2Service = null
     
     boolean refreshContext = false
 
@@ -51,54 +48,52 @@ class TermReconciliationService extends AbstractReconciliationService
     {
         String path
         try {
-            if ((!service)||refreshContext) {
+            if ((!cts2Service)||refreshContext) {
                 logger.warn("Refresing Service....")
                 FileProjectManager fm = ((FileProjectManager) FileProjectManager.singleton)
                 path = fm.getWorkspaceDir().getPath() + File.separator + D2RC.PROP_FILE_PATH
-                service = new VocabularyServices(path)
+                cts2Service = new VocabularyServices(path)
             }
         }
         catch(Exception e) {
         }
         
-        if (!service) {
+        if (!cts2Service) {
             logger.warn("Could not read properties file from '" + path + "'")
             path = File.separator + "tmp" +File.separator + "CTS2Profiles.properties"
             logger.warn("trying to read properties file from '" + path + "'")
-            service = new VocabularyServices(path)
+            cts2Service = new VocabularyServices(path)
         }       
         
-        service != null
+        cts2Service != null
     }
 
     List<ReconciliationCandidate> reconcile(ReconciliationRequest reconciliationRequest) {
+        def candidates = new ArrayList<ReconciliationCandidate>()
 
-        Set<ReconciliationCandidate> candidates = new LinkedHashSet<ReconciliationCandidate>()
+        if (isServiceAvailable())
+            return cts2Service.getReconciliationCandidates(reconciliationRequest.queryString)
+        else
+            logger.warn "Failed to get a Terminology Reconciliation Service"
 
-        if (isServiceAvailable()) {
-            String entityDirectory = service.search(
-                                    null,  null, reconciliationRequest.queryString)
-            candidates = CTS2Transforms.readEntitiesAsCandidates(
-                                        reconciliationRequest.queryString, entityDirectory)
-        }
-
-        new ArrayList<ReconciliationCandidate>(candidates)
+        candidates
     }
     
-    List<SearchResultItem> suggestType(String searchTerm) {
+    List<ReconciliationCandidate> suggestType(String searchTerm) {
 
-        List<SearchResultItem> items = new ArrayList<SearchResultItem>();
-        
+        def candidates = new ArrayList<ReconciliationCandidate>()
+
         if (isServiceAvailable()) {
-            String entityDirectory = service.search(null,  null, searchTerm)
-            items = CTS2Transforms.readEntitiesAsResultItems(searchTerm, entityDirectory)
-            
-            items?.sort{a, b ->
+            candidates = cts2Service.getReconciliationCandidates(searchTerm)
+
+            candidates?.sort { a, b ->
                 b.score <=> a.score
             }
         }
-            
-        items
+        else
+            logger.warn "Failed to get a Terminology Reconciliation Service"
+
+        candidates
     }
 
     @Override

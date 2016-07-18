@@ -34,6 +34,11 @@ import edu.mayo.bsi.cts.cts2connector.cts2search.aux.MatchAlgorithm
 import edu.mayo.bsi.cts.cts2connector.cts2search.aux.SearchException
 import edu.mayo.bsi.cts.cts2connector.cts2search.aux.ServiceResultFormat
 import edu.mayo.bsi.cts.cts2connector.cts2search.aux.VocabularyId
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationCandidate
+import edu.mayo.d2refine.util.D2RC
+import groovy.json.JsonSlurper
+import org.apache.commons.lang.StringUtils
+
 /**
  *
  *
@@ -78,5 +83,61 @@ class VocabularyServices {
         catch(Exception e) {
             e.printStackTrace()
         }
+    }
+
+    List<ReconciliationCandidate> getReconciliationCandidates(String phrase){
+        String entityDirectory = search(null, null, phrase)
+        parseReconciliationCandidates(phrase, entityDirectory)
+    }
+
+    List<ReconciliationCandidate> parseReconciliationCandidates(String phrase, String json) {
+        List<ReconciliationCandidate> candidates = new ArrayList<ReconciliationCandidate>()
+
+        try {
+            if (json) {
+                JsonSlurper slurper = new JsonSlurper()
+                def entDir = slurper.parseText(json)
+                int entries = 0
+                entries = entDir?.EntityDirectory?.numEntries as int
+
+                if (entries) {
+                    entDir.EntityDirectory?.entry?.each {
+                        def termId = it.about
+                        def ked = it.knownEntityDescription
+                        def desc = (ked instanceof List) ? ked[0] : ked
+
+                        def id = desc.href ?: termId
+
+                        def ns = it.name?.namespace
+                        def nameId = it.name?.name
+                        def idQual = nameId ? ('[' + (ns ? "${ns}:" : '') + nameId + ']') : ''
+                        double score = 0.0
+
+                        def desgn = desc.designation
+
+                        boolean isMatch = false;
+                        if (phrase && desgn) {
+                            score = StringUtils.getLevenshteinDistance(desgn, phrase)
+                            isMatch = score == 0
+                        }
+
+                        desgn += idQual
+
+                        String[] types = [D2RC.ServiceType.TERM.toString()];
+
+                        ReconciliationCandidate rc =
+                                new ReconciliationCandidate(id: id, name: desgn, types: types, score: score, match: isMatch);
+                        candidates.add(rc)
+                    }
+
+                }
+            }
+        }
+        catch (Exception e) {
+            if (e.getMessage().indexOf("not found") == -1)
+                e.printStackTrace();
+        }
+
+        candidates
     }
 }

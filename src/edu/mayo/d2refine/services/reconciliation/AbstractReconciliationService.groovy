@@ -56,41 +56,24 @@ abstract class AbstractReconciliationService implements ReconciliationService
         Map<String, ReconciliationResponse> multiQueryResponse =
                             new HashMap<String, ReconciliationResponse>();
 
+        //String searchingFor
+
         try {
-            multiQueryRequest.each { key, reconciliationRequest ->
+            multiQueryRequest?.each { key, reconciliationRequest ->
+                //searchingFor = reconciliationRequest.queryString
                 if (reconciliationRequest.queryString) {
                     multiQueryResponse.put(
                             key, D2rUtils.wrapCandidates(
-                                    reconcile(reconciliationRequest)))
+                            reconcile(reconciliationRequest)))
                     Thread.sleep(300);
                 }
             }
         }
         catch(Exception e){
-            logger.error("error reconciling '" + entry.getValue().getQueryString() + "'",e);
+            logger.error("Error Reconciling...",e);
         }
 
         multiQueryResponse
-
-        /*
-        for(Entry<String, ReconciliationRequest> entry: multiQueryRequest.entrySet()){
-                try{
-                        String key = entry.getKey();
-                        ReconciliationRequest request = entry.getValue();
-
-                        if (StringUtils.isBlank(request.getQueryString()))
-                            continue;
-
-                        ReconciliationResponse response = D2rUtils.wrapCandidates(reconcile(request));
-                        multiQueryResponse.put(key, response);
-                        Thread.sleep(300);
-                }catch(Exception e){
-                        multiQueryResponse.put(entry.getKey(), new ReconciliationResponse());
-                        logger.error("error reconciling '" + entry.getValue().getQueryString() + "'",e);
-                }
-        }
-        return ImmutableMap.copyOf(multiQueryResponse);
-        */
     }
 
     void writeAsJson(JSONWriter jsonWriter) throws JSONException {

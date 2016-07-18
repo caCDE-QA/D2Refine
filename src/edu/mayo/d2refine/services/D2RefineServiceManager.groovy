@@ -29,12 +29,11 @@
 */
 
 package edu.mayo.d2refine.services
-
 import edu.mayo.d2refine.services.reconciliation.ReconciliationService
 import edu.mayo.d2refine.services.reconciliation.TermReconciliationService
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationCandidate
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationResponse
-import edu.mayo.d2refine.services.reconciliation.model.SearchResultItem
 import edu.mayo.d2refine.util.D2RC
 import edu.mayo.d2refine.util.D2rUtils
 import groovy.json.JsonBuilder
@@ -72,7 +71,7 @@ class D2RefineServiceManager {
 
         String serviceURL = request.getRequestURL().toString()
 
-        if (path.endsWith("main")) {
+        if (path.endsWith("d2refine")) {
             if (!callback) {
                 String queries = request.getParameter("queries")
                 if (queries){
@@ -88,7 +87,7 @@ class D2RefineServiceManager {
         }
         else {
             String prefix = request.getParameter("prefix")
-            List<SearchResultItem> results = service.suggestType(prefix)
+            List<ReconciliationCandidate> results = service.suggestType(prefix)
             D2rUtils.toJSONP(callback, D2rUtils.jsonizeSearchResult(results, prefix))
         }
     }
@@ -112,7 +111,7 @@ class D2RefineServiceManager {
             }
             suggest {
                 type {
-                    service_url baseServiceUrl
+                    service_url baseServiceUrl + '/suggest/type'
                     service_path '/suggest/type'
                     flyout_service_url baseServiceUrl
                     flyout_service_path '/suggest/type/preview'

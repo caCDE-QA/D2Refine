@@ -63,10 +63,12 @@ class RegistrationCommand extends Command {
 
             writer.object()
                 writer.key("code"); writer.value("ok")
-                writer.key("service"); writer.object()
-                    writer.key("id"); writer.value("main")
+                writer.key("service");
+                writer.object()
+                    writer.key("id"); writer.value("d2refine")
                     writer.key("name"); writer.value("D2Refine")
-                    writer.key("ui"); writer.object()
+                    writer.key("ui");
+                    writer.object()
                         writer.key("handler"); writer.value("ReconStandardServicePanel")
                     writer.endObject()
                 writer.endObject()
