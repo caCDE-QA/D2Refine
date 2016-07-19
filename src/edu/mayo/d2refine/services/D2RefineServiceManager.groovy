@@ -71,8 +71,12 @@ class D2RefineServiceManager {
 
         String serviceURL = request.getRequestURL().toString()
 
-        if (path.endsWith("d2refine")) {
-            if (!callback) {
+        if (path.contains("d2refine"))
+        {
+            if (callback && path.endsWith("d2refine"))
+                getServiceMetadataAsJsonP(service, callback, serviceURL)
+            else
+            {
                 String queries = request.getParameter("queries")
                 if (queries){
                     Map<String, ReconciliationRequest> multiQueryRequest =
@@ -81,14 +85,15 @@ class D2RefineServiceManager {
                             service.reconcile(multiQueryRequest)
                     return D2rUtils.getMultipleResponse(multiResponse)
                 }
+                else {
+                    String prefix = request.getParameter("prefix")
+
+                    if (prefix) {
+                        List<ReconciliationCandidate> results = service.suggestType(prefix)
+                        D2rUtils.toJSONP(callback, D2rUtils.jsonizeSearchResult(results, prefix))
+                    }
+                }
             }
-        
-            getServiceMetadataAsJsonP(service, callback, serviceURL)
-        }
-        else {
-            String prefix = request.getParameter("prefix")
-            List<ReconciliationCandidate> results = service.suggestType(prefix)
-            D2rUtils.toJSONP(callback, D2rUtils.jsonizeSearchResult(results, prefix))
         }
     }
     
@@ -111,7 +116,7 @@ class D2RefineServiceManager {
             }
             suggest {
                 type {
-                    service_url baseServiceUrl + '/suggest/type'
+                    service_url baseServiceUrl
                     service_path '/suggest/type'
                     flyout_service_url baseServiceUrl
                     flyout_service_path '/suggest/type/preview'

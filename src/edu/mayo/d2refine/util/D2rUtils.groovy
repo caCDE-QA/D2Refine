@@ -55,25 +55,22 @@ public class D2rUtils
     
     static String jsonizeSearchResult(List<ReconciliationCandidate> results, String pref)
     {
-        def jsonBuilder = new JsonBuilder()
-
-        jsonBuilder {
-            code: '/api/status/ok'
-            status: '200 OK'
-            prefix: pref
-            result: {
-                results.collect {item ->
-                    id: item.id
-                    name: item.name
-                    type: {
-                        id: item.id
-                        name: item.id
+        def data = [
+            code: '/api/status/ok',
+            status: '200 OK',
+            prefix: pref,
+            result: results?.collect{
+                       ['id' : it.id,
+                        'name' : it.name,
+                        'type' : it.types as List,
+                        'score' : it.score,
+                        'match' : it.match
+                       ]
                     }
-                }
-            }
-        }
+        ]
 
-        jsonBuilder.toString()
+        def jsonBuilder = new JsonBuilder(data)
+        jsonBuilder.toString().replaceAll("results", "result").replaceAll("types", "type")
     }
 
     static String getMultipleResponse(Map<String,ReconciliationResponse> multiResponse)
