@@ -62,7 +62,7 @@ public class D2rUtils
             result: results?.collect{
                        ['id' : it.id,
                         'name' : it.name,
-                        'type' : it.types as List,
+                        'type' : it.types,
                         'score' : it.score,
                         'match' : it.match
                        ]
@@ -85,7 +85,7 @@ public class D2rUtils
                         v.results?.collect {
                             ['id' : it.id,
                             'name' : it.name,
-                            'type' : it.types as List,
+                            'type' : it.types,
                             'score' : it.score,
                             'match' : it.match ]
                         },
@@ -120,7 +120,7 @@ public class D2rUtils
                         req = new ReconciliationRequest(queryString: v.query, limit: resultLimit)
 
                         if (v.type)
-                            req.types = v.type as String[]
+                            req.types = [v.type]
 
                         if (v.properties)
                             req.context = v.properties

@@ -29,6 +29,7 @@
 */
 package edu.mayo.d2refine.services.reconciliation
 
+import edu.mayo.d2refine.services.reconciliation.model.ReconciliationCandidate
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationRequest
 import edu.mayo.d2refine.services.reconciliation.model.ReconciliationResponse
 import edu.mayo.d2refine.util.D2RC
@@ -56,16 +57,34 @@ abstract class AbstractReconciliationService implements ReconciliationService
         Map<String, ReconciliationResponse> multiQueryResponse =
                             new HashMap<String, ReconciliationResponse>();
 
-        //String searchingFor
+        String[] reconTypes = [D2RC.ServiceType.TERM, D2RC.ServiceType.VALUE_SET]
+        boolean match = true
+        def typeCandidate = new ReconciliationCandidate(id : 1,
+                name: 'Reconciliation Types',
+                score: 1.0,
+                types: reconTypes,
+                match: match)
 
         try {
             multiQueryRequest?.each { key, reconciliationRequest ->
-                //searchingFor = reconciliationRequest.queryString
                 if (reconciliationRequest.queryString) {
-                    multiQueryResponse.put(
-                            key, D2rUtils.wrapCandidates(
-                            reconcile(reconciliationRequest)))
-                    Thread.sleep(300);
+
+                    // If types are not supplied in the request
+                    // I am assuming that it is just to get the types
+                    // and not actual reconciliation request.
+                    // TODO: check this logic
+                    if (!reconciliationRequest.types) {
+                        multiQueryResponse.put(
+                                key, D2rUtils.wrapCandidates(
+                                [typeCandidate]
+                        ))
+                    }
+                    else {
+                        multiQueryResponse.put(
+                                key, D2rUtils.wrapCandidates(
+                                reconcile(reconciliationRequest)))
+                        Thread.sleep(300);
+                    }
                 }
             }
         }

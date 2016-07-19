@@ -70,7 +70,6 @@ class TermReconciliationService extends AbstractReconciliationService
 
     List<ReconciliationCandidate> reconcile(ReconciliationRequest reconciliationRequest) {
         def candidates = new ArrayList<ReconciliationCandidate>()
-
         if (isServiceAvailable())
             return cts2Service.getReconciliationCandidates(reconciliationRequest.queryString)
         else
