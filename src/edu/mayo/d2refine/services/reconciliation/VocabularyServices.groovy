@@ -59,11 +59,13 @@ class VocabularyServices {
         }
         catch(Exception e) {
             this.cm_ = ConvenienceMethods.instance()
+            e.printStackTrace()
         }
     }
 
     void prepare(String requestedCTS2ServiceName) throws SearchException {
 
+        cts2ServiceName = requestedCTS2ServiceName
         // If requested service profile does not exist then a default CTS2
         // Service profile will be returned.
         if ((!requestedCTS2ServiceName)||
@@ -74,7 +76,15 @@ class VocabularyServices {
         cts2ServiceContext.outputFormat = cts2ResultOutputFormat
         cts2ServiceContext.matchAlgorithm_ = cts2MatchAlgorithm
     }
-    
+
+    void addUpdateCTS2Context(String name, RESTContext context) {
+        cm_.addUpdateRESTContext(name, context)
+    }
+
+    void addUpdateRESTBaseServiceURL(String name, String baseURL) {
+        cm_.addUpdateRESTBaseServiceURL(name, baseURL)
+    }
+
     String search (String cts2Service, VocabularyId vocabulary, String matchPhrase) {
         try {
             prepare(cts2Service);
@@ -83,10 +93,12 @@ class VocabularyServices {
         catch(Exception e) {
             e.printStackTrace()
         }
+
+        return null
     }
 
-    List<ReconciliationCandidate> getReconciliationCandidates(String phrase){
-        String entityDirectory = search(null, null, phrase)
+    List<ReconciliationCandidate> getReconciliationCandidates(String serviceId, String phrase){
+        String entityDirectory = search(serviceId, null, phrase)
         parseReconciliationCandidates(phrase, entityDirectory)
     }
 
@@ -97,8 +109,7 @@ class VocabularyServices {
             if (json) {
                 JsonSlurper slurper = new JsonSlurper()
                 def entDir = slurper.parseText(json)
-                int entries = 0
-                entries = entDir?.EntityDirectory?.numEntries as int
+                int entries = entDir?.EntityDirectory?.numEntries as int
 
                 if (entries) {
                     entDir.EntityDirectory?.entry?.each {
@@ -109,7 +120,7 @@ class VocabularyServices {
                         def id = desc.href ?: termId
 
                         def ns = it.name?.namespace
-                        def nameId = it.name?.name
+                        String nameId = it.name?.name
                         def idQual = nameId ? ('[' + (ns ? "${ns}:" : '') + nameId + ']') : ''
                         double score = 0.0
 

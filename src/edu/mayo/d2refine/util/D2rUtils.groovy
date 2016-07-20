@@ -108,6 +108,7 @@ public class D2rUtils
 
     static Map<String, ReconciliationRequest> getMultipleRequest(String queries){
             Map multiRequest = [:]
+
             JsonSlurper slurper = new JsonSlurper()
             def jsonQueries = slurper.parseText(queries)
             jsonQueries.each {k,v ->

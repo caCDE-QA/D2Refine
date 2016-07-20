@@ -44,12 +44,12 @@ class TermReconciliationService extends AbstractReconciliationService
     
     boolean refreshContext = false
 
-    private boolean isServiceAvailable()
+    void setTermReconciliationService(String serviceId)
     {
         String path
         try {
             if ((!cts2Service)||refreshContext) {
-                logger.warn("Refresing Service....")
+                logger.warn("Initializing/Refreshing CTS2 Service....")
                 FileProjectManager fm = ((FileProjectManager) FileProjectManager.singleton)
                 path = fm.getWorkspaceDir().getPath() + File.separator + D2RC.PROP_FILE_PATH
                 cts2Service = new VocabularyServices(path)
@@ -59,21 +59,25 @@ class TermReconciliationService extends AbstractReconciliationService
         }
         
         if (!cts2Service) {
-            logger.warn("Could not read properties file from '" + path + "'")
+            logger.warn("Could not read properties file from '${path}'")
             path = File.separator + "tmp" +File.separator + "CTS2Profiles.properties"
-            logger.warn("trying to read properties file from '" + path + "'")
+            logger.warn("trying to read properties file from '${path}'")
             cts2Service = new VocabularyServices(path)
-        }       
-        
-        cts2Service != null
+        }
+    }
+
+    VocabularyServices getVocabularyService(String id){
+        if ((!cts2Service)||(cts2Service.cts2ServiceName != id))
+            setTermReconciliationService(id)
+        cts2Service
     }
 
     List<ReconciliationCandidate> reconcile(ReconciliationRequest reconciliationRequest) {
         def candidates = new ArrayList<ReconciliationCandidate>()
-        if (isServiceAvailable())
-            return cts2Service.getReconciliationCandidates(reconciliationRequest.queryString)
+        if (getVocabularyService(id))
+            return getVocabularyService(id).getReconciliationCandidates(id, reconciliationRequest.queryString)
         else
-            logger.warn "Failed to get a Terminology Reconciliation Service"
+            logger.warn "Failed to Reconcile with selected service at '${getVocabularyService(id)?.getCm_()?.getContext()?.baseURL}'"
 
         candidates
     }
@@ -82,8 +86,8 @@ class TermReconciliationService extends AbstractReconciliationService
 
         def candidates = new ArrayList<ReconciliationCandidate>()
 
-        if (isServiceAvailable()) {
-            candidates = cts2Service.getReconciliationCandidates(searchTerm)
+        if (getVocabularyService(id)) {
+            candidates = getVocabularyService(id).getReconciliationCandidates(id, searchTerm)
 
             candidates?.sort { a, b ->
                 b.score <=> a.score
