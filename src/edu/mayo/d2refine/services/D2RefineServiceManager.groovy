@@ -78,6 +78,8 @@ class D2RefineServiceManager {
         }
         else if (path.contains(D2RC.REGISTER_CTS2_SERVICE_PREFIX)){
             String customId = (path.split(D2RC.REGISTER_CTS2_SERVICE_PREFIX))[1]
+            if (customId.startsWith("/"))
+                customId = customId.substring(1)
             // Only split on first ":" - by limiting output array entries to 2
             String[] serviceParts = customId.split(":", 2)
             customId = serviceParts[0]?: D2RC.MAIN_SERVICE_NAME

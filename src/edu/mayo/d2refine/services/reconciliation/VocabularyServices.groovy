@@ -75,6 +75,7 @@ class VocabularyServices {
         cts2ServiceContext = cm_.getContext(cts2ServiceName)
         cts2ServiceContext.outputFormat = cts2ResultOutputFormat
         cts2ServiceContext.matchAlgorithm_ = cts2MatchAlgorithm
+        cts2ServiceContext.resultLimit = 5
     }
 
     void addUpdateCTS2Context(String name, RESTContext context) {

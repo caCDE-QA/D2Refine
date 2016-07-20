@@ -113,7 +113,10 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
     		<format property="timestmp" pattern="MM/dd/yyyy hh:mm:ss aa" unit="hour"/>
     	</tstamp>
         <echo message="Building D2Refine...${timestmp}" />
-    	<zip destfile="../D2Refine/D2Refine.zip" basedir="../D2Refine/module" />
+    	<zip destfile="../D2Refine/D2Refine.zip">
+            <fileset dir="../D2Refine/module" />
+            <fileset dir="../D2Refine" includes="CTS2Profiles.properties" />
+        </zip>
     </target>
 
 	<target name="ivy-clean-cache" 

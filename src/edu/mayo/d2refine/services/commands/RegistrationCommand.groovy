@@ -61,7 +61,7 @@ class RegistrationCommand extends Command {
 
             name = name?:D2RC.MAIN_SERVICE_NAME
             id = id?(D2RC.MAIN_SERVICE_ID + File.separator +
-                    D2RC.REGISTER_CTS2_SERVICE_PREFIX + File.separator + id):D2RC.MAIN_SERVICE_ID
+                    D2RC.REGISTER_CTS2_SERVICE_PREFIX + id):D2RC.MAIN_SERVICE_ID
 
             response.setCharacterEncoding("UTF-8")
             response.setHeader("Content-Type", "application/json")
