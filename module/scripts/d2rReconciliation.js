@@ -39,11 +39,16 @@ TermReconciliationManager.registerService = function(data,level){
             var url = location.href;
             var baseURL = url.substring(0,url.lastIndexOf('/'));
             var service_url = baseURL + '/extension/d2refine/services/' + data.service.id;
-            data.service.url = service_url;
+            data.service.url = service_url
+
+            if (data.service.cts2BaseUrl){
+                data.service.url = service_url + ':' + data.service.cts2BaseUrl
+            }
+
             //ReconciliationManager doesnot call this method upon unregister.. this is why I am calling it myself
             ReconciliationManager._rebuildMap();
             
-            if(!ReconciliationManager.getServiceFromUrl(service_url)){
+            if(!ReconciliationManager.getServiceFromUrl(data.service.url)){
                     ReconciliationManager.registerStandardService(data.service.url);
             }
             if(level){

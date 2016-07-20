@@ -35,7 +35,14 @@ ExtensionBar.addExtensionMenu({
   id: "d2refine",
   label: "D2Refine",
   submenu: [
-    {
+      {
+          "id" :"d2refine/cts2ReconService",
+          label: "Add CTS2 Reconciliation Service...",
+          click: function() {
+             new AddReconciliationServiceDialog();
+          }
+      },
+      {
       id   : "d2refine/d2rAbout",
       label: "About D2Refine...",
       click: function(){

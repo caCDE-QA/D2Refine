@@ -51,4 +51,6 @@ class D2RC {
                                     'CTS2Profiles.properties'
 
     static String MAIN_SERVICE_NAME = "D2Refine"
+    static String MAIN_SERVICE_ID = "d2refine"
+    static String REGISTER_CTS2_SERVICE_PREFIX = "cts2Service"
 }

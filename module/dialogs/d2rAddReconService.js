@@ -53,10 +53,27 @@ AddReconciliationServiceDialog.prototype._footer = function (footer) {
     $('<button></button>').addClass('button').html("&nbsp;&nbsp;OK&nbsp;&nbsp;").click(function () {
         self._dismissBusy = DialogSystem.showBusy('Adding new CTS2 Reconciliation service');
         var name = self._elmts.service_name.val();
-        var cts2BaseUrl = self._elmts.cts2-base-url.val()
+        var cts2BaseUrl = self._elmts.cts2_base_url.val()
 
         if (name.trim() === "") {
             alert("CTS2 Service Name is required");
+            self._dismissBusy();
+            return;
+        }
+
+        var services = ReconciliationManager.getAllServices();
+        var ids = [];
+        for(var i=0;i<services.length;i++){
+            if(services[i].url){
+                if (services[i].url.indexOf("\/extension\/d2refine\/services\/") > -1) {
+                    var d2refineId = services[i].url.split("\/extension\/d2refine\/services\/")[1]
+                    ids.push(d2refineId);
+                }
+            }
+        }
+
+        if ($.inArray(name, ids) > -1) {
+            alert("The service with name '" + name + "' already exists!");
             self._dismissBusy();
             return;
         }
@@ -69,10 +86,11 @@ AddReconciliationServiceDialog.prototype._footer = function (footer) {
 
         TermReconciliationManager.synchronizeServices(
             function () {
-                $.post("command/d2refine/addCTS2Service",
+                $.post("command/d2refine/registerD2RefineServices",
                     {
+                        "id" : name,
                         "name": name,
-                        "url": cts2BaseUrl,
+                        "cts2BaseUrl": cts2BaseUrl,
                     },
                     function (data) {
                         self._dismissBusy();

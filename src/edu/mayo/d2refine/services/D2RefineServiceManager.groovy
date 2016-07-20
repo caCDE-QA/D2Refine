@@ -65,16 +65,27 @@ class D2RefineServiceManager {
         String callback = request.getParameter('callback');
 
         ReconciliationService  service = new TermReconciliationService(
-                                            id : 'terms',
-                                            name : 'CTS2Reconciliation',
+                                            id : D2RC.MAIN_SERVICE_ID,
+                                            name : D2RC.MAIN_SERVICE_NAME,
                                             refreshContext:false)
 
         String serviceURL = request.getRequestURL().toString()
 
         if (path.contains("d2refine"))
         {
-            if (callback && path.endsWith("d2refine"))
-                getServiceMetadataAsJsonP(service, callback, serviceURL)
+            if (callback)
+            {
+                if (path.endsWith("d2refine")) {
+                    getServiceMetadataAsJsonP(D2RC.MAIN_SERVICE_NAME, callback, serviceURL)
+                }
+                else if (path.contains(D2RC.REGISTER_CTS2_SERVICE_PREFIX)){
+                    String customName = (path.split(D2RC.REGISTER_CTS2_SERVICE_PREFIX + File.separator))[1]
+                    customName = (customName.split(":"))[0]
+
+                    customName = (customName)?:D2RC.MAIN_SERVICE_NAME
+                    getServiceMetadataAsJsonP(customName, callback, serviceURL)
+                }
+            }
             else
             {
                 String queries = request.getParameter("queries")
@@ -97,7 +108,7 @@ class D2RefineServiceManager {
         }
     }
     
-    String getServiceMetadataAsJsonP(ReconciliationService service,
+    String getServiceMetadataAsJsonP(String serviceName,
                                      String callback,
                                      String baseServiceUrl) {
         def jsonBuilder = new JsonBuilder()

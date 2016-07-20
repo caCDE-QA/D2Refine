@@ -30,6 +30,7 @@
 package edu.mayo.d2refine.services.commands
 import com.google.refine.RefineServlet
 import com.google.refine.commands.Command
+import edu.mayo.d2refine.util.D2RC
 import org.json.JSONWriter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -54,6 +55,13 @@ class RegistrationCommand extends Command {
     void doPost(HttpServletRequest request, HttpServletResponse response){
         try {
             def services = request.getParameter('services')
+            def name = request.getParameter('name')
+            def id = request.getParameter('id')
+            def cts2BaseUrl = request.getParameter('cts2BaseUrl')
+
+            name = name?:D2RC.MAIN_SERVICE_NAME
+            id = id?(D2RC.MAIN_SERVICE_ID + File.separator +
+                    D2RC.REGISTER_CTS2_SERVICE_PREFIX + File.separator + id):D2RC.MAIN_SERVICE_ID
 
             response.setCharacterEncoding("UTF-8")
             response.setHeader("Content-Type", "application/json")
@@ -65,8 +73,9 @@ class RegistrationCommand extends Command {
                 writer.key("code"); writer.value("ok")
                 writer.key("service");
                 writer.object()
-                    writer.key("id"); writer.value("d2refine")
-                    writer.key("name"); writer.value("D2Refine")
+                    writer.key("id"); writer.value(id)
+                    writer.key("name"); writer.value(name)
+                    writer.key("cts2BaseUrl"); writer.value(cts2BaseUrl?:"")
                     writer.key("ui");
                     writer.object()
                         writer.key("handler"); writer.value("ReconStandardServicePanel")
