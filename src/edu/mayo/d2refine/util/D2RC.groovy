@@ -47,7 +47,7 @@ class D2RC {
     static int MAXIMUM_RESULT_LIMIT = 10
 
     static String PROP_FILE_PATH = 'extensions' + File.separator +
-                                    'D2Refine' + File.separator +
+                                    'd2Refine' + File.separator +
                                     'CTS2Profiles.properties'
 
     static String MAIN_SERVICE_NAME = "D2Refine"

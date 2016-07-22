@@ -69,12 +69,21 @@ class D2RefineServiceManager {
 
         String serviceURL = request.getRequestURL().toString()
 
+        String configString = request.getParameter("config");
 
         if (path.endsWith("services/d2refine")) {
             if (callback)
                 return getServiceMetadataAsJsonP(D2RC.MAIN_SERVICE_NAME, callback, serviceURL)
             else
                 return handleQueries(request, termReconciliationService)
+        }
+        else if (path.endsWith("/preview")) {
+            return 'put some preview here'
+        }
+        else if (path.endsWith("suggest/entity")) {
+            String prefix = request.getParameter("prefix")
+            List<ReconciliationCandidate> results = termReconciliationService.suggestType(prefix)
+            return D2rUtils.toJSONP(callback, D2rUtils.jsonizeSearchResult(results, prefix))
         }
         else if (path.contains(D2RC.REGISTER_CTS2_SERVICE_PREFIX)){
             String customId = (path.split(D2RC.REGISTER_CTS2_SERVICE_PREFIX))[1]
@@ -100,14 +109,6 @@ class D2RefineServiceManager {
                 termReconciliationService.name = customId
                 return handleQueries(request, termReconciliationService)
             }
-        }
-        else if (path.endsWith("services/d2refine/suggest/entity")) {
-            String prefix = request.getParameter("prefix")
-            List<ReconciliationCandidate> results = termReconciliationService.suggestType(prefix)
-            return D2rUtils.toJSONP(callback, D2rUtils.jsonizeSearchResult(results, prefix))
-        }
-        else if (path.endsWith("services/d2refine/suggest/entity/preview")) {
-            return 'test'
         }
         else{
             return handleQueries(request, termReconciliationService)

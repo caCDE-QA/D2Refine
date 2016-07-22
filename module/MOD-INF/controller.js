@@ -95,8 +95,13 @@ function process(path, request, response)
     logger.info("path=" + path);
     logger.info("request.method=" + request.getMethod());
     logger.info("request.method=" + request.getParameter("columnName"));
-        
-    if (path.indexOf("services\/d2refine") != -1)
+
+    if (path.endsWith("/view")){
+        var id = request.getParameter('id');
+        butterfly.redirect(request,response,id);
+        return;
+    }
+    else if (path.indexOf("services\/d2refine") != -1)
     {
         logger.info("Service Found for " + path);
 

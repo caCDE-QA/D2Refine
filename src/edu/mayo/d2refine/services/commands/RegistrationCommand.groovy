@@ -54,6 +54,7 @@ class RegistrationCommand extends Command {
     @Override
     void doPost(HttpServletRequest request, HttpServletResponse response){
         try {
+            String configString = request.getParameter("config");
             def services = request.getParameter('services')
             def name = request.getParameter('name')
             def id = request.getParameter('id')

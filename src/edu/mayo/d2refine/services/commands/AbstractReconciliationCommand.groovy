@@ -29,7 +29,7 @@
 */
 package edu.mayo.d2refine.services.commands
 import com.google.refine.RefineServlet
-import com.google.refine.commands.Command
+import com.google.refine.commands.recon.ReconcileCommand
 import edu.mayo.d2refine.services.reconciliation.ReconciliationService
 import org.json.JSONWriter
 import org.slf4j.Logger
@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletResponse
  *
  * @author <a href="mailto:sharma.deepak2@mayo.edu>Deepak Sharma</a>
  */
-abstract class AbstractReconciliationCommand extends Command {
+abstract class AbstractReconciliationCommand extends ReconcileCommand {
 
     final static Logger logger = LoggerFactory.getLogger("AbstractServiceCommand");
     
