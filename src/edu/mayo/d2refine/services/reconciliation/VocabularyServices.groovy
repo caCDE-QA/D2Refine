@@ -118,7 +118,14 @@ class VocabularyServices {
                         def ked = it.knownEntityDescription
                         def desc = (ked instanceof List) ? ked[0] : ked
 
-                        def id = desc.href ?: termId
+                        def id = desc.href?:termId
+
+                        if (id.toLowerCase().contains('py4cts2')) {
+                            // Py4CTS2 require bypass=1 to be added for automatic authorization
+                            // this piece should go in service specific customization module (TBD)
+                            char delimHref = id?.contains('?') ? '&' : '?'
+                            id = id + delimHref + 'bypass=1'
+                        }
 
                         def ns = it.name?.namespace
                         String nameId = it.name?.name

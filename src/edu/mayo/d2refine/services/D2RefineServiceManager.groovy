@@ -69,7 +69,18 @@ class D2RefineServiceManager {
 
         String serviceURL = request.getRequestURL().toString()
 
-        String configString = request.getParameter("config");
+        String customId
+        String customURL
+
+        if (path.contains(D2RC.REGISTER_CTS2_SERVICE_PREFIX)) {
+            customId = (path.split(D2RC.REGISTER_CTS2_SERVICE_PREFIX))[1]
+            if (customId.startsWith("/"))
+                customId = customId.substring(1)
+            // Only split on first ":" - by limiting output array entries to 2
+            String[] serviceParts = customId.split(":", 2)
+            customId = serviceParts[0] ?: D2RC.MAIN_SERVICE_NAME
+            customURL = serviceParts[1] ?: ""
+        }
 
         if (path.endsWith("services/d2refine")) {
             if (callback)
@@ -78,22 +89,28 @@ class D2RefineServiceManager {
                 return handleQueries(request, termReconciliationService)
         }
         else if (path.endsWith("/preview")) {
-            return 'put some preview here'
+            String entityId = request.getParameter("id");
+
+            if (!entityId)
+                return null
+
+            String html = new URL(entityId).getText()
+            def jsonResults = ['html': html, 'id' : entityId]
+            JsonBuilder jb = new JsonBuilder(jsonResults)
+            return D2rUtils.toJSONP(callback, jb.toString())
         }
         else if (path.endsWith("suggest/entity")) {
             String prefix = request.getParameter("prefix")
+
+            if (customId) {
+                termReconciliationService.id = customId
+                termReconciliationService.name = customId
+            }
+
             List<ReconciliationCandidate> results = termReconciliationService.suggestType(prefix)
             return D2rUtils.toJSONP(callback, D2rUtils.jsonizeSearchResult(results, prefix))
         }
         else if (path.contains(D2RC.REGISTER_CTS2_SERVICE_PREFIX)){
-            String customId = (path.split(D2RC.REGISTER_CTS2_SERVICE_PREFIX))[1]
-            if (customId.startsWith("/"))
-                customId = customId.substring(1)
-            // Only split on first ":" - by limiting output array entries to 2
-            String[] serviceParts = customId.split(":", 2)
-            customId = serviceParts[0]?: D2RC.MAIN_SERVICE_NAME
-            String customURL = serviceParts[1]?:""
-
             String metadata = getServiceMetadataAsJsonP(customId, callback, serviceURL)
 
             // it means we have some valid metadata created
@@ -139,8 +156,8 @@ class D2RefineServiceManager {
             }
             preview {
                 url baseServiceUrl + '/preview/template?id={{id}}'
-                width 430
-                height 300
+                width 500
+                height 500
             }
             suggest {
                 type {
@@ -159,7 +176,7 @@ class D2RefineServiceManager {
                     service_url baseServiceUrl
                     service_path '/suggest/entity'
                     flyout_service_url baseServiceUrl
-                    flyout_service_path '/suggest/entity/preview'
+                    flyout_service_path '/suggest/entity/preview?id=${id}'
                 }
             }
         }

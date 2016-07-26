@@ -82,7 +82,7 @@ function init()
             module,
             [            
               "styles/project-injection.less",
-              "styles/d2refine.less",
+              //"styles/d2refine.less",
               "dialogs/d2rDialogs.less",
               "dialogs/d2rAbout.less"
             ]);
@@ -95,6 +95,7 @@ function process(path, request, response)
     logger.info("path=" + path);
     logger.info("request.method=" + request.getMethod());
     logger.info("request.method=" + request.getParameter("columnName"));
+    logger.info("id=" + request.getParameter('id'));
 
     if (path.endsWith("/view")){
         var id = request.getParameter('id');
