@@ -27,4 +27,5 @@ This library provides a layer of convenience methods to create ADL artefacts in 
 2. Copy this project's contents into OpenRefine's SIMILE Butterfly project's "extensions" folder.
 3. Tweak build.xml file for your environment if needed.
 
-
+## Publications
+* Deepak K. Sharma, Harold R. Solbrig, Eric Prud’hommeaux, Jyotishman Pathak, Guoqian Jiang. Standardized Representation of Clinical Study Data Dictionaries with CIMI Archetypes. AMIA Annu Symp Proc. 2016. (A paper in press)
