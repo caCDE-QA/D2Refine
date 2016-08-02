@@ -18,7 +18,7 @@ This library provides a layer of convenience methods to create ADL artefacts in 
 
 1. Install OpenRefine. D2Refine is a set of plugins to OpenRefine. Please note installaing this extension to Google Refine (a predecessor of OpenRefine may not work properly). OpenRefine could be downloaded from its download page: https://github.com/OpenRefine/OpenRefine/releases/tag/2.6-beta.1
 2. Find the location of OpenRefine's "extensions" folder. You can find out by clicking on the link "Browse workspace directory" on OpenRefine's project list. [Usually on webpage "http://127.0.0.1:3333", when OpenRefine is running].  There should be an "extensions" folder in the workspace directory. Create the 'extensions" folder manually, if it does not exist.
-3. Download file "D2Refine.zip" (https://github.com/caCDE-QA/D2Refine/blob/master/D2Refine.zip) and copy the content to the OpenRefine's "extensions" folder.
+3. Download file "D2Refine.zip" (https://github.com/caCDE-QA/D2Refine/raw/master/D2Refine.zip) and copy the content to the OpenRefine's "extensions" folder.
 4. Restart OpenRefine.
 
 ## Development Environment
