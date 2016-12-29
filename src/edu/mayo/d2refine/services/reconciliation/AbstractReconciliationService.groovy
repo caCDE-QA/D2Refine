@@ -83,7 +83,7 @@ abstract class AbstractReconciliationService implements ReconciliationService
                         multiQueryResponse.put(
                                 key, D2rUtils.wrapCandidates(
                                 reconcile(reconciliationRequest)))
-                        Thread.sleep(300);
+                        //Thread.sleep(300);
                     }
                 }
             }
