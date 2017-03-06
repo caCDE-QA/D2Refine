@@ -1,0 +1,767 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#"
+     xml:base="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30"
+     xmlns:untitled-ontology-30="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#implmentedBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#implmentedBy">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Product"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#usedInActivitiesOf -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#usedInActivitiesOf">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Product"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#wantedByUsersOf -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#wantedByUsersOf">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Product"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#productName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#productName"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ActivityModelFunction -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ActivityModelFunction">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#usedInActivitiesOf"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Product"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Administer -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Administer">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#AssignNewURI -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#AssignNewURI">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ManageURIs"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#AssignVersionURI -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#AssignVersionURI">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ManageURIs"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Automate -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Automate">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#AutomateBatchBindings -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#AutomateBatchBindings">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Automate"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#AutomateBatchValidation -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#AutomateBatchValidation">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Automate"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#AutomateSelectedBindingValidation -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#AutomateSelectedBindingValidation">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Automate"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#BindToClinicalModel -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#BindToClinicalModel">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Bindings"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#BindToCodeSystemTerm -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#BindToCodeSystemTerm">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Bindings"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#BindToDataElement -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#BindToDataElement">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Bindings"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#BindToLocalStandards -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#BindToLocalStandards">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Bindings"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Bindings -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Bindings">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#CTS2Services -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#CTS2Services">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ControlledTerminologies"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ClinicalModels -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ClinicalModels">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Administer"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ConfigureTerminologies -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ConfigureTerminologies">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#UseCase"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ControlledTerminologies -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ControlledTerminologies">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Administer"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Create -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Create">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#CreateBinding -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#CreateBinding">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#UseCase"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#CreateNewDD -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#CreateNewDD">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Create"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#CreateNewDDByExtension -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#CreateNewDDByExtension">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#CreateNewDD"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DataElements -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DataElements">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Administer"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DesignerModelFunction -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DesignerModelFunction">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#implmentedBy"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Product"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Discover -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Discover">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DiscoverAllClinicalModels -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DiscoverAllClinicalModels">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Discover"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DiscoverAllCodesystems -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DiscoverAllCodesystems">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Discover"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DiscoverAllDataElements -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DiscoverAllDataElements">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Discover"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DiscoverAllValueSets -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DiscoverAllValueSets">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Discover"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DomainFunction -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#DomainFunction">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#usedInActivitiesOf"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Product"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#wantedByUsersOf"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Product"/>
+                    </owl:Restriction>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Edit -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Edit">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#EditBindings -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#EditBindings">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Edit"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#EditDD -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#EditDD">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Edit"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Export -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Export">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ExportADL -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ExportADL">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ExportModel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ExportAML -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ExportAML">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ExportModel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ExportClinicalModel -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ExportClinicalModel">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#UseCase"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ExportFHIR -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ExportFHIR">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ExportModel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ExportModel -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ExportModel">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Export"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Import -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Import">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportADL -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportADL">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportModel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportAML -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportAML">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportModel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportAndAlignDD -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportAndAlignDD">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Import"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportDD -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportDD">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#UseCase"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportFHIR -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportFHIR">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportModel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportModel -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportModel">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Import"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportSpreadsheet -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportSpreadsheet">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportAndAlignDD"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportXML -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportXML">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportAndAlignDD"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportXSD -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportXSD">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportAndAlignDD"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#List -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#List">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ListClinicalModels -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ListClinicalModels">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#List"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ListDDs -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ListDDs">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#List"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ManageURIs -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ManageURIs">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Persist -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Persist">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#PersistAsClinicalModel -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#PersistAsClinicalModel">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Persist"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#PersistAsDD -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#PersistAsDD">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Persist"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#PheKBImport -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#PheKBImport">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportSpreadsheet"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Product -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Product">
+        <rdfs:comment rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#productName"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForClinicalModel -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForClinicalModel">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Discover"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForDD -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForDD">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Discover"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForDataElement -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForDataElement">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Discover"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntity -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntity">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Discover"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntityByExactMatch -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntityByExactMatch">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntityByText"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntityByFuzzyMatch -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntityByFuzzyMatch">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntityByText"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntityByKeyword -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntityByKeyword">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntity"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntityBySubstring -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntityBySubstring">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntityByText"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntityByText -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntityByText">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForEntity"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForValueSet -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchForValueSet">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Discover"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchTerms -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#SearchTerms">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#UseCase"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#TCGAImport -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#TCGAImport">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportXSD"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#UseCase -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#UseCase"/>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#UserModelFunction -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#UserModelFunction">
+        <owl:equivalentClass>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#wantedByUsersOf"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Product"/>
+            </owl:Restriction>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Function"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#UserPreferences -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#UserPreferences">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Administer"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#createNewDDConstraint -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#createNewDDConstraint">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Create"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#dbGAPImport -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#dbGAPImport">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#ImportXML"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#D2Refine -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#D2Refine">
+        <rdf:type rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Product"/>
+        <productName>D2Refine</productName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#NCILexEVS -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#NCILexEVS">
+        <rdf:type rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#CTS2Services"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#OHDSI -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#OHDSI">
+        <rdf:type rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Product"/>
+        <productName>OHDSI</productName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#OntoMap -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#OntoMap">
+        <rdf:type rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Product"/>
+        <productName>OntoMap</productName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Py4CTS2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#Py4CTS2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/dks02/ontologies/2017/1/untitled-ontology-30#CTS2Services"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi -->
+
