@@ -9,4 +9,5 @@ D2Refine platform includes a collection of the OpenRefine plugins that augment O
 
 More Information available at [D2Refine Wiki](https://github.com/caCDE-QA/D2Refine/wiki)
 
+![alt tag](https://github.com/caCDE-QA/D2Refine/blob/master/docs/img/D2Refine_thumbnail.png)
 ![alt tag](https://github.com/caCDE-QA/D2Refine/blob/master/docs/img/D2Refine.png)
