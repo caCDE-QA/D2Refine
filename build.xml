@@ -37,8 +37,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
     | Author: Deepak Sharma (sharma.deepak2@mayo.edu)
     +-->
     
-<project name="D2Refine" default="build" basedir="."
-	xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="D2Refine" default="build" basedir=".">
 
     <property environment="env"/>
 	<property name="java_version" value="1.7"/>
@@ -74,14 +73,6 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
     <property name="modinf.dir" value="${module.dir}/MOD-INF" />
     <property name="lib.dir" value="${modinf.dir}/lib" />
     <property name="classes.dir" value="${modinf.dir}/classes" />
-	
-	<property name="ivy.home" value="${user.home}/my_installations/ivy"/>
-	
-	<!-- Third party libraries locations, versions.
-	     These libraries must be downloaded from their 
-	     Maven repository locations -->
-	
-	<property name="maven-repo.dir" value="${user.home}/.m2/repository" />
 
     <path id="class.path">
         <fileset dir="${lib.dir}" erroronmissingdir="false">
@@ -119,15 +110,6 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
         </zip>
     </target>
 
-	<target name="ivy-clean-cache" 
-		description="removes the local Ivy cache. WARNING! After removal, this may take significant time to rebuild. Only use this if you are having problems with a corrupt or stale cache.">
-		<ivy:cleancache/>
-	</target>
-	
-	<target name="resolve" description="--> retrieve dependencies with ivy">
-			<ivy:retrieve pattern="${lib.dir}/[artifact].[revision](-[classifier]).[ext]"/>
-	 </target>
-	
     <target name="clean">
         <delete dir="${classes.dir}" />
     </target>
