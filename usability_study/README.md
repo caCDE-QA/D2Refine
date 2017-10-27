@@ -8,5 +8,5 @@ This directory contains the documents and recordings of the usability study:
 - study_execution - sample data dictionary metadata to get started with usability study tasks.
 - analysis - datasets prepared after responses collected and results of the comparison
 
-![alt tag](https://github.com/caCDE-QA/D2Refine/blob/master/docs/img/FavoritesRankings.png)
+![alt tag](https://github.com/caCDE-QA/D2Refine/blob/master/docs/img/FavoriteRankings.png)
 ![alt tag](https://github.com/caCDE-QA/D2Refine/blob/master/docs/img/D2RefineVsOntoMatonFavorites.png)
