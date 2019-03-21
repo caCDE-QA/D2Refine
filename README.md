@@ -11,3 +11,9 @@ More Information available at [D2Refine Wiki](https://github.com/caCDE-QA/D2Refi
 
 ![alt tag](https://github.com/caCDE-QA/D2Refine/blob/master/docs/img/D2Refine_thumbnail.png)
 ![alt tag](https://github.com/caCDE-QA/D2Refine/blob/master/docs/img/D2Refine.png)
+
+## Publications
+
+* Sharma DK, Solbrig HR, Prud'hommeaux E, Lee K, Pathak J, Jiang G. D2Refine: A Platform for Clinical Research Study Data Element Harmonization and Standardization. AMIA Jt Summits Transl Sci Proc. 2017 Jul 26;2017:259-267. eCollection 2017. [PubMed](https://www.ncbi.nlm.nih.gov/pubmed/28815140)
+
+* Sharma DK, Peterson KJ, Hong N, Jiang G. The D2Refine Platform for the Standardization of Clinical Research Study Data Dictionaries: Usability Study. JMIR Hum Factors. 2018 Jul 25;5(3):e10205. doi: 10.2196/10205. [PubMed]()https://www.ncbi.nlm.nih.gov/pubmed/30045832
